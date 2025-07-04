@@ -94,11 +94,17 @@ body {
 .favorites h3 { margin-top: 0; font-size: 1.1em; }
 
 .purchases-wrapper {
-  overflow-x: auto;
+  overflow-x: auto;      /* تمرير أفقي فقط داخل المشتريات */
+  width: 100%;
+}
+
+.purchases-wrapper .favorites-table {
+  min-width: 700px;      /* جدول المشتريات أعرض من الحاوية عند الحاجة */
+  width: 100%;
+  border-collapse: collapse;
 }
 
 .favorites-table {
-  min-width: 700px;
   width: 100%;
   border-collapse: collapse;
 }

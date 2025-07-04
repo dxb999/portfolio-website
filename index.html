@@ -10,7 +10,7 @@
       margin: 0;
       padding: 0;
       direction: rtl;
-      background: #0a3e7d; /* الأزرق الغامق */
+      background: #0a3e7d;
       color: white;
     }
     .header {
@@ -72,22 +72,30 @@
       margin-top: 0;
       font-size: 1.1em;
     }
-    .stock {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-top: 10px;
-      padding: 10px;
+    .favorites-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 15px;
+    }
+    .favorites-table th, .favorites-table td {
+      padding: 12px;
+      text-align: center;
       border-bottom: 1px solid #ddd;
+      font-size: 1em;
     }
-    .stock:last-child { border-bottom: none; }
-    .stock .symbol {
-      font-weight: bold;
+    .favorites-table th {
+      background-color: #f5f5f5;
+      color: #333;
     }
-    .stock .price {
-      color: green;
-      font-weight: bold;
+    .price-cell .arrow {
+      font-size: 0.9em;
+      margin-right: 4px;
+      vertical-align: middle;
     }
+    .price-cell.positive .arrow { color: green; }
+    .price-cell.negative .arrow { color: red; }
+    .positive { color: green; font-weight: bold; }
+    .negative { color: red; font-weight: bold; }
   </style>
 </head>
 <body>
@@ -139,14 +147,27 @@
 
   <div class="favorites">
     <h3>قائمة المفضلات الخاصة بي</h3>
-    <div class="stock">
-      <div class="symbol">ADIB</div>
-      <div class="price">21.640 (+0.19%)</div>
-    </div>
-    <div class="stock">
-      <div class="symbol">ADCB</div>
-      <div class="price">13.580 (+2.41%)</div>
-    </div>
+    <table class="favorites-table">
+      <thead>
+        <tr>
+          <th>رمز</th>
+          <th>آخر سعر</th>
+          <th>تغيير</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>ADIB</td>
+          <td class="price-cell positive">21.660 <span class="arrow">▲</span></td>
+          <td class="positive">+0.28% (+0.060)</td>
+        </tr>
+        <tr>
+          <td>ADCB</td>
+          <td class="price-cell negative">13.580 <span class="arrow">▼</span></td>
+          <td class="negative">-0.15% (-0.020)</td>
+        </tr>
+      </tbody>
+    </table>
   </div>
 
   <script>
@@ -185,7 +206,7 @@
     }
 
     updateMarketStatus();
-    setInterval(updateMarketStatus, 60000);
+    setInterval(updateMarketStatus, 1000); // تحديث كل ثانية
   </script>
 </body>
 </html>

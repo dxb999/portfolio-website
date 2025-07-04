@@ -8,7 +8,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-p+tLgUk6fD9X1A7w1XbA+fXg6vZ7M5+o4Wk8A9QgM7K5pZ9cHnq8mJHRMGGxYzM0/f5soR7QJIbT5+1K99YlGw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 <body>
-  <!-- ترويسة شاشة الأسعار -->
+  <!-- الترويسة -->
   <div class="header">
     <h2>شاشة الأسعار</h2>
     <div class="profile-icon">MS</div>
@@ -51,36 +51,53 @@
     <button>الأرباح</button>
   </div>
 
-  <!-- أزرار عرض الكل والمفضلة وخريطة الأسهم -->
-  <div class="filter-buttons">
-    <button class="active">عرض الكل</button>
-    <button>المفضلة</button>
-    <button>خريطة تحركات الأسهم</button>
+  <!-- محتوى السوق الرئيسي -->
+  <div class="market-content" id="market-main">
+    <div class="filter-buttons">
+      <button class="active">عرض الكل</button>
+      <button>المفضلة</button>
+      <button>خريطة تحركات الأسهم</button>
+    </div>
+
+    <div class="favorites">
+      <table class="favorites-table">
+        <thead>
+          <tr>
+            <th>رمز</th>
+            <th>آخر سعر</th>
+            <th>تغيير</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>ADIB</td>
+            <td class="price-cell positive">21.660 <span class="arrow">▲</span></td>
+            <td class="positive">+0.28% (+0.060)</td>
+          </tr>
+          <tr>
+            <td>ADCB</td>
+            <td class="price-cell negative">13.580 <span class="arrow">▼</span></td>
+            <td class="negative">-0.15% (-0.020)</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
 
-  <!-- جدول السوق الرئيسي -->
-  <div class="favorites">
-    <table class="favorites-table">
-      <thead>
-        <tr>
-          <th>رمز</th>
-          <th>آخر سعر</th>
-          <th>تغيير</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>ADIB</td>
-          <td class="price-cell positive">21.660 <span class="arrow">▲</span></td>
-          <td class="positive">+0.28% (+0.060)</td>
-        </tr>
-        <tr>
-          <td>ADCB</td>
-          <td class="price-cell negative">13.580 <span class="arrow">▼</span></td>
-          <td class="negative">-0.15% (-0.020)</td>
-        </tr>
-      </tbody>
-    </table>
+  <!-- الأقسام الفارغة -->
+  <div class="market-content empty" id="market-purchases" style="display:none;">
+    <div class="favorites"><p>لا توجد بيانات حالياً في المشتريات.</p></div>
+  </div>
+  <div class="market-content empty" id="market-sales" style="display:none;">
+    <div class="favorites"><p>لا توجد بيانات حالياً في المبيعات.</p></div>
+  </div>
+  <div class="market-content empty" id="market-profits" style="display:none;">
+    <div class="favorites"><p>لا توجد بيانات حالياً في الأرباح.</p></div>
+  </div>
+
+  <!-- الزر العائم -->
+  <div class="floating-button">
+    <i class="fas fa-th"></i>
   </div>
 
   <!-- القائمة السفلية -->
@@ -91,6 +108,25 @@
     <a href="#"><i class="fas fa-home"></i><span>الرئيسية</span></a>
   </div>
 
-  <script src="script.js"></script>
+  <!-- سكربت تحكم في التنقل الداخلي -->
+  <script>
+    const buttons = document.querySelectorAll('.inner-nav button');
+    const sections = {
+      'السوق الرئيسي': document.getElementById('market-main'),
+      'المشتريات': document.getElementById('market-purchases'),
+      'المبيعات': document.getElementById('market-sales'),
+      'الأرباح': document.getElementById('market-profits')
+    };
+
+    buttons.forEach(button => {
+      button.addEventListener('click', () => {
+        buttons.forEach(btn => btn.classList.remove('active'));
+        button.classList.add('active');
+        Object.values(sections).forEach(sec => sec.style.display = 'none');
+        const section = sections[button.textContent.trim()];
+        if (section) section.style.display = 'block';
+      });
+    });
+  </script>
 </body>
 </html>

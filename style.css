@@ -94,8 +94,9 @@ body {
 .favorites h3 { margin-top: 0; font-size: 1.1em; }
 
 .purchases-wrapper {
-  overflow-x: auto;      /* تمرير أفقي فقط داخل المشتريات */
+  overflow-x: auto;       /* يضيف تمرير أفقي */
   width: 100%;
+  max-width: 100%;        /* يمنع تمدد الجدول خارج القسم */
 }
 
 .purchases-wrapper .favorites-table {

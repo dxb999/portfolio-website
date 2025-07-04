@@ -49,6 +49,18 @@
       color: #cccccc;
       font-size: 1em;
     }
+    .market-status {
+      margin: 20px;
+      font-size: 1em;
+    }
+    .status-dot {
+      display: inline-block;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      margin-left: 8px;
+      vertical-align: middle;
+    }
     .favorites {
       background: white;
       color: black;
@@ -92,26 +104,36 @@
 
   <div class="chart-placeholder">رسم بياني للأداء (قيد التطوير)</div>
 
+  <div class="market-status">
+    <div>
+      <span class="status-dot" id="status-dot"></span>
+      <span id="market-status-text">السوق مفتوح</span>
+    </div>
+    <div class="market-time" id="market-time" style="margin-top: 5px; font-size: 0.9em;">
+      سعر السوق اعتبارًا من ...
+    </div>
+  </div>
+
   <!-- TradingView Ticker Widget -->
   <div class="tradingview-widget-container" style="margin-top:20px;">
     <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-ticker-tape.js" async>
-{
-  "symbols": [
-    { "proName": "ADX:ADIB", "title": "ADIB" },
-    { "proName": "ADX:ADCB", "title": "ADCB" },
-    { "proName": "ADX:ALDAR", "title": "ALDAR" },
-    { "proName": "ADX:FAB", "title": "FAB" },
-    { "proName": "ADX:TAQA", "title": "TAQA" },
-    { "proName": "ADX:DANA", "title": "DANA" },
-    { "proName": "ADX:ETISALAT", "title": "EAND" },
-    { "proName": "ADX:MUBADALA", "title": "MUBADALA" }
-  ],
-  "colorTheme": "dark",
-  "isTransparent": false,
-  "displayMode": "adaptive",
-  "locale": "ar"
-}
-</script>
+    {
+    "symbols": [
+      { "proName": "ADX:ADIB", "title": "ADIB" },
+      { "proName": "ADX:ADCB", "title": "ADCB" },
+      { "proName": "ADX:ALDAR", "title": "ALDAR" },
+      { "proName": "ADX:FAB", "title": "FAB" },
+      { "proName": "ADX:TAQA", "title": "TAQA" },
+      { "proName": "ADX:DANA", "title": "DANA" },
+      { "proName": "ADX:ETISALAT", "title": "EAND" },
+      { "proName": "ADX:MUBADALA", "title": "MUBADALA" }
+    ],
+    "colorTheme": "dark",
+    "isTransparent": false,
+    "displayMode": "adaptive",
+    "locale": "ar"
+    }
+    </script>
   </div>
   <!-- End TradingView Widget -->
 
@@ -132,6 +154,38 @@
     const portfolioChange = 0.032;
     document.getElementById('portfolio-value').textContent = `${portfolioValue.toLocaleString()} درهم`;
     document.getElementById('portfolio-change').textContent = `${(portfolioChange * 100).toFixed(3)}% اليوم`;
+
+    function updateMarketStatus() {
+      const now = new Date();
+      const utc = now.getTime() + (now.getTimezoneOffset() * 60000);
+      const uaeTime = new Date(utc + (4 * 60 * 60 * 1000)); // توقيت الإمارات UTC+4
+
+      const hours = uaeTime.getHours();
+      const minutes = uaeTime.getMinutes().toString().padStart(2, '0');
+
+      const day = uaeTime.getDate().toString().padStart(2, '0');
+      const month = (uaeTime.getMonth() + 1).toString().padStart(2, '0');
+      const year = uaeTime.getFullYear();
+
+      const marketOpen = (hours >= 10 && hours < 14);
+
+      const statusText = document.getElementById("market-status-text");
+      const statusDot = document.getElementById("status-dot");
+      const marketTime = document.getElementById("market-time");
+
+      if (marketOpen) {
+        statusText.textContent = "السوق مفتوح";
+        statusDot.style.backgroundColor = "#00e676"; // أخضر
+      } else {
+        statusText.textContent = "السوق مغلق";
+        statusDot.style.backgroundColor = "#ff1744"; // أحمر
+      }
+
+      marketTime.textContent = `سعر السوق اعتبارًا من ${hours}:${minutes} UAE ${day}/${month}/${year}`;
+    }
+
+    updateMarketStatus();
+    setInterval(updateMarketStatus, 60000);
   </script>
 </body>
 </html>

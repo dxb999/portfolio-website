@@ -5,18 +5,113 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>محفظتي الاستثمارية</title>
   <style>
-    body { font-family: Tahoma, sans-serif; direction: rtl; background: #f5f5f5; color: #333; text-align: center; }
-    .container { max-width: 600px; margin: 50px auto; background: white; padding: 20px; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
-    h1 { color: #007bff; }
-    .value { font-size: 2em; margin: 20px 0; }
-    .change { font-size: 1.2em; }
+    body {
+      font-family: Tahoma, sans-serif;
+      margin: 0;
+      padding: 0;
+      direction: rtl;
+      background: #0a3e7d; /* اللون الأزرق المميز */
+      color: white;
+    }
+    .header {
+      padding: 30px 20px 10px;
+      text-align: right;
+    }
+    .header h2 {
+      margin: 0;
+      font-size: 1.2em;
+    }
+    .header .user-info {
+      font-size: 0.9em;
+      color: #d1d1d1;
+      margin-top: 5px;
+    }
+    .portfolio {
+      text-align: center;
+      margin: 40px 20px;
+    }
+    .portfolio .value {
+      font-size: 2em;
+      margin: 10px 0;
+    }
+    .portfolio .change {
+      font-size: 1.2em;
+      color: #00e676;
+    }
+    .chart-placeholder {
+      height: 200px;
+      margin: 20px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #cccccc;
+      font-size: 1em;
+    }
+    .favorites {
+      background: white;
+      color: black;
+      border-radius: 20px 20px 0 0;
+      padding: 20px;
+      min-height: 200px;
+    }
+    .favorites h3 {
+      margin-top: 0;
+      font-size: 1.1em;
+    }
+    .stock {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 10px;
+      padding: 10px;
+      border-bottom: 1px solid #ddd;
+    }
+    .stock:last-child { border-bottom: none; }
+    .stock .symbol {
+      font-weight: bold;
+    }
+    .stock .price {
+      color: green;
+      font-weight: bold;
+    }
   </style>
 </head>
 <body>
-  <div class="container">
-    <h1>قيمة محفظتي الاستثمارية</h1>
-    <div class="value">AED 500,000</div>
-    <div class="change" style="color: green;">+2.49% اليوم</div>
+  <div class="header">
+    <h2>👋 هلا، محمد سالم محمد زايد المزروعي</h2>
+    <div class="user-info">NIN# UAE6210000021913</div>
   </div>
+
+  <div class="portfolio">
+    <div>قيمة المحفظة الكاملة</div>
+    <div class="value" id="portfolio-value">--</div>
+    <div class="change" id="portfolio-change">--</div>
+  </div>
+
+  <div class="chart-placeholder">رسم بياني للأداء (قيد التطوير)</div>
+
+  <div class="favorites">
+    <h3>قائمة المفضلات الخاصة بي</h3>
+    <div class="stock">
+      <div class="symbol">ADIB</div>
+      <div class="price">21.640 (+0.19%)</div>
+    </div>
+    <div class="stock">
+      <div class="symbol">ADCB</div>
+      <div class="price">13.580 (+2.41%)</div>
+    </div>
+  </div>
+
+  <script>
+    // البيانات الحقيقية للمحفظة
+    const portfolioValue = 6562.81;
+    const portfolioChange = 0.032; // نسبة مئوية
+
+    // تحديث القيم في الصفحة
+    document.getElementById('portfolio-value').textContent = `${portfolioValue.toLocaleString()} درهم`;
+    document.getElementById('portfolio-change').textContent = `${(portfolioChange * 100).toFixed(3)}% اليوم`;
+  </script>
 </body>
 </html>

@@ -89,12 +89,11 @@ body {
   border-radius: 20px 20px 0 0;
   padding: 20px;
   min-height: 200px;
-  overflow-x: auto; /* دعم التمرير الأفقي */
 }
 
 .favorites h3 { margin-top: 0; font-size: 1.1em; }
 
-.table-wrapper {
+.purchases-wrapper {
   overflow-x: auto;
 }
 

@@ -84,10 +84,46 @@
     </div>
   </div>
 
-  <!-- الأقسام الفارغة -->
-  <div class="market-content empty" id="market-purchases" style="display:none;">
-    <div class="favorites"><p>لا توجد بيانات حالياً في المشتريات.</p></div>
+  <!-- محتوى المشتريات -->
+  <div class="market-content" id="market-purchases" style="display:none;">
+    <div class="favorites">
+      <h3>المشتريات الأخيرة</h3>
+      <div class="table-wrapper">
+        <table class="favorites-table">
+          <thead>
+            <tr>
+              <th>رمز</th>
+              <th>الكمية</th>
+              <th>سعر الشراء</th>
+              <th>عمولة السهم</th>
+              <th>الضريبة</th>
+              <th>التاريخ</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>ADIB</td>
+              <td>500</td>
+              <td>21.600</td>
+              <td>0.05</td>
+              <td>5%</td>
+              <td>2024-07-01</td>
+            </tr>
+            <tr>
+              <td>ALDAR</td>
+              <td>200</td>
+              <td>5.400</td>
+              <td>0.02</td>
+              <td>5%</td>
+              <td>2024-07-02</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
   </div>
+
+  <!-- الأقسام الفارغة -->
   <div class="market-content empty" id="market-sales" style="display:none;">
     <div class="favorites"><p>لا توجد بيانات حالياً في المبيعات.</p></div>
   </div>
@@ -108,7 +144,6 @@
     <a href="#"><i class="fas fa-home"></i><span>الرئيسية</span></a>
   </div>
 
-  <!-- سكربت تحكم في التنقل الداخلي -->
   <script>
     const buttons = document.querySelectorAll('.inner-nav button');
     const sections = {

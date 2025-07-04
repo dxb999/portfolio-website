@@ -10,7 +10,7 @@
       margin: 0;
       padding: 0;
       direction: rtl;
-      background: #0a3e7d; /* اللون الأزرق المميز */
+      background: #0a3e7d; /* الأزرق الغامق */
       color: white;
     }
     .header {
@@ -48,6 +48,40 @@
       justify-content: center;
       color: #cccccc;
       font-size: 1em;
+    }
+    .ticker {
+      background: #002f6c;
+      overflow: hidden;
+      box-sizing: border-box;
+      padding: 10px 20px;
+      border-top: 1px solid #004080;
+      border-bottom: 1px solid #004080;
+    }
+    .market-status {
+      white-space: nowrap;
+      margin-bottom: 5px;
+      font-size: 1em;
+    }
+    .status-dot {
+      display: inline-block;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      margin-left: 8px;
+      vertical-align: middle;
+    }
+    .ticker-items {
+      white-space: nowrap;
+    }
+    .ticker-item {
+      display: inline-block;
+      margin-left: 50px;
+      font-size: 1em;
+      animation: ticker-scroll 15s linear infinite;
+    }
+    @keyframes ticker-scroll {
+      from { transform: translateX(100%); }
+      to { transform: translateX(-100%); }
     }
     .favorites {
       background: white;
@@ -92,6 +126,25 @@
 
   <div class="chart-placeholder">رسم بياني للأداء (قيد التطوير)</div>
 
+  <div class="ticker">
+    <div class="market-status">
+      <span class="status-dot" id="status-dot"></span>
+      <span id="market-status-text">السوق مفتوح</span>
+      <span style="margin-right: 20px; font-size: 0.9em;" id="market-time">سعر السوق اعتبارًا من ...</span>
+    </div>
+    <div class="ticker-items">
+      <div class="ticker-item" style="color: green;">
+        ARAM 1.500 +0.030 (+2.041%)
+      </div>
+      <div class="ticker-item" style="color: red;">
+        DUBAI 3.420 -0.010 (-0.262%)
+      </div>
+      <div class="ticker-item" style="color: green;">
+        ADIB 21.640 +0.040 (+0.19%)
+      </div>
+    </div>
+  </div>
+
   <div class="favorites">
     <h3>قائمة المفضلات الخاصة بي</h3>
     <div class="stock">
@@ -105,13 +158,46 @@
   </div>
 
   <script>
-    // البيانات الحقيقية للمحفظة
+    // البيانات الفعلية
     const portfolioValue = 6562.81;
-    const portfolioChange = 0.032; // نسبة مئوية
+    const portfolioChange = 0.032; // نسبة التغيير
 
-    // تحديث القيم في الصفحة
     document.getElementById('portfolio-value').textContent = `${portfolioValue.toLocaleString()} درهم`;
     document.getElementById('portfolio-change').textContent = `${(portfolioChange * 100).toFixed(3)}% اليوم`;
+
+    function updateMarketStatus() {
+      const now = new Date();
+      const utc = now.getTime() + (now.getTimezoneOffset() * 60000);
+      const uaeTime = new Date(utc + (4 * 60 * 60 * 1000)); // توقيت الإمارات UTC+4
+
+      const hours = uaeTime.getHours();
+      const minutes = uaeTime.getMinutes().toString().padStart(2, '0');
+
+      const day = uaeTime.getDate().toString().padStart(2, '0');
+      const month = (uaeTime.getMonth() + 1).toString().padStart(2, '0');
+      const year = uaeTime.getFullYear();
+
+      // نطاق عمل السوق الإماراتي 10 صباحًا - 2 ظهرًا
+      const marketOpen = (hours >= 10 && hours < 14);
+
+      const statusText = document.getElementById("market-status-text");
+      const statusDot = document.getElementById("status-dot");
+      const marketTime = document.getElementById("market-time");
+
+      if (marketOpen) {
+        statusText.textContent = "السوق مفتوح";
+        statusDot.style.backgroundColor = "#00e676"; // أخضر
+      } else {
+        statusText.textContent = "السوق مغلق";
+        statusDot.style.backgroundColor = "#ff1744"; // أحمر
+      }
+
+      marketTime.textContent = `سعر السوق اعتبارًا من ${hours}:${minutes} UAE ${day}/${month}/${year}`;
+    }
+
+    // التحديث عند تحميل الصفحة وكل دقيقة
+    updateMarketStatus();
+    setInterval(updateMarketStatus, 60000);
   </script>
 </body>
 </html>

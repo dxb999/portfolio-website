@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>شاشة الأسعار</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-p+tLgUk6fD9X1A7w1XbA+fXg6vZ7M5+o4Wk8A9QgM7K5pZ9cHnq8mJHRMGGxYzM0/f5soR7QJIbT5+1K99YlGw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+<body>
+  <!-- ترويسة شاشة الأسعار -->
+  <div class="header">
+    <h2>شاشة الأسعار</h2>
+    <div class="profile-icon">MS</div>
+  </div>
+
+  <!-- حالة السوق -->
+  <div class="market-status">
+    <div>
+      <span class="status-dot" id="status-dot"></span>
+      <span id="market-status-text">السوق مفتوح</span>
+    </div>
+    <div class="market-time" id="market-time" style="margin-top: 5px; font-size: 0.9em;">
+      سعر السوق اعتبارًا من ...
+    </div>
+  </div>
+
+  <!-- شريط الأسهم المتحرك -->
+  <div class="tradingview-widget-container" style="margin-top:20px;">
+    <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-ticker-tape.js" async>
+    {
+    "symbols": [
+      { "proName": "ADX:ADIB", "title": "ADIB" },
+      { "proName": "ADX:ADCB", "title": "ADCB" },
+      { "proName": "ADX:ALDAR", "title": "ALDAR" },
+      { "proName": "ADX:FAB", "title": "FAB" }
+    ],
+    "colorTheme": "dark",
+    "isTransparent": false,
+    "displayMode": "adaptive",
+    "locale": "ar"
+    }
+    </script>
+  </div>
+
+  <!-- قائمة تنقل داخلية -->
+  <div class="inner-nav">
+    <button class="active">السوق الرئيسي</button>
+    <button>المشتريات</button>
+    <button>المبيعات</button>
+    <button>الأرباح</button>
+  </div>
+
+  <!-- أزرار عرض الكل والمفضلة وخريطة الأسهم -->
+  <div class="filter-buttons">
+    <button class="active">عرض الكل</button>
+    <button>المفضلة</button>
+    <button>خريطة تحركات الأسهم</button>
+  </div>
+
+  <!-- جدول السوق الرئيسي -->
+  <div class="favorites">
+    <table class="favorites-table">
+      <thead>
+        <tr>
+          <th>رمز</th>
+          <th>آخر سعر</th>
+          <th>تغيير</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>ADIB</td>
+          <td class="price-cell positive">21.660 <span class="arrow">▲</span></td>
+          <td class="positive">+0.28% (+0.060)</td>
+        </tr>
+        <tr>
+          <td>ADCB</td>
+          <td class="price-cell negative">13.580 <span class="arrow">▼</span></td>
+          <td class="negative">-0.15% (-0.020)</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- القائمة السفلية -->
+  <div class="bottom-nav" id="bottom-nav">
+    <a href="#"><i class="fas fa-coins"></i><span>أرباح</span></a>
+    <a href="#"><i class="fas fa-chart-line"></i><span>شاشة الأسعار</span></a>
+    <a href="#"><i class="fas fa-briefcase"></i><span>محفظتي</span></a>
+    <a href="#"><i class="fas fa-home"></i><span>الرئيسية</span></a>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>

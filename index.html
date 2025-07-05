@@ -3,29 +3,34 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>شاشة الأسعار</title>
+  <title>محفظتي الاستثمارية</title>
   <link rel="stylesheet" href="style.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-p+tLgUk6fD9X1A7w1XbA+fXg6vZ7M5+o4Wk8A9QgM7K5pZ9cHnq8mJHRMGGxYzM0/f5soR7QJIbT5+1K99YlGw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 <body>
-  <!-- الترويسة -->
   <div class="header">
-    <h2>شاشة الأسعار</h2>
-    <div class="profile-icon">MS</div>
+    <h2>👋 هلا، محمد سالم محمد زايد المزروعي</h2>
+    <div class="user-info">NIN# UAE6210000021913</div>
   </div>
 
-  <!-- حالة السوق -->
+  <div class="portfolio">
+    <div>قيمة المحفظة الكاملة</div>
+    <div class="value" id="portfolio-value">--</div>
+    <div class="change" id="portfolio-change">--</div>
+  </div>
+
+  <div class="chart-placeholder">رسم بياني للأداء (قيد التطوير)</div>
+
   <div class="market-status">
     <div>
       <span class="status-dot" id="status-dot"></span>
       <span id="market-status-text">السوق مفتوح</span>
     </div>
     <div class="market-time" id="market-time" style="margin-top: 5px; font-size: 0.9em;">
-      سعر السوق اعتبارًا من ...
+‎      سعر السوق اعتبارًا من ...
     </div>
   </div>
 
-  <!-- شريط الأسهم المتحرك -->
   <div class="tradingview-widget-container" style="margin-top:20px;">
     <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-ticker-tape.js" async>
     {
@@ -43,100 +48,35 @@
     </script>
   </div>
 
-  <!-- قائمة تنقل داخلية -->
-  <div class="inner-nav">
-    <button class="active">السوق الرئيسي</button>
-    <button>المشتريات</button>
-    <button>المبيعات</button>
-    <button>الأرباح</button>
+  <div class="favorites">
+    <h3>قائمة المفضلات الخاصة بي</h3>
+    <table class="favorites-table">
+      <thead>
+        <tr>
+          <th>رمز</th>
+          <th>آخر سعر</th>
+          <th>تغيير</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>ADIB</td>
+          <td class="price-cell positive">21.660 <span class="arrow">▲</span></td>
+          <td class="positive">+0.28% (+0.060)</td>
+        </tr>
+        <tr>
+          <td>ADCB</td>
+          <td class="price-cell negative">13.580 <span class="arrow">▼</span></td>
+          <td class="negative">-0.15% (-0.020)</td>
+        </tr>
+      </tbody>
+    </table>
   </div>
 
-  <!-- محتوى السوق الرئيسي -->
-  <div class="market-content" id="market-main">
-    <div class="filter-buttons">
-      <button class="active">عرض الكل</button>
-      <button>المفضلة</button>
-      <button>خريطة تحركات الأسهم</button>
-    </div>
-
-    <div class="favorites">
-      <table class="favorites-table">
-        <thead>
-          <tr>
-            <th>رمز</th>
-            <th>آخر سعر</th>
-            <th>تغيير</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>ADIB</td>
-            <td class="price-cell positive">21.660 <span class="arrow">▲</span></td>
-            <td class="positive">+0.28% (+0.060)</td>
-          </tr>
-          <tr>
-            <td>ADCB</td>
-            <td class="price-cell negative">13.580 <span class="arrow">▼</span></td>
-            <td class="negative">-0.15% (-0.020)</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
-
-  <!-- محتوى المشتريات -->
-  <div class="market-content" id="market-purchases" style="display:none;">
-    <div class="favorites">
-      <h3>المشتريات الأخيرة</h3>
-      <div class="purchases-wrapper">
-        <table class="favorites-table">
-          <thead>
-            <tr>
-              <th>رمز</th>
-              <th>الكمية</th>
-              <th>سعر الشراء</th>
-              <th>عمولة السهم</th>
-              <th>الضريبة</th>
-              <th>التاريخ</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>ADIB</td>
-              <td>500</td>
-              <td>21.600</td>
-              <td>0.05</td>
-              <td>5%</td>
-              <td>2024-07-01</td>
-            </tr>
-            <tr>
-              <td>ALDAR</td>
-              <td>200</td>
-              <td>5.400</td>
-              <td>0.02</td>
-              <td>5%</td>
-              <td>2024-07-02</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-  </div>
-
-  <!-- الأقسام الفارغة -->
-  <div class="market-content empty" id="market-sales" style="display:none;">
-    <div class="favorites"><p>لا توجد بيانات حالياً في المبيعات.</p></div>
-  </div>
-  <div class="market-content empty" id="market-profits" style="display:none;">
-    <div class="favorites"><p>لا توجد بيانات حالياً في الأرباح.</p></div>
-  </div>
-
-  <!-- الزر العائم -->
   <div class="floating-button">
     <i class="fas fa-th"></i>
   </div>
 
-  <!-- القائمة السفلية -->
   <div class="bottom-nav" id="bottom-nav">
     <a href="#"><i class="fas fa-coins"></i><span>أرباح</span></a>
     <a href="#"><i class="fas fa-chart-line"></i><span>شاشة الأسعار</span></a>
@@ -145,28 +85,15 @@
   </div>
 
   <script>
-    const buttons = document.querySelectorAll('.inner-nav button');
-    const sections = {
-      'السوق الرئيسي': document.getElementById('market-main'),
-      'المشتريات': document.getElementById('market-purchases'),
-      'المبيعات': document.getElementById('market-sales'),
-      'الأرباح': document.getElementById('market-profits')
-    };
-
-    buttons.forEach(button => {
-      button.addEventListener('click', () => {
-        buttons.forEach(btn => btn.classList.remove('active'));
-        button.classList.add('active');
-        Object.values(sections).forEach(sec => sec.style.display = 'none');
-        const section = sections[button.textContent.trim()];
-        if (section) section.style.display = 'block';
-      });
-    });
+    const portfolioValue = 6562.81;
+    const portfolioChange = 0.032;
+    document.getElementById('portfolio-value').textContent = `${portfolioValue.toLocaleString()} درهم`;
+    document.getElementById('portfolio-change').textContent = `${(portfolioChange * 100).toFixed(3)}% اليوم`;
 
     function updateMarketStatus() {
       const now = new Date();
       const utc = now.getTime() + (now.getTimezoneOffset() * 60000);
-      const uaeTime = new Date(utc + (4 * 60 * 60 * 1000));
+      const uaeTime = new Date(utc + (4 * 60 * 60 * 1000)); // توقيت الإمارات UTC+4
 
       const hours = uaeTime.getHours();
       const minutes = uaeTime.getMinutes().toString().padStart(2, '0');
@@ -193,6 +120,17 @@
 
     updateMarketStatus();
     setInterval(updateMarketStatus, 1000);
+
+    let lastScrollY = window.scrollY;
+    window.addEventListener('scroll', () => {
+      const nav = document.getElementById('bottom-nav');
+      if (window.scrollY > lastScrollY) {
+        nav.classList.add('hide');
+      } else {
+        nav.classList.remove('hide');
+      }
+      lastScrollY = window.scrollY;
+    });
   </script>
 </body>
 </html>

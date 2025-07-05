@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>شاشة الأسعار</title>
   <link rel="stylesheet" href="style.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-p+tLgUk6fD9X1A7w1XbA+fXg6vZ7M5+o4Wk8A9QgM7K5pZ9cHnq8mJHRMGGxYzM0/f5soR7QJIbT5+1K99YlGw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 <body>
   <!-- الترويسة -->
@@ -88,7 +88,7 @@
   <div class="market-content" id="market-purchases" style="display:none;">
     <div class="favorites">
       <h3>المشتريات الأخيرة</h3>
-      <div class="table-wrapper">
+      <div class="purchases-wrapper">
         <table class="favorites-table">
           <thead>
             <tr>
@@ -166,7 +166,7 @@
     function updateMarketStatus() {
       const now = new Date();
       const utc = now.getTime() + (now.getTimezoneOffset() * 60000);
-      const uaeTime = new Date(utc + (4 * 60 * 60 * 1000)); // توقيت الإمارات UTC+4
+      const uaeTime = new Date(utc + (4 * 60 * 60 * 1000));
 
       const hours = uaeTime.getHours();
       const minutes = uaeTime.getMinutes().toString().padStart(2, '0');

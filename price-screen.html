@@ -97,6 +97,8 @@
               <th>سعر الشراء</th>
               <th>عمولة السهم</th>
               <th>الضريبة</th>
+              <th>مبلغ التداول</th>
+              <th>سعر الشراء الحقيقي</th>
               <th>التاريخ</th>
             </tr>
           </thead>
@@ -107,6 +109,8 @@
               <td>21.600</td>
               <td>0.05</td>
               <td>5%</td>
+              <td>11366.25</td>
+              <td>22.732</td>
               <td>2024-07-01</td>
             </tr>
             <tr>
@@ -115,6 +119,8 @@
               <td>5.400</td>
               <td>0.02</td>
               <td>5%</td>
+              <td>1137.60</td>
+              <td>5.688</td>
               <td>2024-07-02</td>
             </tr>
           </tbody>
@@ -131,17 +137,12 @@
     <div class="favorites"><p>لا توجد بيانات حالياً في الأرباح.</p></div>
   </div>
 
-  <!-- الزر العائم -->
-  <div class="floating-button">
-    <i class="fas fa-th"></i>
-  </div>
-
   <!-- القائمة السفلية -->
   <div class="bottom-nav" id="bottom-nav">
     <a href="#"><i class="fas fa-coins"></i><span>أرباح</span></a>
-    <a href="#"><i class="fas fa-chart-line"></i><span>شاشة الأسعار</span></a>
+    <a href="price.html"><i class="fas fa-chart-line"></i><span>شاشة الأسعار</span></a>
     <a href="#"><i class="fas fa-briefcase"></i><span>محفظتي</span></a>
-    <a href="#"><i class="fas fa-home"></i><span>الرئيسية</span></a>
+    <a href="index.html"><i class="fas fa-home"></i><span>الرئيسية</span></a>
   </div>
 
   <script>
@@ -174,7 +175,12 @@
       const month = (uaeTime.getMonth() + 1).toString().padStart(2, '0');
       const year = uaeTime.getFullYear();
 
-      const marketOpen = (hours >= 10 && hours < 14);
+      const weekday = uaeTime.getDay(); // 0 الأحد .. 6 السبت
+      let marketOpen = false;
+
+      if (weekday >= 1 && weekday <= 5 && hours >= 10 && hours < 14) {
+        marketOpen = true;
+      }
 
       const statusText = document.getElementById("market-status-text");
       const statusDot = document.getElementById("status-dot");

@@ -43,49 +43,8 @@
     </script>
   </div>
 
-  <!-- قائمة تنقل داخلية -->
-  <div class="inner-nav">
-    <button class="active">السوق الرئيسي</button>
-    <button>المشتريات</button>
-    <button>المبيعات</button>
-    <button>الأرباح</button>
-  </div>
-
-  <!-- محتوى السوق الرئيسي -->
-  <div class="market-content" id="market-main">
-    <div class="filter-buttons">
-      <button class="active">عرض الكل</button>
-      <button>المفضلة</button>
-      <button>خريطة تحركات الأسهم</button>
-    </div>
-
-    <div class="favorites">
-      <table class="favorites-table">
-        <thead>
-          <tr>
-            <th>رمز</th>
-            <th>آخر سعر</th>
-            <th>تغيير</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>ADIB</td>
-            <td class="price-cell positive">21.660 <span class="arrow">▲</span></td>
-            <td class="positive">+0.28% (+0.060)</td>
-          </tr>
-          <tr>
-            <td>ADCB</td>
-            <td class="price-cell negative">13.580 <span class="arrow">▼</span></td>
-            <td class="negative">-0.15% (-0.020)</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
-
-  <!-- محتوى المشتريات -->
-  <div class="market-content" id="market-purchases" style="display:none;">
+  <!-- المشتريات -->
+  <div class="market-content" id="market-purchases">
     <div class="favorites">
       <h3>المشتريات الأخيرة</h3>
       <div class="purchases-wrapper">
@@ -95,7 +54,7 @@
               <th>رمز</th>
               <th>الكمية</th>
               <th>سعر الشراء</th>
-              <th>عمولة السهم</th>
+              <th>العمولة</th>
               <th>الضريبة</th>
               <th>مبلغ التداول</th>
               <th>سعر الشراء الحقيقي</th>
@@ -103,38 +62,11 @@
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td>ADIB</td>
-              <td>500</td>
-              <td>21.600</td>
-              <td>0.05</td>
-              <td>5%</td>
-              <td>11366.25</td>
-              <td>22.732</td>
-              <td>2024-07-01</td>
-            </tr>
-            <tr>
-              <td>ALDAR</td>
-              <td>200</td>
-              <td>5.400</td>
-              <td>0.02</td>
-              <td>5%</td>
-              <td>1137.60</td>
-              <td>5.688</td>
-              <td>2024-07-02</td>
-            </tr>
+            <!-- هنا سيتم توليد الصفوف تلقائيًا من الكود -->
           </tbody>
         </table>
       </div>
     </div>
-  </div>
-
-  <!-- الأقسام الفارغة -->
-  <div class="market-content empty" id="market-sales" style="display:none;">
-    <div class="favorites"><p>لا توجد بيانات حالياً في المبيعات.</p></div>
-  </div>
-  <div class="market-content empty" id="market-profits" style="display:none;">
-    <div class="favorites"><p>لا توجد بيانات حالياً في الأرباح.</p></div>
   </div>
 
   <!-- القائمة السفلية -->
@@ -146,24 +78,7 @@
   </div>
 
   <script>
-    const buttons = document.querySelectorAll('.inner-nav button');
-    const sections = {
-      'السوق الرئيسي': document.getElementById('market-main'),
-      'المشتريات': document.getElementById('market-purchases'),
-      'المبيعات': document.getElementById('market-sales'),
-      'الأرباح': document.getElementById('market-profits')
-    };
-
-    buttons.forEach(button => {
-      button.addEventListener('click', () => {
-        buttons.forEach(btn => btn.classList.remove('active'));
-        button.classList.add('active');
-        Object.values(sections).forEach(sec => sec.style.display = 'none');
-        const section = sections[button.textContent.trim()];
-        if (section) section.style.display = 'block';
-      });
-    });
-
+    // تحديث حالة السوق مع التحقق من أيام الأسبوع
     function updateMarketStatus() {
       const now = new Date();
       const utc = now.getTime() + (now.getTimezoneOffset() * 60000);
@@ -196,9 +111,31 @@
 
       marketTime.textContent = `سعر السوق اعتبارًا من ${hours}:${minutes} UAE ${day}/${month}/${year}`;
     }
-
     updateMarketStatus();
     setInterval(updateMarketStatus, 1000);
+
+    // جلب البيانات من Sheety وعرضها في جدول المشتريات
+    fetch('https://api.sheety.co/136f1878874f9351833ca417ad952e59/stock/purchases')
+      .then(res => res.json())
+      .then(data => {
+        const tbody = document.querySelector('#market-purchases tbody');
+        tbody.innerHTML = '';
+
+        data.purchases.forEach(row => {
+          tbody.innerHTML += `
+            <tr>
+              <td>${row.رمز}</td>
+              <td>${row.الكمية}</td>
+              <td>${parseFloat(row.سعرالشراء).toFixed(3)}</td>
+              <td>${row.العمولة}</td>
+              <td>${row.الضريبة}</td>
+              <td>${parseFloat(row.مبلغالتداول).toFixed(2)}</td>
+              <td>${parseFloat(row.سعرالشراءالحقيقي).toFixed(3)}</td>
+              <td>${row.التاريخ}</td>
+            </tr>`;
+        });
+      })
+      .catch(err => console.error('فشل تحميل البيانات:', err));
   </script>
 </body>
 </html>

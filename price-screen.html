@@ -63,6 +63,7 @@
         <table class="favorites-table">
           <thead>
             <tr>
+              <th>مفضلة</th>
               <th>الشعار</th>
               <th>اسم السهم</th>
               <th>رمز</th>
@@ -166,16 +167,18 @@
     updateMarketStatus();
     setInterval(updateMarketStatus, 1000);
 
+    let favorites = [];
+
     // جلب بيانات السوق الرئيسي من ADX_Price
     fetch('https://api.sheety.co/136f1878874f9351833ca417ad952e59/stock/adxPrice')
       .then(res => res.json())
       .then(data => {
         const tbody = document.querySelector('#market-main tbody');
         tbody.innerHTML = '';
-        console.log(data);
         data.adxPrice.forEach(row => {
           tbody.innerHTML += `
             <tr>
+              <td><i class="fas fa-star favorite-icon" data-id="${row.id}" style="cursor:pointer; color:#ccc;"></i></td>
               <td><img src="${row.logo}" alt="Logo" style="width:24px;height:24px;"></td>
               <td>${row.name}</td>
               <td>${row.id}</td>
@@ -186,13 +189,40 @@
       })
       .catch(err => console.error('فشل تحميل بيانات ADX_Price:', err));
 
+    document.addEventListener('click', function(e) {
+      if (e.target.classList.contains('favorite-icon')) {
+        const icon = e.target;
+        const stockId = icon.dataset.id;
+        if (favorites.includes(stockId)) {
+          favorites = favorites.filter(id => id !== stockId);
+          icon.style.color = '#ccc';
+        } else {
+          favorites.push(stockId);
+          icon.style.color = '#ffd700';
+        }
+      }
+    });
+
+    document.querySelector('.filter-buttons button:nth-child(2)').addEventListener('click', () => {
+      const tbody = document.querySelector('#market-main tbody');
+      const rows = tbody.querySelectorAll('tr');
+      rows.forEach(row => {
+        const stockId = row.querySelector('.favorite-icon').dataset.id;
+        row.style.display = favorites.includes(stockId) ? '' : 'none';
+      });
+    });
+
+    document.querySelector('.filter-buttons button:nth-child(1)').addEventListener('click', () => {
+      const rows = document.querySelectorAll('#market-main tbody tr');
+      rows.forEach(row => row.style.display = '');
+    });
+
     // جلب بيانات المشتريات من purchases
     fetch('https://api.sheety.co/136f1878874f9351833ca417ad952e59/stock/purchases')
       .then(res => res.json())
       .then(data => {
         const tbody = document.querySelector('#market-purchases tbody');
         tbody.innerHTML = '';
-        console.log(data);
         data.purchases.forEach(row => {
           tbody.innerHTML += `
             <tr>

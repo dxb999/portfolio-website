@@ -12,6 +12,7 @@
       justify-content: center;
       align-items: center;
       height: 100vh;
+      direction: rtl;
     }
     .catalog-container {
       position: relative;
@@ -29,13 +30,13 @@
       display: none;
       justify-content: center;
       align-items: center;
-      font-size: 24px;
       text-align: center;
-      padding: 20px;
       box-sizing: border-box;
+      overflow-y: auto;
     }
     .page.active {
       display: flex;
+      flex-direction: column;
     }
     .arrow {
       position: absolute;
@@ -53,6 +54,23 @@
     .arrow-right {
       right: 10px;
     }
+    .page img {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+      border-radius: 8px;
+    }
+    .page-content {
+      padding: 30px;
+      font-size: 20px;
+      text-align: right;
+      line-height: 1.6;
+      color: #333;
+    }
+    .page-content h2 {
+      color: #6B4E2E;
+      margin-bottom: 20px;
+    }
   </style>
 </head>
 <body>
@@ -61,31 +79,63 @@
   <div class="arrow arrow-left" onclick="prevPage()">&#10094;</div>
   <div class="arrow arrow-right" onclick="nextPage()">&#10095;</div>
 
-  <div class="page active" id="page0">صفحة الغلاف</div>
-  <div class="page" id="page1">صفحة المقدمة</div>
-  <div class="page" id="page2">صفحة المخطط العام</div>
-  <!-- يمكنك إضافة المزيد من الصفحات هنا -->
+  <!-- الغلاف -->
+  <div class="page active" id="page0">
+    <img src="A_3D-rendered_architectural_illustration_showcases.png" alt="الغلاف">
+  </div>
+
+  <!-- المقدمة كنص -->
+  <div class="page" id="page1">
+    <div class="page-content">
+      <h2>المقدمة</h2>
+      <p><strong>الرؤية:</strong> نهدف إلى تصميم فيلا خاصة تتميز بالعصرية والعملية، مع توزيع مرن للفراغات الداخلية يحقق راحة العائلة ويضمن الخصوصية، مع إطلالة مباشرة على الطبيعة الجبلية في وادي أصفني.</p>
+      <p><strong>الموقع والموقع العام:</strong> الأرض تقع في وادي أصفني – أبوظبي، بمساحة كلية 45 × 30 متر. الأرض محاطة بالجبال من الجهة الشمالية والغربية، ما يوفر أجواء طبيعية رائعة وإطلالة خلابة.</p>
+      <p><strong>متطلبات التصميم الأساسية:</strong></p>
+      <ul>
+        <li>أربع غرف نوم ماستر بالطابق العلوي.</li>
+        <li>مجلس رجال منفصل.</li>
+        <li>مجلس نساء منفصل أو صالة معيشة كبيرة (حسب الخيار المختار).</li>
+        <li>مطبخ حديث بخزائن مخفية ومساحات تخزين واسعة.</li>
+        <li>غرفة خادمة وغرفة غسيل.</li>
+        <li>مسبح وحديقة خلفية بتصميم متدرج مع جلسات خارجية.</li>
+        <li>مواقف سيارات وممرات حجرية للربط بين المساحات.</li>
+      </ul>
+      <p><strong>فلسفة التصميم:</strong> تقليل الجدران الداخلية لزيادة الانفتاح بين الفراغات. دمج الإضاءة الطبيعية عبر نوافذ زجاجية بانورامية. استخدام مواد طبيعية مثل الحجر والخشب لتتناسب مع بيئة وادي أصفني.</p>
+      <p>📞 للتواصل: 050 977 7992<br>✉️ البريد الإلكتروني: yourname@example.com</p>
+    </div>
+  </div>
+
 </div>
 
 <script>
   let currentPage = 0;
   const pages = document.querySelectorAll('.page');
+  const arrowLeft = document.querySelector('.arrow-left');
+  const arrowRight = document.querySelector('.arrow-right');
 
   function showPage(index) {
     pages.forEach((page, i) => {
       page.classList.toggle('active', i === index);
     });
+    arrowLeft.style.display = index === 0 ? 'none' : 'block';
+    arrowRight.style.display = index === pages.length - 1 ? 'none' : 'block';
   }
 
   function nextPage() {
-    currentPage = (currentPage + 1) % pages.length;
-    showPage(currentPage);
+    if (currentPage < pages.length - 1) {
+      currentPage++;
+      showPage(currentPage);
+    }
   }
 
   function prevPage() {
-    currentPage = (currentPage - 1 + pages.length) % pages.length;
-    showPage(currentPage);
+    if (currentPage > 0) {
+      currentPage--;
+      showPage(currentPage);
+    }
   }
+
+  showPage(currentPage);
 </script>
 
 </body>

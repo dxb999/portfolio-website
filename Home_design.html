@@ -2,88 +2,45 @@
 <html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8">
-  <title>كتالوج بيت العمر - محمد المزروعي</title>
-  <script src="https://unpkg.com/stpageflip"></script>
+  <title>غلاف كتالوج بيت العمر</title>
   <style>
     body {
       margin: 0;
       background-color: #f4f0eb;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      direction: rtl;
-    }
-    #flipbook {
-      width: 80%;
-      height: 90%;
-      box-shadow: 0 0 20px rgba(0,0,0,0.2);
-      border-radius: 10px;
-      overflow: hidden;
-    }
-    .page {
-      display: flex;
-      justify-content: center;
-      align-items: center;
       font-family: 'Dubai', sans-serif;
-      font-size: 22px;
-      padding: 20px;
-      box-sizing: border-box;
-      color: #333;
-      background-color: #fff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      text-align: center;
+      color: #6B4E2E;
+    }
+    h1 {
+      font-size: 36px;
+      margin: 20px 0 10px;
+    }
+    img {
+      max-width: 80%;
+      border-radius: 12px;
+      box-shadow: 0 0 30px rgba(0,0,0,0.3);
+    }
+    .info {
+      margin-top: 20px;
+      font-size: 20px;
+      line-height: 1.6;
     }
   </style>
 </head>
 <body>
 
-<div id="flipbook"></div>
-
-<!-- صفحات الكتالوج -->
-<div class="my-page page">
-  <img src="A_3D-rendered_architectural_illustration_showcases.png" alt="الغلاف" style="max-width:100%; max-height:100%; border-radius:8px;">
-</div>
-
-<div class="my-page page">
-  <div>
-    <h2 style="color:#6B4E2E; margin-bottom:20px;">المقدمة</h2>
-    <p><strong>الرؤية:</strong> نهدف إلى تصميم فيلا خاصة تتميز بالعصرية والعملية، مع توزيع مرن للفراغات الداخلية يحقق راحة العائلة ويضمن الخصوصية، مع إطلالة مباشرة على الطبيعة الجبلية في وادي أصفني.</p>
-    <p><strong>الموقع والموقع العام:</strong> الأرض تقع في وادي أصفني – أبوظبي، بمساحة كلية 45 × 30 متر. الأرض محاطة بالجبال من الجهة الشمالية والغربية، ما يوفر أجواء طبيعية رائعة وإطلالة خلابة.</p>
-    <p><strong>متطلبات التصميم الأساسية:</strong></p>
-    <ul>
-      <li>أربع غرف نوم ماستر بالطابق العلوي.</li>
-      <li>مجلس رجال منفصل.</li>
-      <li>مجلس نساء منفصل أو صالة معيشة كبيرة (حسب الخيار المختار).</li>
-      <li>مطبخ حديث بخزائن مخفية ومساحات تخزين واسعة.</li>
-      <li>غرفة خادمة وغرفة غسيل.</li>
-      <li>مسبح وحديقة خلفية بتصميم متدرج مع جلسات خارجية.</li>
-      <li>مواقف سيارات وممرات حجرية للربط بين المساحات.</li>
-    </ul>
-    <p><strong>فلسفة التصميم:</strong> تقليل الجدران الداخلية لزيادة الانفتاح بين الفراغات. دمج الإضاءة الطبيعية عبر نوافذ زجاجية بانورامية. استخدام مواد طبيعية مثل الحجر والخشب لتتناسب مع بيئة وادي أصفني.</p>
-    <p>📞 للتواصل: 050 977 7992<br>✉️ البريد الإلكتروني: yourname@example.com</p>
+  <h1>فلة المزروعي الخاصة</h1>
+  <img src="A_3D-rendered_digital_image_showcases_a_modern_two.png" alt="غلاف بيت العمر">
+  <div class="info">
+    الموقع: وادي أصفني – أبوظبي<br>
+    المساحة: 45 × 30 متر<br>
+    للتواصل: 050 977 7992
   </div>
-</div>
-
-<script>
-  const pageFlip = new St.PageFlip(document.getElementById('flipbook'), {
-    width: 600,
-    height: 800,
-    size: 'stretch',
-    minWidth: 315,
-    maxWidth: 1000,
-    minHeight: 400,
-    maxHeight: 1536,
-    maxShadowOpacity: 0.5,
-    showCover: true,
-    usePortrait: false,
-    flippingTime: 1000,
-    swipeDistance: 30,
-    disableFlipByClick: false,
-    startPage: 0, // يبدأ من الغلاف مباشرة
-    rtl: true // التقليب من اليسار إلى اليمين
-  });
-
-  pageFlip.loadFromHTML(document.querySelectorAll('.my-page'));
-</script>
 
 </body>
 </html>

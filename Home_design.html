@@ -3,140 +3,87 @@
 <head>
   <meta charset="UTF-8">
   <title>كتالوج بيت العمر - محمد المزروعي</title>
+  <script src="https://unpkg.com/stpageflip"></script>
   <style>
     body {
       margin: 0;
       background-color: #f4f0eb;
-      font-family: 'Dubai', sans-serif;
       display: flex;
       justify-content: center;
       align-items: center;
       height: 100vh;
       direction: rtl;
     }
-    .catalog-container {
-      position: relative;
+    #flipbook {
       width: 80%;
-      max-width: 900px;
       height: 90%;
-      background-color: #fff;
       box-shadow: 0 0 20px rgba(0,0,0,0.2);
-      overflow: hidden;
       border-radius: 10px;
+      overflow: hidden;
     }
     .page {
-      width: 100%;
-      height: 100%;
-      display: none;
+      display: flex;
       justify-content: center;
       align-items: center;
-      text-align: center;
+      font-family: 'Dubai', sans-serif;
+      font-size: 22px;
+      padding: 20px;
       box-sizing: border-box;
-      overflow-y: auto;
-    }
-    .page.active {
-      display: flex;
-      flex-direction: column;
-    }
-    .arrow {
-      position: absolute;
-      top: 50%;
-      transform: translateY(-50%);
-      font-size: 48px;
-      color: #6B4E2E;
-      cursor: pointer;
-      user-select: none;
-      z-index: 10;
-    }
-    .arrow-left {
-      left: 10px;
-    }
-    .arrow-right {
-      right: 10px;
-    }
-    .page img {
-      max-width: 100%;
-      max-height: 100%;
-      object-fit: contain;
-      border-radius: 8px;
-    }
-    .page-content {
-      padding: 30px;
-      font-size: 20px;
-      text-align: right;
-      line-height: 1.6;
       color: #333;
-    }
-    .page-content h2 {
-      color: #6B4E2E;
-      margin-bottom: 20px;
+      background-color: #fff;
     }
   </style>
 </head>
 <body>
 
-<div class="catalog-container">
-  <div class="arrow arrow-left" onclick="prevPage()">&#10094;</div>
-  <div class="arrow arrow-right" onclick="nextPage()">&#10095;</div>
-
-  <!-- الغلاف -->
-  <div class="page active" id="page0">
-    <img src="A_3D-rendered_architectural_illustration_showcases.png" alt="الغلاف">
-  </div>
-
-  <!-- المقدمة كنص -->
-  <div class="page" id="page1">
-    <div class="page-content">
-      <h2>المقدمة</h2>
-      <p><strong>الرؤية:</strong> نهدف إلى تصميم فيلا خاصة تتميز بالعصرية والعملية، مع توزيع مرن للفراغات الداخلية يحقق راحة العائلة ويضمن الخصوصية، مع إطلالة مباشرة على الطبيعة الجبلية في وادي أصفني.</p>
-      <p><strong>الموقع والموقع العام:</strong> الأرض تقع في وادي أصفني – أبوظبي، بمساحة كلية 45 × 30 متر. الأرض محاطة بالجبال من الجهة الشمالية والغربية، ما يوفر أجواء طبيعية رائعة وإطلالة خلابة.</p>
-      <p><strong>متطلبات التصميم الأساسية:</strong></p>
-      <ul>
-        <li>أربع غرف نوم ماستر بالطابق العلوي.</li>
-        <li>مجلس رجال منفصل.</li>
-        <li>مجلس نساء منفصل أو صالة معيشة كبيرة (حسب الخيار المختار).</li>
-        <li>مطبخ حديث بخزائن مخفية ومساحات تخزين واسعة.</li>
-        <li>غرفة خادمة وغرفة غسيل.</li>
-        <li>مسبح وحديقة خلفية بتصميم متدرج مع جلسات خارجية.</li>
-        <li>مواقف سيارات وممرات حجرية للربط بين المساحات.</li>
-      </ul>
-      <p><strong>فلسفة التصميم:</strong> تقليل الجدران الداخلية لزيادة الانفتاح بين الفراغات. دمج الإضاءة الطبيعية عبر نوافذ زجاجية بانورامية. استخدام مواد طبيعية مثل الحجر والخشب لتتناسب مع بيئة وادي أصفني.</p>
-      <p>📞 للتواصل: 050 977 7992<br>✉️ البريد الإلكتروني: yourname@example.com</p>
-    </div>
-  </div>
-
-</div>
+<div id="flipbook"></div>
 
 <script>
-  let currentPage = 0;
-  const pages = document.querySelectorAll('.page');
-  const arrowLeft = document.querySelector('.arrow-left');
-  const arrowRight = document.querySelector('.arrow-right');
+  const pageFlip = new St.PageFlip(document.getElementById('flipbook'), {
+    width: 600,
+    height: 800,
+    size: 'stretch',
+    minWidth: 315,
+    maxWidth: 1000,
+    minHeight: 400,
+    maxHeight: 1536,
+    maxShadowOpacity: 0.5,
+    showCover: true,
+    usePortrait: false,
+    flippingTime: 1000,
+    swipeDistance: 30,
+    disableFlipByClick: false,
+    startPage: 0,
+    rtl: true // هذا ما يجعل التقليب من اليسار إلى اليمين
+  });
 
-  function showPage(index) {
-    pages.forEach((page, i) => {
-      page.classList.toggle('active', i === index);
-    });
-    arrowLeft.style.display = index === 0 ? 'none' : 'block';
-    arrowRight.style.display = index === pages.length - 1 ? 'none' : 'block';
-  }
-
-  function nextPage() {
-    if (currentPage < pages.length - 1) {
-      currentPage++;
-      showPage(currentPage);
-    }
-  }
-
-  function prevPage() {
-    if (currentPage > 0) {
-      currentPage--;
-      showPage(currentPage);
-    }
-  }
-
-  showPage(currentPage);
+  pageFlip.loadFromHTML(document.querySelectorAll('.my-page'));
 </script>
+
+<!-- صفحات الكتالوج -->
+<div class="my-page page">
+  <img src="A_3D-rendered_architectural_illustration_showcases.png" alt="الغلاف" style="max-width:100%; max-height:100%; border-radius:8px;">
+</div>
+
+<div class="my-page page">
+  <div>
+    <h2 style="color:#6B4E2E; margin-bottom:20px;">المقدمة</h2>
+    <p><strong>الرؤية:</strong> نهدف إلى تصميم فيلا خاصة تتميز بالعصرية والعملية، مع توزيع مرن للفراغات الداخلية يحقق راحة العائلة ويضمن الخصوصية، مع إطلالة مباشرة على الطبيعة الجبلية في وادي أصفني.</p>
+    <p><strong>الموقع والموقع العام:</strong> الأرض تقع في وادي أصفني – أبوظبي، بمساحة كلية 45 × 30 متر. الأرض محاطة بالجبال من الجهة الشمالية والغربية، ما يوفر أجواء طبيعية رائعة وإطلالة خلابة.</p>
+    <p><strong>متطلبات التصميم الأساسية:</strong></p>
+    <ul>
+      <li>أربع غرف نوم ماستر بالطابق العلوي.</li>
+      <li>مجلس رجال منفصل.</li>
+      <li>مجلس نساء منفصل أو صالة معيشة كبيرة (حسب الخيار المختار).</li>
+      <li>مطبخ حديث بخزائن مخفية ومساحات تخزين واسعة.</li>
+      <li>غرفة خادمة وغرفة غسيل.</li>
+      <li>مسبح وحديقة خلفية بتصميم متدرج مع جلسات خارجية.</li>
+      <li>مواقف سيارات وممرات حجرية للربط بين المساحات.</li>
+    </ul>
+    <p><strong>فلسفة التصميم:</strong> تقليل الجدران الداخلية لزيادة الانفتاح بين الفراغات. دمج الإضاءة الطبيعية عبر نوافذ زجاجية بانورامية. استخدام مواد طبيعية مثل الحجر والخشب لتتناسب مع بيئة وادي أصفني.</p>
+    <p>📞 للتواصل: 050 977 7992<br>✉️ البريد الإلكتروني: yourname@example.com</p>
+  </div>
+</div>
 
 </body>
 </html>

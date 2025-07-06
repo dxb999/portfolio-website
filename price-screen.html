@@ -53,21 +53,28 @@
 
   <!-- محتوى السوق الرئيسي -->
   <div class="market-content" id="market-main">
+    <div class="filter-buttons">
+      <button class="active">عرض الكل</button>
+      <button>المفضلة</button>
+      <button>خريطة تحركات الأسهم</button>
+    </div>
     <div class="favorites">
-      <table class="favorites-table">
-        <thead>
-          <tr>
-            <th>الشعار</th>
-            <th>اسم السهم</th>
-            <th>رمز</th>
-            <th>آخر سعر</th>
-            <th>التغيير</th>
-          </tr>
-        </thead>
-        <tbody>
-          <!-- الصفوف ستتولد هنا -->
-        </tbody>
-      </table>
+      <div class="purchases-wrapper">
+        <table class="favorites-table">
+          <thead>
+            <tr>
+              <th>الشعار</th>
+              <th>اسم السهم</th>
+              <th>رمز</th>
+              <th>آخر سعر</th>
+              <th>التغيير</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- الصفوف ستتولد هنا -->
+          </tbody>
+        </table>
+      </div>
     </div>
   </div>
 
@@ -114,7 +121,6 @@
   </div>
 
   <script>
-    // قائمة التنقل بين الأقسام
     const buttons = document.querySelectorAll('.inner-nav button');
     const sections = {
       'السوق الرئيسي': document.getElementById('market-main'),
@@ -133,7 +139,6 @@
       });
     });
 
-    // تحديث حالة السوق
     function updateMarketStatus() {
       const now = new Date();
       const utc = now.getTime() + (now.getTimezoneOffset() * 60000);

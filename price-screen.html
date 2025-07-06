@@ -8,16 +8,19 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 <body>
+  <!-- الترويسة -->
   <div class="header">
     <h2>شاشة الأسعار</h2>
     <div class="profile-icon">MS</div>
   </div>
 
+  <!-- حالة السوق -->
   <div class="market-status">
     <div><span class="status-dot" id="status-dot"></span><span id="market-status-text">السوق مفتوح</span></div>
     <div class="market-time" id="market-time" style="margin-top:5px; font-size:0.9em;">سعر السوق اعتبارًا من ...</div>
   </div>
 
+  <!-- شريط الأسهم المتحرك -->
   <div class="tradingview-widget-container" style="margin-top:20px;">
     <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-ticker-tape.js" async>
     {
@@ -26,6 +29,7 @@
     </script>
   </div>
 
+  <!-- قائمة تنقل داخلية -->
   <div class="inner-nav">
     <button class="active">السوق الرئيسي</button>
     <button>المشتريات</button>
@@ -33,6 +37,7 @@
     <button>الأرباح</button>
   </div>
 
+  <!-- محتوى السوق الرئيسي -->
   <div class="market-content" id="market-main">
     <div class="filter-buttons">
       <button class="active">عرض الكل</button>
@@ -51,21 +56,26 @@
     </div>
   </div>
 
+  <!-- محتوى المشتريات -->
   <div class="market-content" id="market-purchases" style="display:none;">
     <div class="favorites">
       <h3>المشتريات الأخيرة</h3>
       <div class="purchases-wrapper">
         <table class="favorites-table">
-          <thead><tr><th>رمز</th><th>الكمية</th><th>سعر الشراء</th><th>العمولة</th><th>الضريبة</th><th>مبلغ التداول</th><th>سعر الشراء الحقيقي</th><th>التاريخ</th></tr></thead>
+          <thead>
+            <tr><th>رمز</th><th>الكمية</th><th>سعر الشراء</th><th>العمولة</th><th>الضريبة</th><th>مبلغ التداول</th><th>سعر الشراء الحقيقي</th><th>التاريخ</th></tr>
+          </thead>
           <tbody></tbody>
         </table>
       </div>
     </div>
   </div>
 
+  <!-- الأقسام الفارغة -->
   <div class="market-content empty" id="market-sales" style="display:none;"><div class="favorites"><p>لا توجد بيانات حالياً في المبيعات.</p></div></div>
   <div class="market-content empty" id="market-profits" style="display:none;"><div class="favorites"><p>لا توجد بيانات حالياً في الأرباح.</p></div></div>
 
+  <!-- القائمة السفلية -->
   <div class="bottom-nav" id="bottom-nav">
     <a href="#"><i class="fas fa-coins"></i><span>أرباح</span></a>
     <a href="price.html"><i class="fas fa-chart-line"></i><span>شاشة الأسعار</span></a>
@@ -81,7 +91,6 @@
       'المبيعات': document.getElementById('market-sales'),
       'الأرباح': document.getElementById('market-profits')
     };
-
     buttons.forEach(button => {
       button.addEventListener('click', () => {
         buttons.forEach(btn => btn.classList.remove('active'));
@@ -103,23 +112,27 @@
     }
     updateMarketStatus();setInterval(updateMarketStatus,1e3);
 
-    let favorites=[];
+    let favorites = [];
+
+    // تحميل بيانات السوق الرئيسي
     fetch('https://api.sheety.co/136f1878874f9351833ca417ad952e59/stock/adxPrice')
-      .then(res=>res.json()).then(data=>{
+      .then(res=>res.json())
+      .then(data=>{
         const tbody=document.querySelector('#market-main tbody');tbody.innerHTML='';
         data.adxPrice.forEach(row=>{
           tbody.innerHTML+=`
-          <tr>
-            <td><i class="fas fa-star favorite-icon" data-id="${row.id}" style="cursor:pointer; color:#ccc;"></i></td>
-            <td><img src="${row.logo}" alt="Logo" style="width:24px;height:24px;"></td>
-            <td>${row.name}</td>
-            <td>${row.id}</td>
-            <td class="price-cell">${parseFloat(row.price).toFixed(3)}</td>
-            <td>${row.prices}</td>
-          </tr>`;
+            <tr>
+              <td><i class="fas fa-star favorite-icon" data-id="${row.id}" style="cursor:pointer; color:#ccc;"></i></td>
+              <td><img src="${row.logo}" alt="Logo" style="width:24px;height:24px;"></td>
+              <td>${row.name}</td>
+              <td>${row.id}</td>
+              <td class="price-cell">${parseFloat(row.price).toFixed(3)}</td>
+              <td>${row.prices}</td>
+            </tr>`;
         });
-      }).catch(err=>console.error('فشل تحميل بيانات السوق:',err));
+      }).catch(err=>console.error('فشل تحميل بيانات ADX_Price:',err));
 
+    // التعامل مع المفضلة
     document.addEventListener('click',e=>{
       if(e.target.classList.contains('favorite-icon')){
         const icon=e.target,id=icon.dataset.id;
@@ -129,8 +142,9 @@
       }
     });
 
+    // زر المفضلة
     document.querySelector('.filter-buttons button:nth-child(2)').addEventListener('click',()=>{
-      const tbody=document.querySelector('#market-main tbody'),rows=tbody.querySelectorAll('tr');
+      const rows=document.querySelectorAll('#market-main tbody tr');
       rows.forEach(row=>{
         const id=row.querySelector('.favorite-icon').dataset.id;
         row.style.display=favorites.includes(id)?'':'none';
@@ -139,11 +153,32 @@
       document.querySelector('.filter-buttons button:nth-child(2)').classList.add('active');
     });
 
+    // زر عرض الكل
     document.querySelector('.filter-buttons button:nth-child(1)').addEventListener('click',()=>{
       document.querySelectorAll('#market-main tbody tr').forEach(row=>row.style.display='');
       document.querySelectorAll('.filter-buttons button').forEach(b=>b.classList.remove('active'));
       document.querySelector('.filter-buttons button:nth-child(1)').classList.add('active');
     });
+
+    // تحميل بيانات المشتريات
+    fetch('https://api.sheety.co/136f1878874f9351833ca417ad952e59/stock/purchases')
+      .then(res=>res.json())
+      .then(data=>{
+        const tbody=document.querySelector('#market-purchases tbody');tbody.innerHTML='';
+        data.purchases.forEach(row=>{
+          tbody.innerHTML+=`
+            <tr>
+              <td>${row.رمز}</td>
+              <td>${row.الكمية}</td>
+              <td>${parseFloat(row.سعرالشراء).toFixed(3)}</td>
+              <td>${row.العمولة}</td>
+              <td>${row.الضريبة}</td>
+              <td>${parseFloat(row.مبلغالتداول).toFixed(2)}</td>
+              <td>${parseFloat(row.سعرالشراءالحقيقي).toFixed(3)}</td>
+              <td>${row.التاريخ}</td>
+            </tr>`;
+        });
+      }).catch(err=>console.error('فشل تحميل بيانات المشتريات:',err));
   </script>
 </body>
 </html>

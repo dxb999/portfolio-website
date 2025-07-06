@@ -8,39 +8,65 @@
       margin: 0;
       background-color: #f4f0eb;
       font-family: 'Dubai', sans-serif;
+      color: #6B4E2E;
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: center;
-      height: 100vh;
+      padding: 50px 20px;
       text-align: center;
-      color: #6B4E2E;
     }
-    h1 {
-      font-size: 36px;
-      margin: 20px 0 10px;
+    header {
+      margin-bottom: 30px;
     }
-    img {
-      max-width: 80%;
-      border-radius: 12px;
-      box-shadow: 0 0 30px rgba(0,0,0,0.3);
+    header h1 {
+      font-size: 42px;
+      font-weight: bold;
+      margin: 0;
+    }
+    header h2 {
+      font-size: 24px;
+      font-weight: normal;
+      margin: 10px 0 0;
+      color: #8b6b4e;
+    }
+    .cover-img {
+      max-width: 900px;
+      width: 100%;
+      border-radius: 15px;
+      box-shadow: 0 0 40px rgba(0,0,0,0.2);
+      margin-bottom: 30px;
     }
     .info {
+      font-size: 22px;
+      line-height: 1.8;
+    }
+    .contact {
+      display: inline-block;
       margin-top: 20px;
+      padding: 10px 20px;
+      background-color: #6B4E2E;
+      color: #fff;
+      border-radius: 8px;
+      text-decoration: none;
       font-size: 20px;
-      line-height: 1.6;
     }
   </style>
 </head>
 <body>
 
-  <h1>فلة المزروعي الخاصة</h1>
-  <img src="BAA4E3A4-FD44-444A-8D7D-2519E7CBE046.jpeg" alt="غلاف بيت العمر">
+  <header>
+    <h1>فلة المزروعي الخاصة</h1>
+    <h2>تصميم فيلا عصرية بوادي أصفني</h2>
+  </header>
+
+  <img class="cover-img" src="22BA2DD8-ECBE-4C16-8099-4778A6CB45BC.jpeg" alt="غلاف بيت العمر">
+
   <div class="info">
     الموقع: وادي أصفني – أبوظبي<br>
-    المساحة: 45 × 30 متر<br>
-    للتواصل: 050 977 7992
+    المساحة: 45 × 30 متر
   </div>
+
+  <a class="contact" href="tel:0509777992">📞 للتواصل: 050 977 7992</a>
 
 </body>
 </html>

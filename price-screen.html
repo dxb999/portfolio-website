@@ -112,17 +112,17 @@
     }
     updateMarketStatus();setInterval(updateMarketStatus,1e3);
 
-    let favorites = [];
+    let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
 
-    // تحميل بيانات السوق الرئيسي
     fetch('https://api.sheety.co/136f1878874f9351833ca417ad952e59/stock/adxPrice')
       .then(res=>res.json())
       .then(data=>{
         const tbody=document.querySelector('#market-main tbody');tbody.innerHTML='';
         data.adxPrice.forEach(row=>{
+          const isFav = favorites.includes(row.id.toString());
           tbody.innerHTML+=`
             <tr>
-              <td><i class="fas fa-star favorite-icon" data-id="${row.id}" style="cursor:pointer; color:#ccc;"></i></td>
+              <td><i class="fas fa-star favorite-icon" data-id="${row.id}" style="cursor:pointer; color:${isFav?'#ffd700':'#ccc'};"></i></td>
               <td><img src="${row.logo}" alt="Logo" style="width:24px;height:24px;"></td>
               <td>${row.name}</td>
               <td>${row.id}</td>
@@ -132,17 +132,16 @@
         });
       }).catch(err=>console.error('فشل تحميل بيانات ADX_Price:',err));
 
-    // التعامل مع المفضلة
     document.addEventListener('click',e=>{
       if(e.target.classList.contains('favorite-icon')){
         const icon=e.target,id=icon.dataset.id;
         if(favorites.includes(id)){
           favorites=favorites.filter(f=>f!==id);icon.style.color='#ccc';
         }else{favorites.push(id);icon.style.color='#ffd700';}
+        localStorage.setItem('favorites', JSON.stringify(favorites));
       }
     });
 
-    // زر المفضلة
     document.querySelector('.filter-buttons button:nth-child(2)').addEventListener('click',()=>{
       const rows=document.querySelectorAll('#market-main tbody tr');
       rows.forEach(row=>{
@@ -153,14 +152,12 @@
       document.querySelector('.filter-buttons button:nth-child(2)').classList.add('active');
     });
 
-    // زر عرض الكل
     document.querySelector('.filter-buttons button:nth-child(1)').addEventListener('click',()=>{
       document.querySelectorAll('#market-main tbody tr').forEach(row=>row.style.display='');
       document.querySelectorAll('.filter-buttons button').forEach(b=>b.classList.remove('active'));
       document.querySelector('.filter-buttons button:nth-child(1)').classList.add('active');
     });
 
-    // تحميل بيانات المشتريات
     fetch('https://api.sheety.co/136f1878874f9351833ca417ad952e59/stock/purchases')
       .then(res=>res.json())
       .then(data=>{

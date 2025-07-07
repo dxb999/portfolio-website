@@ -84,6 +84,7 @@
     width: 600,
     height: 800,
     size: 'stretch',
+    mode: 'single', // عرض صفحة واحدة في كل مرة
     minWidth: 315,
     maxWidth: 1200,
     minHeight: 400,
@@ -95,7 +96,7 @@
     swipeDistance: 30,
     disableFlipByClick: false,
     startPage: 0,
-    rtl: true // لتكون البداية على اليمين والانتقال من اليسار لليمين
+    rtl: true // البداية على اليمين مع التقليب باتجاه القراءة العربية
   });
 
   pageFlip.loadFromHTML(document.querySelectorAll('.my-page'));

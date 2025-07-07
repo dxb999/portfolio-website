@@ -4,8 +4,8 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>شاشة الأسعار</title>
-  <link rel="stylesheet" href="style.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" />
 </head>
 <body>
   <!-- الترويسة -->
@@ -16,44 +16,39 @@
 
   <!-- حالة السوق -->
   <div class="market-status">
-    <div><span class="status-dot" id="status-dot"></span><span id="market-status-text">السوق مفتوح</span></div>
-    <div class="market-time" id="market-time" style="margin-top:5px; font-size:0.9em;">سعر السوق اعتبارًا من ...</div>
+    <div>
+      <span class="status-dot" id="status-dot"></span>
+      <span id="market-status-text">السوق مفتوح</span>
+    </div>
+    <div class="market-time" id="market-time">
+      سعر السوق اعتبارًا من ...
+    </div>
   </div>
 
-  <!-- شريط الأسهم المتحرك -->
-  <div class="tradingview-widget-container" style="margin-top:20px;">
+  <!-- شريط الأسهم -->
+  <div class="tradingview-widget-container">
     <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-ticker-tape.js" async>
     {
-    "symbols":[{"proName":"ADX:ADIB","title":"ADIB"},{"proName":"ADX:ADCB","title":"ADCB"},{"proName":"ADX:ALDAR","title":"ALDAR"},{"proName":"ADX:FAB","title":"FAB"}],
-    "colorTheme":"dark","isTransparent":false,"displayMode":"adaptive","locale":"ar"}
+      "symbols": [
+        { "proName": "ADX:ADIB", "title": "ADIB" },
+        { "proName": "ADX:ADCB", "title": "ADCB" },
+        { "proName": "ADX:ALDAR", "title": "ALDAR" },
+        { "proName": "ADX:FAB", "title": "FAB" }
+      ],
+      "colorTheme": "dark",
+      "isTransparent": false,
+      "displayMode": "adaptive",
+      "locale": "ar"
+    }
     </script>
   </div>
 
-  <!-- قائمة تنقل داخلية -->
+  <!-- قائمة تنقل -->
   <div class="inner-nav">
     <button class="active">السوق الرئيسي</button>
     <button>المشتريات</button>
     <button>المبيعات</button>
     <button>الأرباح</button>
-  </div>
-
-  <!-- محتوى السوق الرئيسي -->
-  <div class="market-content" id="market-main">
-    <div class="filter-buttons">
-      <button class="active">عرض الكل</button>
-      <button>المفضلة</button>
-      <button>خريطة تحركات الأسهم</button>
-    </div>
-    <div class="favorites">
-      <div class="purchases-wrapper">
-        <table class="favorites-table">
-          <thead>
-            <tr><th>مفضلة</th><th>الشعار</th><th>اسم السهم</th><th>رمز</th><th>آخر سعر</th><th>التغيير</th></tr>
-          </thead>
-          <tbody></tbody>
-        </table>
-      </div>
-    </div>
   </div>
 
   <!-- محتوى المشتريات -->
@@ -63,27 +58,50 @@
       <div class="purchases-wrapper">
         <table class="favorites-table">
           <thead>
-            <tr><th>رمز</th><th>الكمية</th><th>سعر الشراء</th><th>العمولة</th><th>الضريبة</th><th>مبلغ التداول</th><th>سعر الشراء الحقيقي</th><th>التاريخ</th></tr>
+            <tr>
+              <th>رمز</th>
+              <th>الكمية</th>
+              <th>سعر الشراء</th>
+              <th>العمولة</th>
+              <th>الضريبة</th>
+              <th>مبلغ التداول</th>
+              <th>سعر الشراء الحقيقي</th>
+              <th>سعر السهم حالياً</th>
+              <th>القيمة السوقية الآن</th>
+              <th>قيمة التغير</th>
+              <th>التاريخ</th>
+            </tr>
           </thead>
-          <tbody></tbody>
+          <tbody id="purchases-table-body">
+            <!-- سيتم إدراج الصفوف تلقائياً -->
+          </tbody>
         </table>
       </div>
     </div>
   </div>
 
-  <!-- الأقسام الفارغة -->
-  <div class="market-content empty" id="market-sales" style="display:none;"><div class="favorites"><p>لا توجد بيانات حالياً في المبيعات.</p></div></div>
-  <div class="market-content empty" id="market-profits" style="display:none;"><div class="favorites"><p>لا توجد بيانات حالياً في الأرباح.</p></div></div>
-
-  <!-- القائمة السفلية -->
-  <div class="bottom-nav" id="bottom-nav">
-    <a href="#"><i class="fas fa-coins"></i><span>أرباح</span></a>
-    <a href="price.html"><i class="fas fa-chart-line"></i><span>شاشة الأسعار</span></a>
-    <a href="#"><i class="fas fa-briefcase"></i><span>محفظتي</span></a>
-    <a href="index.html"><i class="fas fa-home"></i><span>الرئيسية</span></a>
+  <!-- الأقسام الأخرى -->
+  <div class="market-content" id="market-main">
+    <p>سيتم لاحقًا إضافة السوق الرئيسي هنا</p>
+  </div>
+  <div class="market-content empty" id="market-sales" style="display:none;">
+    <p>لا توجد بيانات حالياً في المبيعات.</p>
+  </div>
+  <div class="market-content empty" id="market-profits" style="display:none;">
+    <p>لا توجد بيانات حالياً في الأرباح.</p>
   </div>
 
+  <!-- القائمة السفلية -->
+  <div class="bottom-nav">
+    <a href="#"><i class="fas fa-coins"></i><span>أرباح</span></a>
+    <a href="#"><i class="fas fa-chart-line"></i><span>شاشة الأسعار</span></a>
+    <a href="#"><i class="fas fa-briefcase"></i><span>محفظتي</span></a>
+    <a href="#"><i class="fas fa-home"></i><span>الرئيسية</span></a>
+  </div>
+
+  <!-- الجافاسكربت -->
   <script>
+    // تبديل الأقسام
     const buttons = document.querySelectorAll('.inner-nav button');
     const sections = {
       'السوق الرئيسي': document.getElementById('market-main'),
@@ -91,79 +109,48 @@
       'المبيعات': document.getElementById('market-sales'),
       'الأرباح': document.getElementById('market-profits')
     };
+
     buttons.forEach(button => {
       button.addEventListener('click', () => {
         buttons.forEach(btn => btn.classList.remove('active'));
         button.classList.add('active');
-        Object.values(sections).forEach(sec => sec.style.display='none');
-        const section=sections[button.textContent.trim()];
-        if(section) section.style.display='block';
+        Object.values(sections).forEach(sec => sec.style.display = 'none');
+        const section = sections[button.textContent.trim()];
+        if (section) section.style.display = 'block';
       });
     });
 
+    // حالة السوق
     function updateMarketStatus() {
-      const now=new Date(),utc=now.getTime()+now.getTimezoneOffset()*60000,uaeTime=new Date(utc+4*3600000),
-      h=uaeTime.getHours(),m=uaeTime.getMinutes().toString().padStart(2,'0'),
-      d=uaeTime.getDate().toString().padStart(2,'0'),mo=(uaeTime.getMonth()+1).toString().padStart(2,'0'),
-      y=uaeTime.getFullYear(),day=uaeTime.getDay(),open=day>=1&&day<=5&&h>=10&&h<14,
-      s=document.getElementById("market-status-text"),dot=document.getElementById("status-dot"),t=document.getElementById("market-time");
-      s.textContent=open?"السوق مفتوح":"السوق مغلق";dot.style.backgroundColor=open?"#00e676":"#ff1744";
-      t.textContent=`سعر السوق اعتبارًا من ${h}:${m} UAE ${d}/${mo}/${y}`;
+      const now = new Date();
+      const uaeTime = new Date(now.getTime() + (4 * 60 * 60 * 1000));
+      const hours = uaeTime.getHours();
+      const minutes = uaeTime.getMinutes().toString().padStart(2, '0');
+      const day = uaeTime.getDate().toString().padStart(2, '0');
+      const month = (uaeTime.getMonth() + 1).toString().padStart(2, '0');
+      const year = uaeTime.getFullYear();
+      const weekday = uaeTime.getDay();
+      const open = weekday >= 1 && weekday <= 5 && hours >= 10 && hours < 14;
+
+      document.getElementById("market-status-text").textContent = open ? "السوق مفتوح" : "السوق مغلق";
+      document.getElementById("status-dot").style.backgroundColor = open ? "#00e676" : "#ff1744";
+      document.getElementById("market-time").textContent = `سعر السوق اعتبارًا من ${hours}:${minutes} UAE ${day}/${month}/${year}`;
     }
-    updateMarketStatus();setInterval(updateMarketStatus,1e3);
+    updateMarketStatus();
+    setInterval(updateMarketStatus, 60000);
 
-    let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
-
-    fetch('https://api.sheety.co/136f1878874f9351833ca417ad952e59/stock/adxPrice')
-      .then(res=>res.json())
-      .then(data=>{
-        const tbody=document.querySelector('#market-main tbody');tbody.innerHTML='';
-        data.adxPrice.forEach(row=>{
-          const isFav = favorites.includes(row.id.toString());
-          tbody.innerHTML+=`
-            <tr>
-              <td><i class="fas fa-star favorite-icon" data-id="${row.id}" style="cursor:pointer; color:${isFav?'#ffd700':'#ccc'};"></i></td>
-              <td><img src="${row.logo}" alt="Logo" style="width:24px;height:24px;"></td>
-              <td>${row.name}</td>
-              <td>${row.id}</td>
-              <td class="price-cell">${parseFloat(row.price).toFixed(3)}</td>
-              <td>${row.prices}</td>
-            </tr>`;
-        });
-      }).catch(err=>console.error('فشل تحميل بيانات ADX_Price:',err));
-
-    document.addEventListener('click',e=>{
-      if(e.target.classList.contains('favorite-icon')){
-        const icon=e.target,id=icon.dataset.id;
-        if(favorites.includes(id)){
-          favorites=favorites.filter(f=>f!==id);icon.style.color='#ccc';
-        }else{favorites.push(id);icon.style.color='#ffd700';}
-        localStorage.setItem('favorites', JSON.stringify(favorites));
-      }
-    });
-
-    document.querySelector('.filter-buttons button:nth-child(2)').addEventListener('click',()=>{
-      const rows=document.querySelectorAll('#market-main tbody tr');
-      rows.forEach(row=>{
-        const id=row.querySelector('.favorite-icon').dataset.id;
-        row.style.display=favorites.includes(id)?'':'none';
-      });
-      document.querySelectorAll('.filter-buttons button').forEach(b=>b.classList.remove('active'));
-      document.querySelector('.filter-buttons button:nth-child(2)').classList.add('active');
-    });
-
-    document.querySelector('.filter-buttons button:nth-child(1)').addEventListener('click',()=>{
-      document.querySelectorAll('#market-main tbody tr').forEach(row=>row.style.display='');
-      document.querySelectorAll('.filter-buttons button').forEach(b=>b.classList.remove('active'));
-      document.querySelector('.filter-buttons button:nth-child(1)').classList.add('active');
-    });
-
+    // جلب بيانات المشتريات
     fetch('https://api.sheety.co/136f1878874f9351833ca417ad952e59/stock/purchases')
-      .then(res=>res.json())
-      .then(data=>{
-        const tbody=document.querySelector('#market-purchases tbody');tbody.innerHTML='';
-        data.purchases.forEach(row=>{
-          tbody.innerHTML+=`
+      .then(res => res.json())
+      .then(data => {
+        const tbody = document.getElementById('purchases-table-body');
+        tbody.innerHTML = '';
+        data.purchases.forEach(row => {
+          const change = parseFloat(row.قيمةالتغير || 0);
+          const changeClass = change >= 0 ? 'positive' : 'negative';
+          const changeArrow = change >= 0 ? '▲' : '▼';
+
+          tbody.innerHTML += `
             <tr>
               <td>${row.رمز}</td>
               <td>${row.الكمية}</td>
@@ -172,10 +159,14 @@
               <td>${row.الضريبة}</td>
               <td>${parseFloat(row.مبلغالتداول).toFixed(2)}</td>
               <td>${parseFloat(row.سعرالشراءالحقيقي).toFixed(3)}</td>
+              <td>${parseFloat(row.سعرالسهمحالياً).toFixed(3)}</td>
+              <td>${parseFloat(row.القيمةالسوقيةالآن).toFixed(2)}</td>
+              <td><span class="${changeClass}">${changeArrow} ${Math.abs(change).toFixed(3)}</span></td>
               <td>${row.التاريخ}</td>
             </tr>`;
         });
-      }).catch(err=>console.error('فشل تحميل بيانات المشتريات:',err));
+      })
+      .catch(err => console.error('فشل تحميل بيانات المشتريات:', err));
   </script>
 </body>
 </html>

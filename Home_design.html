@@ -18,24 +18,30 @@
       align-items: center;
     }
     .swiper {
-      width: 90%;
-      height: 95%;
-      border-radius: 15px;
-      box-shadow: 0 0 20px rgba(0,0,0,0.2);
+      width: 100%;
+      height: 100%;
     }
     .swiper-slide {
-      background-color: #fff;
       display: flex;
       flex-direction: column;
+      justify-content: center;
       align-items: center;
       overflow-y: auto;
       text-align: right;
       padding: 30px;
+      box-sizing: border-box;
+      background-color: #fff;
     }
-    .swiper-slide img {
-      max-width: 100%;
-      border-radius: 12px;
-      box-shadow: 0 0 30px rgba(0,0,0,0.3);
+    .swiper-slide.first-slide {
+      padding: 0;
+      background-color: #000; /* لو تحب خلفية داكنة تبرز الصورة */
+    }
+    .swiper-slide img.fullscreen {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 0;
+      box-shadow: none;
     }
     .page-content h2 {
       color: #6B4E2E;
@@ -50,9 +56,9 @@
 <div class="swiper">
   <div class="swiper-wrapper">
 
-    <!-- الصفحة الأولى: الغلاف -->
-    <div class="swiper-slide">
-      <img src="BAA4E3A4-FD44-444A-8D7D-2519E7CBE046.jpeg" alt="غلاف بيت العمر">
+    <!-- الصفحة الأولى: الغلاف ممتد -->
+    <div class="swiper-slide first-slide">
+      <img class="fullscreen" src="BAA4E3A4-FD44-444A-8D7D-2519E7CBE046.jpeg" alt="غلاف بيت العمر">
     </div>
 
     <!-- الصفحة الثانية: المقدمة -->
@@ -86,11 +92,8 @@
     rtl: true,
     loop: false,
     slidesPerView: 1,
-    spaceBetween: 30,
+    spaceBetween: 0,
     grabCursor: true,
-    pagination: {
-      el: '.swiper-pagination',
-    },
   });
 </script>
 

@@ -1,14 +1,13 @@
 body {
-  font-family: 'Tahoma', sans-serif;
-  background-color: #f7f7f7;
+  font-family: 'Arial', sans-serif;
+  background: #f2f2f2;
   direction: rtl;
   margin: 0;
-  padding: 0;
 }
 
 .header {
-  background-color: #333;
-  color: white;
+  background-color: #1c1c1c;
+  color: #fff;
   padding: 15px;
   display: flex;
   justify-content: space-between;
@@ -16,50 +15,55 @@ body {
 }
 
 .profile-icon {
-  background: #2196f3;
-  padding: 8px 14px;
+  background: #555;
   border-radius: 50%;
-  color: white;
+  width: 32px;
+  height: 32px;
+  text-align: center;
+  line-height: 32px;
   font-weight: bold;
 }
 
 .market-status {
-  background: #eee;
-  padding: 10px 20px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+  padding: 10px;
+  background: #fff;
+  border-bottom: 1px solid #ddd;
 }
 
 .status-dot {
   width: 10px;
   height: 10px;
-  display: inline-block;
   border-radius: 50%;
-  margin-left: 8px;
+  display: inline-block;
+  margin-left: 5px;
 }
 
-.inner-nav {
+.inner-nav, .filter-buttons {
   display: flex;
   justify-content: space-around;
-  background: #ddd;
-  padding: 10px;
+  background-color: #eee;
+  padding: 10px 0;
 }
 
-.inner-nav button {
+.inner-nav button, .filter-buttons button {
   background: none;
   border: none;
-  font-weight: bold;
+  padding: 8px 15px;
   cursor: pointer;
 }
 
-.inner-nav button.active {
-  color: #2196f3;
-  text-decoration: underline;
+.inner-nav button.active, .filter-buttons button.active {
+  background: #007bff;
+  color: white;
+  border-radius: 5px;
 }
 
 .market-content {
-  padding: 20px;
+  padding: 10px;
+}
+
+.purchases-wrapper {
+  overflow-x: auto;
 }
 
 .favorites-table {
@@ -68,44 +72,42 @@ body {
 }
 
 .favorites-table th, .favorites-table td {
+  padding: 10px;
   border: 1px solid #ccc;
-  padding: 8px;
   text-align: center;
+  font-size: 14px;
 }
 
-.purchases-wrapper {
-  overflow-x: auto;
+.positive {
+  color: green;
+}
+
+.negative {
+  color: red;
 }
 
 .bottom-nav {
   position: fixed;
   bottom: 0;
   width: 100%;
+  background: #1c1c1c;
   display: flex;
   justify-content: space-around;
-  background: #222;
   color: white;
-  padding: 10px 0;
 }
 
 .bottom-nav a {
+  text-align: center;
+  padding: 10px;
   color: white;
   text-decoration: none;
-  font-size: 14px;
-  text-align: center;
 }
 
-.bottom-nav i {
-  display: block;
-  margin-bottom: 4px;
+.fa-star {
+  cursor: pointer;
+  font-size: 16px;
 }
 
-.positive {
-  color: green;
-  font-weight: bold;
-}
-
-.negative {
-  color: red;
-  font-weight: bold;
+.fa-star.fav {
+  color: gold;
 }

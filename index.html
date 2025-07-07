@@ -3,134 +3,179 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>محفظتي الاستثمارية</title>
+  <title>شاشة الأسعار</title>
   <link rel="stylesheet" href="style.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-p+tLgUk6fD9X1A7w1XbA+fXg6vZ7M5+o4Wk8A9QgM7K5pZ9cHnq8mJHRMGGxYzM0/f5soR7QJIbT5+1K99YlGw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 <body>
+  <!-- الترويسة -->
   <div class="header">
-    <h2>👋 هلا، محمد سالم محمد زايد المزروعي</h2>
-    <div class="user-info">NIN# UAE6210000021913</div>
+    <h2>شاشة الأسعار</h2>
+    <div class="profile-icon">MS</div>
   </div>
 
-  <div class="portfolio">
-    <div>قيمة المحفظة الكاملة</div>
-    <div class="value" id="portfolio-value">--</div>
-    <div class="change" id="portfolio-change">--</div>
-  </div>
-
-  <div class="chart-placeholder">رسم بياني للأداء (قيد التطوير)</div>
-
+  <!-- حالة السوق -->
   <div class="market-status">
-    <div>
-      <span class="status-dot" id="status-dot"></span>
-      <span id="market-status-text">السوق مفتوح</span>
-    </div>
-    <div class="market-time" id="market-time" style="margin-top: 5px; font-size: 0.9em;">
-‎      سعر السوق اعتبارًا من ...
-    </div>
+    <div><span class="status-dot" id="status-dot"></span><span id="market-status-text">السوق مفتوح</span></div>
+    <div class="market-time" id="market-time" style="margin-top:5px; font-size:0.9em;">سعر السوق اعتبارًا من ...</div>
   </div>
 
+  <!-- شريط الأسهم المتحرك -->
   <div class="tradingview-widget-container" style="margin-top:20px;">
     <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-ticker-tape.js" async>
     {
-    "symbols": [
-      { "proName": "ADX:ADIB", "title": "ADIB" },
-      { "proName": "ADX:ADCB", "title": "ADCB" },
-      { "proName": "ADX:ALDAR", "title": "ALDAR" },
-      { "proName": "ADX:FAB", "title": "FAB" }
-    ],
-    "colorTheme": "dark",
-    "isTransparent": false,
-    "displayMode": "adaptive",
-    "locale": "ar"
-    }
+    "symbols":[{"proName":"ADX:ADIB","title":"ADIB"},{"proName":"ADX:ADCB","title":"ADCB"},{"proName":"ADX:ALDAR","title":"ALDAR"},{"proName":"ADX:FAB","title":"FAB"}],
+    "colorTheme":"dark","isTransparent":false,"displayMode":"adaptive","locale":"ar"}
     </script>
   </div>
 
-  <div class="favorites">
-    <h3>قائمة المفضلات الخاصة بي</h3>
-    <table class="favorites-table">
-      <thead>
-        <tr>
-          <th>رمز</th>
-          <th>آخر سعر</th>
-          <th>تغيير</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>ADIB</td>
-          <td class="price-cell positive">21.660 <span class="arrow">▲</span></td>
-          <td class="positive">+0.28% (+0.060)</td>
-        </tr>
-        <tr>
-          <td>ADCB</td>
-          <td class="price-cell negative">13.580 <span class="arrow">▼</span></td>
-          <td class="negative">-0.15% (-0.020)</td>
-        </tr>
-      </tbody>
-    </table>
+  <!-- قائمة تنقل داخلية -->
+  <div class="inner-nav">
+    <button class="active">السوق الرئيسي</button>
+    <button>المشتريات</button>
+    <button>المبيعات</button>
+    <button>الأرباح</button>
   </div>
 
-  <div class="floating-button">
-    <i class="fas fa-th"></i>
+  <!-- محتوى السوق الرئيسي -->
+  <div class="market-content" id="market-main">
+    <div class="filter-buttons">
+      <button class="active">عرض الكل</button>
+      <button>المفضلة</button>
+      <button>خريطة تحركات الأسهم</button>
+    </div>
+    <div class="favorites">
+      <div class="purchases-wrapper">
+        <table class="favorites-table">
+          <thead>
+            <tr><th>مفضلة</th><th>الشعار</th><th>اسم السهم</th><th>رمز</th><th>آخر سعر</th><th>التغيير</th></tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
   </div>
 
+  <!-- محتوى المشتريات -->
+  <div class="market-content" id="market-purchases" style="display:none;">
+    <div class="favorites">
+      <h3>المشتريات الأخيرة</h3>
+      <div class="purchases-wrapper">
+        <table class="favorites-table">
+          <thead>
+            <tr><th>رمز</th><th>الكمية</th><th>سعر الشراء</th><th>العمولة</th><th>الضريبة</th><th>مبلغ التداول</th><th>سعر الشراء الحقيقي</th><th>التاريخ</th></tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- الأقسام الفارغة -->
+  <div class="market-content empty" id="market-sales" style="display:none;"><div class="favorites"><p>لا توجد بيانات حالياً في المبيعات.</p></div></div>
+  <div class="market-content empty" id="market-profits" style="display:none;"><div class="favorites"><p>لا توجد بيانات حالياً في الأرباح.</p></div></div>
+
+  <!-- القائمة السفلية -->
   <div class="bottom-nav" id="bottom-nav">
     <a href="#"><i class="fas fa-coins"></i><span>أرباح</span></a>
-    <a href="#"><i class="fas fa-chart-line"></i><span>شاشة الأسعار</span></a>
+    <a href="price.html"><i class="fas fa-chart-line"></i><span>شاشة الأسعار</span></a>
     <a href="#"><i class="fas fa-briefcase"></i><span>محفظتي</span></a>
-    <a href="#"><i class="fas fa-home"></i><span>الرئيسية</span></a>
+    <a href="index.html"><i class="fas fa-home"></i><span>الرئيسية</span></a>
   </div>
 
   <script>
-    const portfolioValue = 6562.81;
-    const portfolioChange = 0.032;
-    document.getElementById('portfolio-value').textContent = `${portfolioValue.toLocaleString()} درهم`;
-    document.getElementById('portfolio-change').textContent = `${(portfolioChange * 100).toFixed(3)}% اليوم`;
+    const buttons = document.querySelectorAll('.inner-nav button');
+    const sections = {
+      'السوق الرئيسي': document.getElementById('market-main'),
+      'المشتريات': document.getElementById('market-purchases'),
+      'المبيعات': document.getElementById('market-sales'),
+      'الأرباح': document.getElementById('market-profits')
+    };
+    buttons.forEach(button => {
+      button.addEventListener('click', () => {
+        buttons.forEach(btn => btn.classList.remove('active'));
+        button.classList.add('active');
+        Object.values(sections).forEach(sec => sec.style.display='none');
+        const section=sections[button.textContent.trim()];
+        if(section) section.style.display='block';
+      });
+    });
 
     function updateMarketStatus() {
-      const now = new Date();
-      const utc = now.getTime() + (now.getTimezoneOffset() * 60000);
-      const uaeTime = new Date(utc + (4 * 60 * 60 * 1000)); // توقيت الإمارات UTC+4
-
-      const hours = uaeTime.getHours();
-      const minutes = uaeTime.getMinutes().toString().padStart(2, '0');
-      const day = uaeTime.getDate().toString().padStart(2, '0');
-      const month = (uaeTime.getMonth() + 1).toString().padStart(2, '0');
-      const year = uaeTime.getFullYear();
-
-      const marketOpen = (hours >= 10 && hours < 14);
-
-      const statusText = document.getElementById("market-status-text");
-      const statusDot = document.getElementById("status-dot");
-      const marketTime = document.getElementById("market-time");
-
-      if (marketOpen) {
-        statusText.textContent = "السوق مفتوح";
-        statusDot.style.backgroundColor = "#00e676";
-      } else {
-        statusText.textContent = "السوق مغلق";
-        statusDot.style.backgroundColor = "#ff1744";
-      }
-
-      marketTime.textContent = `سعر السوق اعتبارًا من ${hours}:${minutes} UAE ${day}/${month}/${year}`;
+      const now=new Date(),utc=now.getTime()+now.getTimezoneOffset()*60000,uaeTime=new Date(utc+4*3600000),
+      h=uaeTime.getHours(),m=uaeTime.getMinutes().toString().padStart(2,'0'),
+      d=uaeTime.getDate().toString().padStart(2,'0'),mo=(uaeTime.getMonth()+1).toString().padStart(2,'0'),
+      y=uaeTime.getFullYear(),day=uaeTime.getDay(),open=day>=1&&day<=5&&h>=10&&h<14,
+      s=document.getElementById("market-status-text"),dot=document.getElementById("status-dot"),t=document.getElementById("market-time");
+      s.textContent=open?"السوق مفتوح":"السوق مغلق";dot.style.backgroundColor=open?"#00e676":"#ff1744";
+      t.textContent=`سعر السوق اعتبارًا من ${h}:${m} UAE ${d}/${mo}/${y}`;
     }
+    updateMarketStatus();setInterval(updateMarketStatus,1e3);
 
-    updateMarketStatus();
-    setInterval(updateMarketStatus, 1000);
+    let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
 
-    let lastScrollY = window.scrollY;
-    window.addEventListener('scroll', () => {
-      const nav = document.getElementById('bottom-nav');
-      if (window.scrollY > lastScrollY) {
-        nav.classList.add('hide');
-      } else {
-        nav.classList.remove('hide');
+    fetch('https://api.sheety.co/136f1878874f9351833ca417ad952e59/stock/adxPrice')
+      .then(res=>res.json())
+      .then(data=>{
+        const tbody=document.querySelector('#market-main tbody');tbody.innerHTML='';
+        data.adxPrice.forEach(row=>{
+          const isFav = favorites.includes(row.id.toString());
+          tbody.innerHTML+=`
+            <tr>
+              <td><i class="fas fa-star favorite-icon" data-id="${row.id}" style="cursor:pointer; color:${isFav?'#ffd700':'#ccc'};"></i></td>
+              <td><img src="${row.logo}" alt="Logo" style="width:24px;height:24px;"></td>
+              <td>${row.name}</td>
+              <td>${row.id}</td>
+              <td class="price-cell">${parseFloat(row.price).toFixed(3)}</td>
+              <td>${row.prices}</td>
+            </tr>`;
+        });
+      }).catch(err=>console.error('فشل تحميل بيانات ADX_Price:',err));
+
+    document.addEventListener('click',e=>{
+      if(e.target.classList.contains('favorite-icon')){
+        const icon=e.target,id=icon.dataset.id;
+        if(favorites.includes(id)){
+          favorites=favorites.filter(f=>f!==id);icon.style.color='#ccc';
+        }else{favorites.push(id);icon.style.color='#ffd700';}
+        localStorage.setItem('favorites', JSON.stringify(favorites));
       }
-      lastScrollY = window.scrollY;
     });
+
+    document.querySelector('.filter-buttons button:nth-child(2)').addEventListener('click',()=>{
+      const rows=document.querySelectorAll('#market-main tbody tr');
+      rows.forEach(row=>{
+        const id=row.querySelector('.favorite-icon').dataset.id;
+        row.style.display=favorites.includes(id)?'':'none';
+      });
+      document.querySelectorAll('.filter-buttons button').forEach(b=>b.classList.remove('active'));
+      document.querySelector('.filter-buttons button:nth-child(2)').classList.add('active');
+    });
+
+    document.querySelector('.filter-buttons button:nth-child(1)').addEventListener('click',()=>{
+      document.querySelectorAll('#market-main tbody tr').forEach(row=>row.style.display='');
+      document.querySelectorAll('.filter-buttons button').forEach(b=>b.classList.remove('active'));
+      document.querySelector('.filter-buttons button:nth-child(1)').classList.add('active');
+    });
+
+    fetch('https://api.sheety.co/136f1878874f9351833ca417ad952e59/stock/purchases')
+      .then(res=>res.json())
+      .then(data=>{
+        const tbody=document.querySelector('#market-purchases tbody');tbody.innerHTML='';
+        data.purchases.forEach(row=>{
+          tbody.innerHTML+=`
+            <tr>
+              <td>${row.رمز}</td>
+              <td>${row.الكمية}</td>
+              <td>${parseFloat(row.سعرالشراء).toFixed(3)}</td>
+              <td>${row.العمولة}</td>
+              <td>${row.الضريبة}</td>
+              <td>${parseFloat(row.مبلغالتداول).toFixed(2)}</td>
+              <td>${parseFloat(row.سعرالشراءالحقيقي).toFixed(3)}</td>
+              <td>${row.التاريخ}</td>
+            </tr>`;
+        });
+      }).catch(err=>console.error('فشل تحميل بيانات المشتريات:',err));
   </script>
 </body>
 </html>

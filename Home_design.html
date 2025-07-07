@@ -2,71 +2,104 @@
 <html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8">
-  <title>غلاف كتالوج بيت العمر</title>
+  <title>كتالوج بيت العمر - المزروعي</title>
+  <script src="https://unpkg.com/stpageflip"></script>
   <style>
     body {
       margin: 0;
       background-color: #f4f0eb;
-      font-family: 'Dubai', sans-serif;
-      color: #6B4E2E;
+      height: 100vh;
       display: flex;
-      flex-direction: column;
+      justify-content: center;
       align-items: center;
-      padding: 50px 20px;
-      text-align: center;
+      direction: rtl;
     }
-    header {
-      margin-bottom: 30px;
+    #flipbook {
+      width: 80%;
+      height: 90%;
+      box-shadow: 0 0 20px rgba(0,0,0,0.2);
+      border-radius: 10px;
+      overflow: hidden;
     }
-    header h1 {
-      font-size: 42px;
-      font-weight: bold;
-      margin: 0;
-    }
-    header h2 {
-      font-size: 24px;
-      font-weight: normal;
-      margin: 10px 0 0;
-      color: #8b6b4e;
-    }
-    .cover-img {
-      max-width: 900px;
-      width: 100%;
-      border-radius: 15px;
-      box-shadow: 0 0 40px rgba(0,0,0,0.2);
-      margin-bottom: 30px;
-    }
-    .info {
+    .page {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-family: 'Dubai', sans-serif;
       font-size: 22px;
-      line-height: 1.8;
+      padding: 30px;
+      box-sizing: border-box;
+      color: #333;
+      background-color: #fff;
+      text-align: right;
     }
-    .contact {
-      display: inline-block;
-      margin-top: 20px;
-      padding: 10px 20px;
-      background-color: #6B4E2E;
-      color: #fff;
-      border-radius: 8px;
-      text-decoration: none;
-      font-size: 20px;
+    .page img {
+      max-width: 100%;
+      border-radius: 12px;
+      box-shadow: 0 0 30px rgba(0,0,0,0.3);
+    }
+    .page-content {
+      width: 100%;
+      height: 100%;
+      overflow-y: auto;
+    }
+    .page-content h2 {
+      color: #6B4E2E;
+      margin-bottom: 20px;
     }
   </style>
 </head>
 <body>
 
-  <header>
-    <h1>فلة المزروعي الخاصة</h1>
-    <h2>تصميم فيلا عصرية بوادي أصفني</h2>
-  </header>
+<div id="flipbook"></div>
 
-  <img class="cover-img" src="BAA4E3A4-FD44-444A-8D7D-2519E7CBE046.jpeg" alt="غلاف بيت العمر">
+<!-- الغلاف - الصفحة الأولى -->
+<div class="my-page page">
+  <img src="BAA4E3A4-FD44-444A-8D7D-2519E7CBE046.jpeg" alt="غلاف بيت العمر">
+</div>
 
-  <div class="info">
-    الموقع: وادي أصفني – أبوظبي<br>
-    المساحة: 45 × 30 متر
+<!-- المقدمة - الصفحة الثانية -->
+<div class="my-page page">
+  <div class="page-content">
+    <h2>المقدمة</h2>
+    <p><strong>الرؤية:</strong> نهدف إلى تصميم فيلا خاصة تتميز بالعصرية والعملية، مع توزيع مرن للفراغات الداخلية يحقق راحة العائلة ويضمن الخصوصية، مع إطلالة مباشرة على الطبيعة الجبلية في وادي أصفني.</p>
+    <p><strong>الموقع والموقع العام:</strong> الأرض تقع في وادي أصفني – أبوظبي، بمساحة كلية 45 × 30 متر. الأرض محاطة بالجبال من الجهة الشمالية والغربية، ما يوفر أجواء طبيعية رائعة وإطلالة خلابة.</p>
+    <p><strong>متطلبات التصميم الأساسية:</strong></p>
+    <ul>
+      <li>أربع غرف نوم ماستر بالطابق العلوي.</li>
+      <li>مجلس رجال منفصل.</li>
+      <li>مجلس نساء منفصل أو صالة معيشة كبيرة (حسب الخيار المختار).</li>
+      <li>مطبخ حديث بخزائن مخفية ومساحات تخزين واسعة.</li>
+      <li>غرفة خادمة وغرفة غسيل.</li>
+      <li>مسبح وحديقة خلفية بتصميم متدرج مع جلسات خارجية.</li>
+      <li>مواقف سيارات وممرات حجرية للربط بين المساحات.</li>
+    </ul>
+    <p><strong>فلسفة التصميم:</strong> تقليل الجدران الداخلية لزيادة الانفتاح بين الفراغات. دمج الإضاءة الطبيعية عبر نوافذ زجاجية بانورامية. استخدام مواد طبيعية مثل الحجر والخشب لتتناسب مع بيئة وادي أصفني.</p>
+    <p>📞 للتواصل: 050 977 7992<br>✉️ البريد الإلكتروني: yourname@example.com</p>
   </div>
+</div>
 
-  <a class="contact" href="tel:0509777992">📞 للتواصل: 050 977 7992</a>
+<script>
+  const pageFlip = new St.PageFlip(document.getElementById('flipbook'), {
+    width: 600,
+    height: 800,
+    size: 'stretch',
+    minWidth: 315,
+    maxWidth: 1200,
+    minHeight: 400,
+    maxHeight: 1536,
+    maxShadowOpacity: 0.5,
+    showCover: true,
+    usePortrait: false,
+    flippingTime: 1000,
+    swipeDistance: 30,
+    disableFlipByClick: false,
+    startPage: 0,
+    rtl: true // لتكون البداية على اليمين والانتقال من اليسار لليمين
+  });
+
+  pageFlip.loadFromHTML(document.querySelectorAll('.my-page'));
+</script>
 
 </body>
 </html>

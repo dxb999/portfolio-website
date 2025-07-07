@@ -84,19 +84,19 @@
     width: 600,
     height: 800,
     size: 'stretch',
-    mode: 'single', // عرض صفحة واحدة في كل مرة
+    mode: 'single',        // عرض صفحة واحدة فقط في كل مرة
+    showCover: false,      // إلغاء وضع الغلاف الذي يسبب عرض صفحتين
     minWidth: 315,
     maxWidth: 1200,
     minHeight: 400,
     maxHeight: 1536,
     maxShadowOpacity: 0.5,
-    showCover: true,
     usePortrait: false,
     flippingTime: 1000,
     swipeDistance: 30,
     disableFlipByClick: false,
     startPage: 0,
-    rtl: true // البداية على اليمين مع التقليب باتجاه القراءة العربية
+    rtl: true              // البداية على اليمين مع التقليب باتجاه القراءة العربية
   });
 
   pageFlip.loadFromHTML(document.querySelectorAll('.my-page'));

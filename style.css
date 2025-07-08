@@ -23,4 +23,44 @@ body {
 .bottom-nav { position:fixed; bottom:0; right:0; left:0; height:60px; background:#002f6c; display:flex; justify-content:space-around; align-items:center; border-top-left-radius:20px; border-top-right-radius:20px; z-index:100; transition:transform 0.3s; direction:rtl; flex-direction:row; }
 .bottom-nav a { color:white; text-decoration:none; text-align:center; font-size:0.8em; }
 .bottom-nav a i { display:block; font-size:1.4em; margin-bottom:4px; }
-.bottom-nav.hide { transform:translateY(100%); }
+.bottom-nav.hide { transform:translateY(100%);       }
+/* الزر الدائري العائم */
+.floating-button {
+  position: fixed;
+  bottom: 80px;
+  right: 20px;
+  width: 56px;
+  height: 56px;
+  background-color: #007bff;
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2em;
+  cursor: pointer;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+  z-index: 1000;
+}
+
+/* قائمة الخيارات المنبثقة */
+.floating-options {
+  position: fixed;
+  bottom: 140px;
+  right: 20px;
+  display: none;
+  flex-direction: column;
+  gap: 10px;
+  z-index: 1000;
+}
+
+.floating-options button {
+  background-color: white;
+  color: #002f6c;
+  border: 1px solid #ccc;
+  padding: 10px 14px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 0.9em;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+}

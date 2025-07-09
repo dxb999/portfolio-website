@@ -83,10 +83,10 @@
 
   
   <!-- زر دائري عائم -->
-  <div class="floating-button" onclick="openOverlay()">
-    <i class="fas fa-plus"></i>
-  </div>
-
+  
+<div class="floating-button" id="openOverlayBtn" onclick="openOverlay()">
+  <i class="fas fa-plus"></i>
+</div>
   <!-- القائمة السفلية -->
   <div class="bottom-nav" id="bottom-nav">
     <a href="#"><i class="fas fa-coins"></i><span>أرباح</span></a>
@@ -253,14 +253,14 @@
   <!-- سكريب الزر الدائري -->
     
   function openOverlay() {
-    document.getElementById("overlayMenu").style.display = "flex";
-    document.getElementById("bottom-nav").style.display = "none"; // يخفي القائمة السفلية
-  }
+  document.getElementById('overlayMenu').style.display = 'flex';
+  document.getElementById('openOverlayBtn').classList.add('hidden');
+}
 
-  function closeOverlay() {
-    document.getElementById("overlayMenu").style.display = "none";
-    document.getElementById("bottom-nav").style.display = "flex"; // يُظهر القائمة السفلية
-  }
+function closeOverlay() {
+  document.getElementById('overlayMenu').style.display = 'none';
+  document.getElementById('openOverlayBtn').classList.remove('hidden');
+}
 
   </script>
   

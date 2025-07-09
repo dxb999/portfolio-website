@@ -250,6 +250,19 @@
     function scrollToTop() {
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
+  <!-- سكريب الزر الدائري -->
+    
+  function openOverlay() {
+    document.getElementById("overlayMenu").style.display = "flex";
+    document.getElementById("bottom-nav").style.display = "none"; // يخفي القائمة السفلية
+  }
+
+  function closeOverlay() {
+    document.getElementById("overlayMenu").style.display = "none";
+    document.getElementById("bottom-nav").style.display = "flex"; // يُظهر القائمة السفلية
+  }
+
   </script>
+  
 </body>
 </html>

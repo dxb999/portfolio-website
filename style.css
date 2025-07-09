@@ -265,7 +265,7 @@ body {
 
 .overlay-icons i {
   font-size: 1.8em; /* الحجم الذي يناسب الرؤية */
-  color: #002f6c;
+  color: white;
   margin-left: 10px;
   cursor: pointer;
 }

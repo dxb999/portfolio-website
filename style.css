@@ -257,9 +257,10 @@ body {
 }
 
 .overlay-item i {
-  display: block;
-  font-size: 1.4em;
-  margin-bottom: 5px;
+  font-size: 1.6em; /* الحجم الجديد */
+  color: #002f6c;
+  margin-left: 12px;
+  cursor: pointer;
 }
 
 .overlay-close {

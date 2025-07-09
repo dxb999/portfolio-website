@@ -253,16 +253,22 @@
     }
   <!-- سكريب الزر الدائري -->
     
-  function openOverlay() {
+function openOverlay() {
   document.getElementById("overlayMenu").style.display = "flex";
   document.getElementById("bottom-nav").style.display = "none";
-  document.querySelector(".floating-button").style.display = "none"; // إخفاء الزر +
+
+  // ✅ إخفاء زر +
+  document.querySelector(".floating-button").style.display = "none";
 }
+    
 
   function closeOverlay() {
-    document.getElementById("overlayMenu").style.display = "none";
-    document.getElementById("bottom-nav").style.display = "flex"; // يُظهر القائمة السفلية
-  }
+  document.getElementById("overlayMenu").style.display = "none";
+  document.getElementById("bottom-nav").style.display = "flex";
+
+  // ✅ إظهار زر +
+  document.querySelector(".floating-button").style.display = "flex";
+}
 
   </script>
   

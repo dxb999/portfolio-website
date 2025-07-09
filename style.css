@@ -258,8 +258,15 @@ body {
 
 .overlay-item i {
   display: block;
-  font-size: 3em;
+  font-size: 1.6em;
   margin-bottom: 5px;
+}
+
+.overlay-icons i {
+  font-size: 1.8em; /* الحجم الذي يناسب الرؤية */
+  color: #002f6c;
+  margin-left: 10px;
+  cursor: pointer;
 }
 
 .overlay-close {

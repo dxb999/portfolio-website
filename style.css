@@ -288,10 +288,10 @@ body {
   z-index: 2001;
 }
 .request-section {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); /* ثلاث أعمدة */
   gap: 15px;
-  justify-content: center;
+  justify-items: center;
   margin-top: 20px;
 }
 
@@ -299,8 +299,7 @@ body {
   background-color: #ffffff;
   color: #002f6c;
   border-radius: 14px;
-  width: 30%;
-  min-width: 100px;
+  width: 100%;
   max-width: 140px;
   text-align: center;
   padding: 15px 10px;
@@ -320,8 +319,9 @@ body {
   display: block;
 }
 
-@media (max-width: 500px) {
-  .request-box {
-    width: 45%;
+/* في حال كانت الشاشة صغيرة جدًا */
+@media (max-width: 400px) {
+  .request-section {
+    grid-template-columns: repeat(2, 1fr); /* صفين × عمودين */
   }
 }

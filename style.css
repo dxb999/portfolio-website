@@ -241,21 +241,21 @@ body {
   flex-direction: row;
   flex-wrap: nowrap;
   overflow-x: auto;
+  width: 100%;
+  gap: 12px;
+  padding-bottom: 10px;
+}
+
+.overlay-grid.vertical .overlay-item {
+  flex: 0 0 auto;              /* العرض لا يتمدد */
+  min-width: 100px;
+  max-width: 120px;
 }
 
 .overlay-item {
-  background-color: white;
-  color: #002f6c;
-  flex: 1 1 30%;
-  min-width: 100px;
-  text-align: center;
-  padding: 10px;
-  border-radius: 10px;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
-  font-size: 0.9em;
-  cursor: pointer;
+  pointer-events: auto;
+  z-index: 1;
 }
-
 .overlay-item i {
   display: block;
   font-size: 1.4em;
@@ -277,4 +277,7 @@ body {
   font-size: 1.2em;
   cursor: pointer;
   box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+}
+.hidden {
+  display: none !important;
 }

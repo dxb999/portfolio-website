@@ -1,7 +1,7 @@
 body {
   font-family: Tahoma, sans-serif;
   margin: 0;
-  padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+  padding: 0;
   direction: rtl;
   background: #0a3e7d;
   color: white;
@@ -183,7 +183,6 @@ body {
 }
 
 /* قائمة الخيارات المنبثقة */
-
 .overlay-menu {
   position: fixed;
   top: 0;
@@ -194,11 +193,16 @@ body {
   z-index: 999;
   display: none;
   flex-direction: column;
-  padding: 20px 10px; /* تقليل الحواف الجانبية */
+  padding: 20px 10px;
+  padding-top: calc(20px + env(safe-area-inset-top));
+  padding-bottom: calc(20px + env(safe-area-inset-bottom));
+  padding-left: calc(10px + env(safe-area-inset-left));
+  padding-right: calc(10px + env(safe-area-inset-right));
   overflow-y: auto;
-  overflow-x: hidden;  /* إلغاء التمدد الأفقي */
-  box-sizing: border-box; /* ضمان أن البادينغ لا يزيد من العرض */
+  overflow-x: hidden;
+  box-sizing: border-box;
 }
+
 .overlay-menu.active {
   display: flex;
 }
@@ -219,7 +223,7 @@ body {
 .overlay-actions i {
   margin-left: 10px;
   cursor: pointer;
-   color: white;
+  color: white;
   font-size: 1.2em;
 }
 
@@ -259,6 +263,11 @@ body {
   cursor: pointer;
 }
 
+.overlay-item:hover {
+  background-color: #f0f0f0;
+  transform: translateY(-3px);
+}
+
 .overlay-item i {
   display: block;
   font-size: 1.6em;
@@ -266,7 +275,7 @@ body {
 }
 
 .overlay-icons i {
-  font-size: 1.8em; /* الحجم الذي يناسب الرؤية */
+  font-size: 1.8em;
   color: white;
   margin-left: 10px;
   cursor: pointer;
@@ -309,7 +318,7 @@ body {
   transition: transform 0.2s ease-in-out;
   font-size: 0.9em;
   width: 100%;
-  max-width: 120px;  /* ✅ هذا مهم للحفاظ على التوازن */
+  max-width: 120px;
   justify-self: center;
 }
 
@@ -324,7 +333,6 @@ body {
   display: block;
 }
 
-/* شاشات صغيرة: عمودين */
 @media (max-width: 500px) {
   .request-section {
     grid-template-columns: repeat(2, 1fr);

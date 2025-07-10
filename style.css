@@ -1,7 +1,7 @@
 body {
   font-family: Tahoma, sans-serif;
   margin: 0;
-  padding: 0;
+  padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
   direction: rtl;
   background: #0a3e7d;
   color: white;
@@ -183,6 +183,7 @@ body {
 }
 
 /* قائمة الخيارات المنبثقة */
+
 .overlay-menu {
   position: fixed;
   top: 0;
@@ -193,10 +194,11 @@ body {
   z-index: 999;
   display: none;
   flex-direction: column;
-  padding: 20px;
+  padding: 20px 10px; /* تقليل الحواف الجانبية */
   overflow-y: auto;
+  overflow-x: hidden;  /* إلغاء التمدد الأفقي */
+  box-sizing: border-box; /* ضمان أن البادينغ لا يزيد من العرض */
 }
-
 .overlay-menu.active {
   display: flex;
 }

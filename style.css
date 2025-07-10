@@ -306,6 +306,9 @@ body {
   cursor: pointer;
   transition: transform 0.2s ease-in-out;
   font-size: 0.9em;
+  width: 100%;
+  max-width: 120px;  /* ✅ هذا مهم للحفاظ على التوازن */
+  justify-self: center;
 }
 
 .request-box:hover {
@@ -319,7 +322,7 @@ body {
   display: block;
 }
 
-/* شاشة صغيرة — يتحول إلى عمودين */
+/* شاشات صغيرة: عمودين */
 @media (max-width: 500px) {
   .request-section {
     grid-template-columns: repeat(2, 1fr);

@@ -231,7 +231,6 @@ body {
   color: white;
 }
 
-/* شبكة العناصر العامة */
 .overlay-grid {
   display: flex;
   flex-wrap: wrap;
@@ -239,49 +238,38 @@ body {
   justify-content: space-between;
 }
 
-/* شبكة مخصصة للعناصر الرأسية (مثل راقب طلباتك / تقدم بطلب جديد) */
 .overlay-grid.vertical {
-  gap: 15px;
-  justify-content: center;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  overflow-x: auto;
 }
 
-/* العنصر داخل الشبكة */
 .overlay-item {
   background-color: white;
   color: #002f6c;
   flex: 1 1 30%;
   min-width: 100px;
-  max-width: 140px;
   text-align: center;
   padding: 10px;
   border-radius: 10px;
   box-shadow: 0 2px 6px rgba(0,0,0,0.2);
   font-size: 0.9em;
   cursor: pointer;
-  transition: transform 0.2s ease-in-out;
 }
 
-.overlay-item:hover {
-  background-color: #f0f0f0;
-  transform: translateY(-3px);
-}
-
-/* الأيقونة داخل العنصر */
 .overlay-item i {
   display: block;
-  font-size: 2em;
-  margin-bottom: 6px;
+  font-size: 1.6em;
+  margin-bottom: 5px;
 }
 
-/* أيقونات الشات والإعدادات */
 .overlay-icons i {
-  font-size: 1.8em;
+  font-size: 1.8em; /* الحجم الذي يناسب الرؤية */
   color: white;
   margin-left: 10px;
   cursor: pointer;
 }
 
-/* زر الإغلاق الدائري */
 .overlay-close {
   position: fixed;
   bottom: 20px;
@@ -299,6 +287,7 @@ body {
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
   z-index: 2001;
 }
+
 .request-section {
   display: grid;
   grid-template-columns: repeat(3, 1fr);

@@ -1,83 +1,333 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8">
-  <title>📈 أسعار الأسهم المفضلة</title>
+  <meta charset="UTF-8" />
+  <title>📊 جدول أسعار الأسهم الإماراتية المباشرة</title>
   <style>
-    body { font-family: Tahoma; background: #eef2f7; padding: 20px; }
-    table { width: 100%; border-collapse: collapse; background: white; border: 1px solid #ccc; }
-    th, td { padding: 10px; border: 1px solid #ccc; text-align: center; }
-    th { background-color: #0a3e7d; color: white; }
-    h2 { color: #0a3e7d; margin-bottom: 20px; }
-    .error { color: red; }
+    body {
+      font-family: Tahoma;
+      background: #f7f9fc;
+      padding: 30px;
+      direction: rtl;
+    }
+    h2 {
+      color: #0a3e7d;
+      text-align: center;
+      margin-bottom: 30px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: white;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    th, td {
+      border: 1px solid #ccc;
+      padding: 12px;
+      text-align: center;
+      vertical-align: middle;
+    }
+    th {
+      background-color: #0a3e7d;
+      color: white;
+    }
   </style>
 </head>
 <body>
 
-<h2>📊 أسعار الأسهم المفضلة (تحديث مباشر)</h2>
+<h2>📈 جدول أسعار الأسهم الإماراتية - مباشر</h2>
 
 <table>
   <thead>
     <tr>
-      <th>الرمز</th>
-      <th>الاسم</th>
-      <th>السعر</th>
-      <th>التغير</th>
-      <th>النسبة</th>
-      <th>السوق</th>
+      <th>السهم</th>
+      <th>السعر المباشر</th>
+      <th>الرسم البياني</th>
     </tr>
   </thead>
-  <tbody id="stock-body">
-    <tr><td colspan="6">🔄 جاري تحميل البيانات...</td></tr>
+  <tbody>
+
+    <!-- ADIB -->
+    <tr>
+      <td>ADIB</td>
+      <td>
+        <div class="tradingview-widget-container">
+          <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-single-quote.js" async>
+          {
+            "symbol": "ADX:ADIB",
+            "width": "100%",
+            "colorTheme": "light",
+            "locale": "en"
+          }
+          </script>
+        </div>
+      </td>
+      <td>
+        <div class="tradingview-widget-container">
+          <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-mini-symbol-overview.js" async>
+          {
+            "symbol": "ADX:ADIB",
+            "width": "100%",
+            "height": "100",
+            "locale": "en",
+            "dateRange": "1D",
+            "colorTheme": "light"
+          }
+          </script>
+        </div>
+      </td>
+    </tr>
+
+    <!-- DIB -->
+    <tr>
+      <td>DIB</td>
+      <td>
+        <div class="tradingview-widget-container">
+          <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-single-quote.js" async>
+          {
+            "symbol": "DFM:DIB",
+            "width": "100%",
+            "colorTheme": "light",
+            "locale": "en"
+          }
+          </script>
+        </div>
+      </td>
+      <td>
+        <div class="tradingview-widget-container">
+          <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-mini-symbol-overview.js" async>
+          {
+            "symbol": "DFM:DIB",
+            "width": "100%",
+            "height": "100",
+            "locale": "en",
+            "dateRange": "1D",
+            "colorTheme": "light"
+          }
+          </script>
+        </div>
+      </td>
+    </tr>
+
+    <!-- EMAAR -->
+    <tr>
+      <td>EMAAR</td>
+      <td>
+        <div class="tradingview-widget-container">
+          <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-single-quote.js" async>
+          {
+            "symbol": "DFM:EMAAR",
+            "width": "100%",
+            "colorTheme": "light",
+            "locale": "en"
+          }
+          </script>
+        </div>
+      </td>
+      <td>
+        <div class="tradingview-widget-container">
+          <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-mini-symbol-overview.js" async>
+          {
+            "symbol": "DFM:EMAAR",
+            "width": "100%",
+            "height": "100",
+            "locale": "en",
+            "dateRange": "1D",
+            "colorTheme": "light"
+          }
+          </script>
+        </div>
+      </td>
+    </tr>
+
+    <!-- AIRARABIA -->
+    <tr>
+      <td>AIRARABIA</td>
+      <td>
+        <div class="tradingview-widget-container">
+          <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-single-quote.js" async>
+          {
+            "symbol": "DFM:AIRARABIA",
+            "width": "100%",
+            "colorTheme": "light",
+            "locale": "en"
+          }
+          </script>
+        </div>
+      </td>
+      <td>
+        <div class="tradingview-widget-container">
+          <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-mini-symbol-overview.js" async>
+          {
+            "symbol": "DFM:AIRARABIA",
+            "width": "100%",
+            "height": "100",
+            "locale": "en",
+            "dateRange": "1D",
+            "colorTheme": "light"
+          }
+          </script>
+        </div>
+      </td>
+    </tr>
+
+    <!-- DANA -->
+    <tr>
+      <td>DANA</td>
+      <td>
+        <div class="tradingview-widget-container">
+          <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-single-quote.js" async>
+          {
+            "symbol": "DFM:DANA",
+            "width": "100%",
+            "colorTheme": "light",
+            "locale": "en"
+          }
+          </script>
+        </div>
+      </td>
+      <td>
+        <div class="tradingview-widget-container">
+          <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-mini-symbol-overview.js" async>
+          {
+            "symbol": "DFM:DANA",
+            "width": "100%",
+            "height": "100",
+            "locale": "en",
+            "dateRange": "1D",
+            "colorTheme": "light"
+          }
+          </script>
+        </div>
+      </td>
+    </tr>
+
+    <!-- ADNOCDIST -->
+    <tr>
+      <td>ADNOCDIST</td>
+      <td>
+        <div class="tradingview-widget-container">
+          <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-single-quote.js" async>
+          {
+            "symbol": "ADX:ADNOCDIST",
+            "width": "100%",
+            "colorTheme": "light",
+            "locale": "en"
+          }
+          </script>
+        </div>
+      </td>
+      <td>
+        <div class="tradingview-widget-container">
+          <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-mini-symbol-overview.js" async>
+          {
+            "symbol": "ADX:ADNOCDIST",
+            "width": "100%",
+            "height": "100",
+            "locale": "en",
+            "dateRange": "1D",
+            "colorTheme": "light"
+          }
+          </script>
+        </div>
+      </td>
+    </tr>
+
+    <!-- EAND -->
+    <tr>
+      <td>EAND</td>
+      <td>
+        <div class="tradingview-widget-container">
+          <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-single-quote.js" async>
+          {
+            "symbol": "DFM:EAND",
+            "width": "100%",
+            "colorTheme": "light",
+            "locale": "en"
+          }
+          </script>
+        </div>
+      </td>
+      <td>
+        <div class="tradingview-widget-container">
+          <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-mini-symbol-overview.js" async>
+          {
+            "symbol": "DFM:EAND",
+            "width": "100%",
+            "height": "100",
+            "locale": "en",
+            "dateRange": "1D",
+            "colorTheme": "light"
+          }
+          </script>
+        </div>
+      </td>
+    </tr>
+
+    <!-- MULTIPLY -->
+    <tr>
+      <td>MULTIPLY</td>
+      <td>
+        <div class="tradingview-widget-container">
+          <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-single-quote.js" async>
+          {
+            "symbol": "ADX:MULTIPLY",
+            "width": "100%",
+            "colorTheme": "light",
+            "locale": "en"
+          }
+          </script>
+        </div>
+      </td>
+      <td>
+        <div class="tradingview-widget-container">
+          <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-mini-symbol-overview.js" async>
+          {
+            "symbol": "ADX:MULTIPLY",
+            "width": "100%",
+            "height": "100",
+            "locale": "en",
+            "dateRange": "1D",
+            "colorTheme": "light"
+          }
+          </script>
+        </div>
+      </td>
+    </tr>
+
+    <!-- LULU -->
+    <tr>
+      <td>LULU</td>
+      <td>
+        <div class="tradingview-widget-container">
+          <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-single-quote.js" async>
+          {
+            "symbol": "ADX:LULU",
+            "width": "100%",
+            "colorTheme": "light",
+            "locale": "en"
+          }
+          </script>
+        </div>
+      </td>
+      <td>
+        <div class="tradingview-widget-container">
+          <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-mini-symbol-overview.js" async>
+          {
+            "symbol": "ADX:LULU",
+            "width": "100%",
+            "height": "100",
+            "locale": "en",
+            "dateRange": "1D",
+            "colorTheme": "light"
+          }
+          </script>
+        </div>
+      </td>
+    </tr>
+
   </tbody>
 </table>
-
-<script>
-const apiKey = '2d42eaedb65c4d268aa695a0be7ca703'; // 🔑 استبدله بمفتاح TwelveData
-
-const symbols = [
-  'ADIB.AE','DIB.DU',
-  'EMAAR.DU','AIRARABIA.DU',
-  'DANA.DU','ADNOCDIST.AE',
-  'EAND.DU'
-];
-
-async function fetchStockData() {
-  const tbody = document.getElementById('stock-body');
-  tbody.innerHTML = '';
-
-  for (let symbol of symbols) {
-    try {
-      const response = await fetch(`https://api.twelvedata.com/quote?symbol=${symbol}&apikey=${apiKey}`);
-      const data = await response.json();
-
-      const row = document.createElement('tr');
-
-      if (!data.code) {
-        row.innerHTML = `
-          <td>${data.symbol}</td>
-          <td>${data.name || '-'}</td>
-          <td>${data.price || '-'}</td>
-          <td>${data.change || '-'}</td>
-          <td>${data.percent_change ? data.percent_change + '%' : '-'}</td>
-          <td>${data.exchange || '-'}</td>
-        `;
-      } else {
-        row.innerHTML = `<td colspan="6" class="error">⚠️ ${symbol}: ${data.message}</td>`;
-      }
-
-      tbody.appendChild(row);
-    } catch (error) {
-      const errorRow = document.createElement('tr');
-      errorRow.innerHTML = `<td colspan="6" class="error">❌ فشل تحميل ${symbol}</td>`;
-      tbody.appendChild(errorRow);
-    }
-  }
-}
-
-fetchStockData();
-setInterval(fetchStockData, 60000); // تحديث كل دقيقة
-</script>
 
 </body>
 </html>

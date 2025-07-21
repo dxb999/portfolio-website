@@ -2,7 +2,7 @@
 <html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8">
-  <title>📈 أسعار سوق أبوظبي ودبي</title>
+  <title>📈 أسعار الأسهم المفضلة</title>
   <style>
     body { font-family: Tahoma; background: #eef2f7; padding: 20px; }
     table { width: 100%; border-collapse: collapse; background: white; border: 1px solid #ccc; }
@@ -14,7 +14,7 @@
 </head>
 <body>
 
-<h2>📊 أسعار الأسهم الإماراتية - تحديث مباشر</h2>
+<h2>📊 أسعار الأسهم المفضلة (تحديث مباشر)</h2>
 
 <table>
   <thead>
@@ -33,20 +33,16 @@
 </table>
 
 <script>
-const apiKey = '2d42eaedb65c4d268aa695a0be7ca703'; // 🔑 أدخل مفتاح API من TwelveData
+const apiKey = '2d42eaedb65c4d268aa695a0be7ca703'; // 🔑 استبدله بمفتاح TwelveData
 
 const symbols = [
-  'ADAVIATION.AE','ADC.AE','ADCB.AE','ADIB.AE','ADNH.AE','ADNIC.AE','ADNOCDIST.AE','ADNOCDRILL.AE',
-  'ADPORTS.AE','ADSB.AE','AGTHIA.AE','AIRARABIA.DU','AJMANBANK.AE','ALAIN.AE','ALDAR.AE','ALFIRDOUS.DU',
-  'ALPHADHABI.AE','AMANAT.DU','AMLAK.DU','APEX.AE','ARAM.DU','ARMX.DU','ASCANA.DU','ASM.AE','BBAYANAT.AE',
-  'BILDCO.AE','BOROUGE.AE','BOS.DU','BBURJEEL.AE','DANAD.DU','DARTAKAFUL.DU','DEWA.DU','DEYAAR.DU',
-  'DFM.DU','DIB.DU','DIC.DU','DRC.DU','DRIVE.AE','DU.DU','EAND.DU','EASYLEASE.AE','EKTTITAB.DU',
-  'EMAAR.DU','EMAARDEV.DU','EMIRATESNBD.DU','EMSTEEL.AE','ERC.DU','ESG.AE','ESHRAQ.AE','FAB.AE',
-  'FCI.AE','FERTIGLB.AE','GCEM.AE','GHITHA.AE','GULFNAV.DU','HAYAH.AE','IH.AE','IHC.AE','INVICTUS.AE',
-  'JULPHAR.AE','MANAZEL.AE','METHAQ.AE','MULTIPLY.AE','NCTH.AE','NIH.AE','NMDC.AE','OEIHC.AE','PALMS.AE',
-  'QHOLDING.AE','RAKBANK.AE','RAKCEC.AE','RAKPROP.AE','RAKWCT.AE','RPM.AE','SALAMA.DU','SSALIK.DU',
-  'SHUAA.DU','SIB.DU','SUDATEL.DU','TABREED.AE','TAKAFUL_EM.DU','TAQA.AE','TECOM.DU','UNION.AE',
-  'UNIONCOOP.DU','UPP.DU','WAHA.AE','YAHSAT.AE','LULU.AE'
+  'ADIB.AE','ADIB.AE','ADIB.AE',
+  'DIB.DU','DIB.DU',
+  'EMAAR.DU','AIRARABIA.DU',
+  'DANA.DU','DANA.DU',
+  'ADNOCDIST.AE','ADNOCDIST.AE',
+  'EAND.DU','EAND.DU',
+  'MULTIPLY.AE','LULU.AE'
 ];
 
 async function fetchStockData() {
@@ -82,9 +78,8 @@ async function fetchStockData() {
   }
 }
 
-// التحديث كل دقيقة
 fetchStockData();
-setInterval(fetchStockData, 60000);
+setInterval(fetchStockData, 60000); // تحديث كل دقيقة
 </script>
 
 </body>

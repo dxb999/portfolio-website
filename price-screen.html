@@ -233,7 +233,7 @@
         const tbody = document.querySelector('#market-purchases tbody');
         tbody.innerHTML = '';
         data.purchases.forEach(row => {
-          const change = parseFloat(row.قيمةالتغير || 0);
+          const change = parseFloat(row.قيمهالتغير || 0);
           const arrow = change > 0 ? '↑' : (change < 0 ? '↓' : '');
           const color = change > 0 ? 'green' : (change < 0 ? 'red' : 'gray');
           tbody.innerHTML += `

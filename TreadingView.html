@@ -39,7 +39,9 @@
     .toolbar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;justify-content:space-between;margin-bottom:10px}
     .toolbar .toggle{padding:8px 10px;border-radius:10px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.12);cursor:pointer}
     table{width:100%;border-collapse:collapse}
-    thead th{position:sticky;top:0;z-index:1;background:linear-gradient(180deg,rgba(255,255,255,.04),rgba(255,255,255,0) 30%),var(--card);color:var(--muted);font-weight:700;text-align:right;font-size:12px;letter-spacing:.2px;border-bottom:1px solid rgba(255,255,255,.12);padding:10px;white-space:nowrap}
+    thead th{position:sticky;top:0;z-index:2;background:linear-gradient(180deg,rgba(255,255,255,.04),rgba(255,255,255,0) 30%),var(--card);color:var(--muted);font-weight:700;text-align:right;font-size:12px;letter-spacing:.2px;border-bottom:1px solid rgba(255,255,255,.12);padding:10px;white-space:nowrap}
+    thead tr.filter-row th{background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(255,255,255,0) 30%),var(--card);position:sticky;top:42px;z-index:1}
+    thead input{width:100%;padding:6px 8px;border-radius:8px;border:1px solid rgba(255,255,255,.15);background:rgba(255,255,255,.04);color:var(--text);font-size:12px}
     tbody td{border-bottom:1px dashed rgba(255,255,255,.08);padding:8px 10px;vertical-align:middle}
     tbody tr:hover{background:rgba(255,255,255,.03)}
     .sym{display:grid;gap:2px}
@@ -168,6 +170,28 @@
                 <th>ملاحظات</th>
                 <th></th>
               </tr>
+              <!-- صف الفلاتر لكل عمود -->
+              <tr class="filter-row">
+                <th></th>
+                <th><input id="filt_symbol" placeholder="مثال: DIB"></th>
+                <th><input id="filt_ex" placeholder="سوق"></th>
+                <th><input id="filt_qty" placeholder=">=100"></th>
+                <th><input id="filt_buy" placeholder="10-15"></th>
+                <th><input id="filt_fee" placeholder="<=5"></th>
+                <th><input id="filt_tax" placeholder="<=1"></th>
+                <th><input id="filt_trade" placeholder=">=500"></th>
+                <th><input id="filt_buyReal" placeholder=".."></th>
+                <th><input id="filt_mkt" placeholder=".."></th>
+                <th><input id="filt_cost" placeholder=".."></th>
+                <th><input id="filt_val" placeholder=".."></th>
+                <th><input id="filt_pnl" placeholder=".."></th>
+                <th><input id="filt_ret" placeholder=">0%"></th>
+                <th><input id="filt_dps" placeholder=".."></th>
+                <th><input id="filt_divy" placeholder=".."></th>
+                <th><input id="filt_date" placeholder="2025"></th>
+                <th><input id="filt_notes" placeholder="ملاحظة"></th>
+                <th></th>
+              </tr>
             </thead>
             <tbody id="tbody"></tbody>
           </table>
@@ -179,6 +203,11 @@
           <h3 style="margin:0 0 8px">📊 توزيع المحفظة</h3>
           <div class="donut" id="donut" title="التوزيع النسبي للوزن"></div>
           <div class="legend" id="legend"></div>
+        </div>
+
+        <div class="card">
+          <h3 style="margin:0 0 8px">📦 عدد الأسهم لكل شركة</h3>
+          <div id="qtyBoard" class="legend"></div>
         </div>
 
         <div class="card whatif">
@@ -245,9 +274,9 @@
     ];
 
     // ========= Utils =========
-    const nf = new Intl.NumberFormat('ar-AE',{minimumFractionDigits:2,maximumFractionDigits:2});
+    const nf2 = new Intl.NumberFormat('ar-AE',{minimumFractionDigits:2,maximumFractionDigits:2});
     function sum(arr){return arr.reduce((a,b)=>a+b,0)}
-    function fmt(x){if(!isFinite(+x)) return '—'; return state.currency+' '+nf.format(+x)}
+    function fmt(x){if(!isFinite(+x)) return '—'; return state.currency+' '+nf2.format(+x)}
     function colorPct(x){return x>0?'pos':(x<0?'neg':'neu')}
     function inputNum(key,val,idx,size=''){return `<input class="input ${size}" type="number" step="0.0000001" data-idx="${idx}" data-key="${key}" value="${val ?? ''}">`}
     function inputText(key,val,idx,size=''){return `<input class="input ${size}" type="text" data-idx="${idx}" data-key="${key}" value="${(val||'').replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[m]))}">`}
@@ -259,10 +288,10 @@
       const rows = state.items.map(it=>{
         const qty = (+it.qty||0);
         const buyBase = (+it.buyReal||0) || (+it.buy||0);
-        const cost = qty * buyBase; // يشمل الرسوم إذا توفرت
+        const cost = qty * buyBase;
         const val = qty * (+it.mkt||0);
         const pnl = val - cost;
-        const ret = cost>0 ? pnl/cost : 0; // هذا هو التغيير النسبي
+        const ret = cost>0 ? pnl/cost : 0;
         const divYield = (+it.mkt||0)>0 ? (+it.dps||0)/(+it.mkt||0) : 0;
         const annualDiv = (+it.dps||0)*qty;
         const progress = (+it.target||0)>0 ? (+it.mkt||0)/(+it.target||0) : 0;
@@ -275,23 +304,106 @@
       return {rows,totalCost,totalVal,totalPnL,totalRet};
     }
 
+    // ===== Helpers: فلتر عمود بنمط أرقام أو نص =====
+    function parseNumericFilter(expr){
+      if(!expr) return ()=>true;
+      expr = expr.toString().trim();
+      const pct = /%$/.test(expr); if(pct) expr = expr.replace(/%/,'');
+      // >=, <=, >, <, =X
+      const m1 = expr.match(/^(>=|<=|>|<|=)\s*(-?\d+(?:\.\d+)?)/);
+      if(m1){
+        const op = m1[1], num = parseFloat(m1[2]);
+        return (v)=>{ v = +v; if(pct) v*=100;
+          if(!isFinite(v)) return false;
+          return op==='>='? v>=num : op==='<= '? v<=num : op==='>'? v>num : op==='<'? v<num : v===num;
+        };
+      }
+      // range: a-b
+      const m2 = expr.match(/^(-?\d+(?:\.\d+)?)\s*-\s*(-?\d+(?:\.\d+)?)/);
+      if(m2){
+        const a = parseFloat(m2[1]), b = parseFloat(m2[2]);
+        return (v)=>{ v=+v; if(pct) v*=100; return isFinite(v) && v>=Math.min(a,b) && v<=Math.max(a,b); };
+      }
+      // plain number = equals (with optional %)
+      const n = parseFloat(expr);
+      if(!isNaN(n)) return (v)=>{ v=+v; if(pct) v*=100; return isFinite(v) && v===n; };
+      // fallback substring for text-like
+      return ()=>true;
+    }
+    function txtMatch(needle){ needle=(needle||'').toString().trim().toLowerCase(); if(!needle) return ()=>true;
+      return (s)=> (s||'').toString().toLowerCase().includes(needle);
+    }
+    function getColumnFilters(){
+      return {
+        symbol: txtMatch($('#filt_symbol')?.value),
+        ex: txtMatch($('#filt_ex')?.value),
+        qty: parseNumericFilter($('#filt_qty')?.value),
+        buy: parseNumericFilter($('#filt_buy')?.value),
+        fee: parseNumericFilter($('#filt_fee')?.value),
+        tax: parseNumericFilter($('#filt_tax')?.value),
+        trade: parseNumericFilter($('#filt_trade')?.value),
+        buyReal: parseNumericFilter($('#filt_buyReal')?.value),
+        mkt: parseNumericFilter($('#filt_mkt')?.value),
+        cost: parseNumericFilter($('#filt_cost')?.value),
+        val: parseNumericFilter($('#filt_val')?.value),
+        pnl: parseNumericFilter($('#filt_pnl')?.value),
+        ret: parseNumericFilter($('#filt_ret')?.value), // استخدم % إن بغيت
+        dps: parseNumericFilter($('#filt_dps')?.value),
+        divy: parseNumericFilter($('#filt_divy')?.value),
+        date: txtMatch($('#filt_date')?.value),
+        notes: txtMatch($('#filt_notes')?.value),
+      };
+    }
+    function passesColumnFilters(r, F){
+      const buyBase = (+r.buyReal||0) || (+r.buy||0);
+      const cost = r.qty*buyBase, val = r.qty*(+r.mkt||0), pnl=val-cost, ret= cost>0? (pnl/cost)*100 : 0;
+      return F.symbol(r.symbol) &&
+             F.ex((r.ex||'')) &&
+             F.qty(r.qty) &&
+             F.buy(r.buy) &&
+             F.fee(r.fee) &&
+             F.tax(r.tax) &&
+             F.trade(r.trade) &&
+             F.buyReal(r.buyReal) &&
+             F.mkt(r.mkt) &&
+             F.cost(cost) &&
+             F.val(val) &&
+             F.pnl(pnl) &&
+             F.ret(ret) &&
+             F.dps(r.dps) &&
+             F.divy((r.mkt>0)? (r.dps/r.mkt*100):0) &&
+             F.date(r.date||'') &&
+             F.notes(r.notes||'');
+    }
+
     function render(){
       const q = $('#search').value?.trim().toLowerCase() || '';
       const exFilter = $('#filterEx').value;
+      const F = getColumnFilters();
       const { rows, totalCost, totalVal, totalPnL, totalRet } = compute();
+
+      // KPIs
       $('#kpiValue').textContent = fmt(totalVal);
       $('#kpiCost').textContent = fmt(totalCost);
-      $('#kpiPnL').innerHTML = `${fmt(totalPnL)} <span class="chip ${colorPct(totalPnL)}">${totalPnL>0?'▲':'▼'} ${nf.format(totalRet*100)}%</span>`;
-      $('#kpiReturn').textContent = nf.format(totalRet*100)+'%';
+      $('#kpiPnL').innerHTML = `${fmt(totalPnL)} <span class="chip ${colorPct(totalPnL)}">${totalPnL>0?'▲':'▼'} ${nf2.format(totalRet*100)}%</span>`;
+      $('#kpiReturn').textContent = nf2.format(totalRet*100)+'%';
 
-      const tbody = $('#tbody');
-      tbody.innerHTML = '';
+      // Body
+      const tbody = $('#tbody'); tbody.innerHTML = '';
       rows.map((r,i)=>({r,i}))
         .filter(({r})=>{
           const hit = (r.symbol||'').toLowerCase().includes(q) || (r.name||'').toLowerCase().includes(q);
-          const hitEx = !exFilter || r.ex===exFilter; return hit && hitEx;
+          const hitEx = !exFilter || r.ex===exFilter;
+          const hitCols = passesColumnFilters(r,F);
+          return hit && hitEx && hitCols;
         })
         .forEach(({r,i}, idx)=>{
+          const buyBase = (+r.buyReal||0) || (+r.buy||0);
+          const cost = r.qty*buyBase;
+          const val = r.qty*(+r.mkt||0);
+          const pnl = val - cost;
+          const ret = cost>0 ? (pnl/cost) : 0;
+
           const tr = document.createElement('tr');
           tr.innerHTML = `
             <td>${idx+1}</td>
@@ -309,12 +421,12 @@
             <td class="num">${inputNum('trade', r.trade, i, 'small')}</td>
             <td class="num">${inputNum('buyReal', r.buyReal, i, 'small')}</td>
             <td class="num">${inputNum('mkt', r.mkt, i)}</td>
-            <td class="num">${fmt(r.cost)}</td>
-            <td class="num">${fmt(r.val)}</td>
-            <td class="num ${colorPct(r.pnl)}">${fmt(r.pnl)}</td>
-            <td class="num ${colorPct(r.ret)}">${nf.format(r.ret*100)}%</td>
+            <td class="num">${fmt(cost)}</td>
+            <td class="num">${fmt(val)}</td>
+            <td class="num ${colorPct(pnl)}">${fmt(pnl)}</td>
+            <td class="num ${colorPct(ret)}">${ret>=0?'▲':'▼'} ${nf2.format(Math.abs(ret*100))}%</td>
             <td class="num">${inputNum('dps', r.dps, i, 'small')}</td>
-            <td class="num">${nf.format(r.divYield*100)}%</td>
+            <td class="num">${nf2.format((r.mkt>0? (r.dps/r.mkt*100):0))}%</td>
             <td>${inputText('date', r.date||'', i, 'small')}</td>
             <td>${inputText('notes', r.notes||'', i, 'wide')}</td>
             <td class="row-actions"><button class="mini delete" data-del="${i}">حذف</button></td>
@@ -322,19 +434,23 @@
           tbody.appendChild(tr);
         });
 
+      // التوزيع (دونت) + لوحة عدد الأسهم
       renderDonut(rows);
+      renderQtyBoard(rows);
 
+      // أحداث الحذف والتحرير الفوري
       $$('button[data-del]').forEach(btn=>btn.onclick = (e)=>{ const idx = +e.currentTarget.getAttribute('data-del'); state.items.splice(idx,1); persist(); render(); });
-      $$('input[data-idx]').forEach(inp=>{ inp.oninput = (e)=>{ const idx = +e.target.getAttribute('data-idx'); const key = e.target.getAttribute('data-key'); const val = e.target.type==='number' ? +e.target.value : e.target.value; state.items[idx][key] = (isFinite(val) ? val : 0); persist(); render(); }; });
+      $$('input[data-idx]').forEach(inp=>{ inp.oninput = (e)=>{ const idx = +e.target.getAttribute('data-idx'); const key = e.target.getAttribute('data-key'); const val = e.target.type==='number' ? +e.target.value : e.target.value; state.items[idx][key] = (e.target.type==='number' ? (isFinite(val)? val:0) : val); persist(); render(); }; });
+
+      // إعادة بناء لوحة الأعمدة عند أول مرة
+      if(!$('#colsList').dataset.built){ buildColsPanel(true); $('#colsList').dataset.built='1'; }
     }
 
     function renderDonut(rows){
-      // تجميع حسب الرمز لعرض وزن كل سهم (مجمّع على الصفقات)
       const bySym = {};
-      rows.forEach(r=>{ bySym[r.symbol] = (bySym[r.symbol]||0) + r.val; });
+      rows.forEach(r=>{ bySym[r.symbol] = (bySym[r.symbol]||0) + r.qty*(+r.mkt||0); });
       const entries = Object.entries(bySym);
       const total = sum(entries.map(([,v])=>v));
-      // زوايا بسيطة لأول 4 قطاعات
       let acc=0; const angles=[]; entries.slice(0,4).forEach(([,v])=>{ acc += total>0 ? (v/total)*360 : 0; angles.push(acc); });
       const donut = $('#donut');
       donut.style.setProperty('--a1', (angles[0]||0)+'deg');
@@ -348,15 +464,31 @@
         const tag=document.createElement('span'); tag.className='tag'; tag.style.background=colors[i%colors.length];
         const name=document.createElement('span'); name.textContent=sym;
         left.append(tag,name);
-        const weight=document.createElement('b'); weight.textContent= total>0 ? (nf.format((val/total)*100)+'%'):'—';
+        const weight=document.createElement('b'); weight.textContent= total>0 ? (nf2.format((val/total)*100)+'%'):'—';
         it.append(left,weight); legend.append(it);
       });
+    }
+
+    function renderQtyBoard(rows){
+      const agg = {};
+      rows.forEach(r=>{ agg[r.symbol] = (agg[r.symbol]||0) + (+r.qty||0); });
+      const qtyBoard = $('#qtyBoard'); qtyBoard.innerHTML='';
+      Object.entries(agg)
+        .sort((a,b)=> b[1]-a[1])
+        .forEach(([sym, q])=>{
+          const item = document.createElement('div');
+          item.className='item';
+          const name = document.createElement('b'); name.textContent = sym;
+          const val = document.createElement('span'); val.textContent = nf2.format(q);
+          item.append(name, val); qtyBoard.append(item);
+        });
     }
 
     // ========== Events ==========
     $('#toggleTheme').onclick = ()=> document.body.classList.toggle('light');
     $('#search').oninput = ()=>render();
     $('#filterEx').onchange = ()=>render();
+    $$('.filter-row input').forEach(inp=> inp.addEventListener('input', ()=>render()));
     $('#bulkBtn').onclick = ()=>{ $('#bulkPanel').style.display='block'; $('#bulkBox').focus(); };
     $('#closeBulk').onclick = ()=>{ $('#bulkPanel').style.display='none'; };
     $('#applyBulk').onclick = ()=>{
@@ -364,7 +496,6 @@
       txt.split(/\n|\r/).map(s=>s.trim()).filter(Boolean).forEach(line=>{
         const m = line.match(/([A-Za-z\-_.]+)/); const num = line.match(/(-?[0-9]+(?:\.[0-9]+)?)/g);
         if(!m||!num) return; const sym=m[1].toUpperCase(); const price=parseFloat(num[num.length-1]);
-        // نحدّث كل الصفوف المطابقة للرمز
         state.items.forEach(x=>{ if((x.symbol||'').toUpperCase()===sym){ x.mkt = price; }});
       });
       persist(); render();
@@ -407,14 +538,12 @@
       persist(); render();
     });
 
-    // فلترة الأعمدة (إخفاء/إظهار) — تُبنى ديناميكيًا من رأس الجدول
+    // فلترة الأعمدة (إخفاء/إظهار) — تُبنى من رأس الجدول
     function buildColsPanel(reset=false){
       const theadRow = $('#tbl thead tr'); if(!theadRow) return;
       const ths = [...theadRow.children];
       const container = $('#colsList'); if(!container) return;
       if(reset) container.innerHTML='';
-      // لا نكرّر العناصر إذا كانت مبنية
-      if(container.childElementCount && !reset) return;
       ths.forEach((th, idx)=>{
         if(idx===0) return; // نتخطى عمود رقم الصف
         const label = th.textContent.trim();

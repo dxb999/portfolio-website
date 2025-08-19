@@ -1,210 +1,804 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8">
-  <title>💼 منصة محفظتي</title>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>منصة محفظتي – بيانات محمد</title>
   <style>
-    body {font-family: 'Tahoma', sans-serif; margin:20px; background:#f5f5f5; color:#333;}
-    h1 {text-align:center;}
-    .controls {text-align:center; margin-bottom:10px;}
-    .btn {padding:6px 12px; margin:3px; border:none; border-radius:6px; cursor:pointer;}
-    .btn.ghost {background:#eee;}
-    .btn.danger {background:#e74c3c; color:#fff;}
-    .btn.flat {background:#3498db; color:#fff;}
-    .kpis {display:flex; justify-content:space-around; margin:20px 0; flex-wrap:wrap;}
-    .kpi {background:#fff; padding:10px 20px; border-radius:8px; box-shadow:0 2px 5px rgba(0,0,0,0.1); margin:5px;}
-    table {width:100%; border-collapse:collapse; margin-top:20px; background:#fff;}
-    th, td {border:1px solid #ccc; padding:6px; text-align:center;}
-    th {background:#eee;}
-    tfoot td {font-weight:bold; background:#fafafa;}
-    .positive {color:green;}
-    .negative {color:red;}
-    .filters {margin:10px 0; display:flex; gap:10px; flex-wrap:wrap;}
-    .dashboard {display:grid; grid-template-columns:repeat(auto-fill,minmax(300px,1fr)); gap:20px; margin-top:30px;}
-    .chart-container {background:#fff; padding:15px; border-radius:8px; box-shadow:0 2px 5px rgba(0,0,0,0.1);}
+    :root { --bg:#0b1220; --card:#131a2a; --muted:#a5b0c2; --text:#eef1f7; --accent:#5eead4; --accent-2:#60a5fa; --danger:#ef4444; --success:#22c55e; --warning:#f59e0b; --shadow:0 10px 24px rgba(0,0,0,.35); --radius:16px; }
+    .light { --bg:#f6f8fc; --card:#fff; --muted:#5b667a; --text:#0b1220; --accent:#0ea5e9; --accent-2:#8b5cf6; --danger:#b91c1c; --success:#15803d; --warning:#b45309; --shadow:0 10px 24px rgba(2,6,23,.12); }
+    *{box-sizing:border-box} html,body{height:100%}
+    body{margin:0;font-family:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,"Noto Kufi Arabic","Noto Sans Arabic",Arial;background:radial-gradient(1200px 800px at 80% -10%,rgba(59,130,246,.15),transparent 60%),var(--bg);color:var(--text)}
+    .container{max-width:1200px;padding:24px;margin:0 auto}
+    header{display:grid;gap:16px}
+    .title-row{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+    h1{margin:0;font-size:28px}
+    .controls{display:flex;gap:8px;flex-wrap:wrap}
+    .btn{background:linear-gradient(135deg,var(--accent),var(--accent-2));color:#fff;border:none;padding:10px 14px;border-radius:12px;font-weight:700;cursor:pointer;box-shadow:var(--shadow)}
+    .btn.ghost{background:transparent;color:var(--text);border:1px solid rgba(255,255,255,.15)}
+    .btn.danger{background:linear-gradient(135deg,#ef4444,#f97316)}
+    .btn.flat{background:var(--card);color:var(--text);border:1px solid rgba(255,255,255,.1)}
+    .grid{display:grid;grid-template-columns:1fr;gap:16px}
+    @media(min-width:900px){.grid{grid-template-columns:1.2fr .8fr}}
+    .card{background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(255,255,255,0) 40%),var(--card);border:1px solid rgba(255,255,255,.06);border-radius:var(--radius);padding:16px;box-shadow:var(--shadow)}
+    .kpis{display:grid;gap:12px;grid-template-columns:repeat(2,1fr)}@media(min-width:680px){.kpis{grid-template-columns:repeat(4,1fr)}}
+    .kpi{padding:14px;border-radius:14px;background:rgba(255,255,255,.04);border:1px dashed rgba(255,255,255,.12)}
+    .kpi .label{color:var(--muted);font-size:12px}
+    .kpi .value{font-size:22px;font-weight:800;margin-top:6px}
+    .chip{display:inline-flex;align-items:center;gap:6px;font-weight:700;font-size:12px;padding:6px 10px;border-radius:999px}
+    .chip.pos{background:rgba(34,197,94,.14);color:#86efac}
+    .chip.neg{background:rgba(239,68,68,.14);color:#fecaca}
+    .chip.neu{background:rgba(234,179,8,.14);color:#fde68a}
+    .add-form{display:grid;gap:8px;grid-template-columns:repeat(8,1fr);align-items:end}
+    .add-form .field{display:grid;gap:6px}
+    .add-form label{font-size:12px;color:var(--muted)}
+    .add-form input,.add-form select,.toolbar input, .toolbar select, thead select{padding:10px 12px;border-radius:10px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.04);color:var(--text)}
+    thead select{width:100%; padding:6px 8px; font-size:12px}
+    .add-form .xwide{grid-column:span 2}
+    .add-form .btn{grid-column:span 2;height:40px}
+    @media(max-width:980px){.add-form{grid-template-columns:repeat(2,1fr)}.add-form .btn{grid-column:span 2}}
+    .toolbar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;justify-content:space-between;margin-bottom:10px}
+    .toolbar .toggle{padding:8px 10px;border-radius:10px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.12);cursor:pointer}
+    .collapse-btn{padding:8px 10px;border-radius:10px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);cursor:pointer}
+    table{width:100%;border-collapse:collapse}
+    thead th{position:sticky;top:0;z-index:3;background:linear-gradient(180deg,rgba(255,255,255,.04),rgba(255,255,255,0) 30%),var(--card);color:var(--muted);font-weight:700;text-align:right;font-size:12px;letter-spacing:.2px;border-bottom:1px solid rgba(255,255,255,.12);padding:10px;white-space:nowrap}
+    thead tr.filter-row th{background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(255,255,255,0) 30%),var(--card);position:sticky;top:42px;z-index:2}
+    tbody td{border-bottom:1px dashed rgba(255,255,255,.08);padding:8px 10px;vertical-align:middle}
+    tbody tr:hover{background:rgba(255,255,255,.03)}
+    tfoot td{border-top:2px solid rgba(255,255,255,.3);font-weight:800;background:rgba(255,255,255,.03)}
+    .sym{display:grid;gap:2px}
+    .sym .t{font-weight:800}
+    .sym .s{color:var(--muted);font-size:12px}
+    .num{text-align:left;font-variant-numeric:tabular-nums;direction:ltr}
+    .pct.pos{color:#86efac;font-weight:800}
+    .pct.neg{color:#fecaca;font-weight:800}
+    .input{width:110px}
+    .input.small{width:84px}
+    .input.wide{width:140px}
+    .row-actions{display:flex;gap:6px}
+    .mini{padding:6px 8px;border-radius:10px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.06);color:var(--text);cursor:pointer;font-size:12px}
+    .mini.delete{background:rgba(239,68,68,.15);border-color:rgba(239,68,68,.4)}
+    .panel{display:grid;gap:12px}
+    /* Tabs */
+    .tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px}
+    .tab{padding:6px 10px;border:1px solid rgba(255,255,255,.2);border-radius:999px;background:rgba(255,255,255,.05);cursor:pointer;font-size:12px}
+    .tab.active{background:linear-gradient(135deg,var(--accent),var(--accent-2));color:#fff;border-color:transparent}
+    /* Donut SVG + Tooltip */
+    .donut-wrap{position:relative; width:220px; height:220px; margin:0 auto}
+    .tooltip{position:absolute; pointer-events:none; background:#111827; color:#fff; padding:6px 8px; font-size:12px; border-radius:8px; border:1px solid rgba(255,255,255,.15); transform:translate(-50%,-120%); white-space:nowrap; display:none}
+    .legend{display:grid;gap:6px}
+    .legend .item{display:flex;align-items:center;gap:8px;justify-content:space-between}
+    .legend .tag{display:inline-block;width:12px;height:12px;border-radius:3px}
+    .subtabs{display:flex;gap:10px;margin:8px 0}
+    .subtab{padding:6px 10px;border:1px solid rgba(255,255,255,.2);border-radius:8px;background:rgba(255,255,255,.05);cursor:pointer;font-size:12px}
+    .subtab.active{background:rgba(255,255,255,.15)}
+    .muted{color:var(--muted)}
   </style>
 </head>
 <body>
-  <h1>💼 منصة محفظتي</h1>
-  <div class="controls">
-    <button class="btn flat" id="toggleTheme">🌗 وضع الليل/النهار</button>
-    <button class="btn ghost" id="exportBtn">⬇️ تصدير</button>
-    <label class="btn ghost" for="importFile" style="cursor:pointer">⬆️ استيراد</label>
-    <input id="importFile" type="file" accept="application/json" hidden>
-    <button class="btn danger" id="resetBtn">إعادة ضبط</button>
+  <div class="container" id="app">
+    <header>
+      <div class="title-row">
+        <h1>💼 منصة محفظتي</h1>
+        <div class="controls">
+          <button class="btn flat" id="toggleTheme">🌗 وضع الليل/النهار</button>
+          <button class="btn ghost" id="exportBtn">⬇️ تصدير</button>
+          <label class="btn ghost" for="importFile" style="cursor:pointer">⬆️ استيراد</label>
+          <input id="importFile" type="file" accept="application/json" hidden>
+          <button class="btn danger" id="resetBtn">إعادة ضبط</button>
+        </div>
+      </div>
+
+      <div class="kpis" id="kpis">
+        <div class="kpi"><div class="label">إجمالي القيمة</div><div class="value" id="kpiValue">—</div></div>
+        <div class="kpi"><div class="label">إجمالي التكلفة</div><div class="value" id="kpiCost">—</div></div>
+        <div class="kpi"><div class="label">صافي الربح/الخسارة</div><div class="value" id="kpiPnL">—</div></div>
+        <div class="kpi"><div class="label">التغيير %</div><div class="value" id="kpiReturn">—</div></div>
+      </div>
+
+      <div class="card">
+        <form class="add-form" id="addForm" onsubmit="return false;">
+          <div class="field"><label>الرمز</label><input id="fSymbol" placeholder="ADIB / DIB / EMAAR" required /></div>
+          <div class="field"><label>الكمية</label><input id="fQty" type="number" step="1" min="0" placeholder="100" /></div>
+          <div class="field"><label>سعر الشراء</label><input id="fBuy" type="number" step="0.0001" min="0" placeholder="10.50" /></div>
+          <div class="field"><label>العمولة</label><input id="fFee" type="number" step="0.0001" min="0" placeholder="1.50" /></div>
+          <div class="field"><label>الضريبة</label><input id="fTax" type="number" step="0.0001" min="0" placeholder="0.08" /></div>
+          <div class="field"><label>مبلغ التداول</label><input id="fTrade" type="number" step="0.0001" min="0" placeholder="1000" /></div>
+          <div class="field"><label>سعر الشراء الحقيقي</label><input id="fBuyReal" type="number" step="0.0000001" min="0" placeholder="10.03" /></div>
+          <div class="field xwide"><label>التاريخ</label><input id="fDate" type="date" /></div>
+          <button class="btn" id="addBtn">➕ إضافة للسجل</button>
+        </form>
+      </div>
+    </header>
+
+    <main class="grid">
+      <section class="card">
+        <!-- شريط أدوات الجدول -->
+        <div class="toolbar">
+          <div class="left" style="display:flex; gap:8px; align-items:center; flex-wrap:wrap">
+            <button id="toggleTable" class="collapse-btn">− إخفاء الجدول</button>
+            <input id="search" placeholder="بحث: رمز/اسم" />
+            <select id="filterEx">
+              <option value="">كل الأسواق</option>
+              <option value="ADX">ADX</option>
+              <option value="DFM">DFM</option>
+              <option value="NASDAQ">NASDAQ</option>
+              <option value="LSE">LSE</option>
+            </select>
+            <span class="muted">* عدّل الأرقام مباشرة في الصفوف</span>
+          </div>
+          <div class="right">
+            <div class="toggle"><span id="currencyLabel">د.إ</span></div>
+            <button class="btn flat" id="bulkBtn">تحديث سريع للأسعار</button>
+          </div>
+        </div>
+
+        <!-- أدوات تحت الجدول: الحركات المالية / شاشة الأسعار -->
+        <div class="subtabs">
+          <div class="subtab active" data-subtab="ledger">الحركات المالية</div>
+          <div class="subtab" data-subtab="prices">شاشة الأسعار (لاحقًا)</div>
+        </div>
+
+        <!-- قسم الجدول القابل للإخفاء -->
+        <div id="tableSection">
+          <!-- droplist لتحديث كل الصفوف لنفس الرمز + إخفاء/إظهار الأعمدة -->
+          <div class="card" style="margin-bottom:10px;">
+            <div style="display:flex; gap:10px; flex-wrap:wrap; align-items:end;">
+              <div style="display:grid; gap:6px;">
+                <label class="muted">اختر الرمز</label>
+                <select id="symSelectAll" style="min-width:140px;"></select>
+              </div>
+              <div style="display:grid; gap:6px;">
+                <label class="muted">سعر السوق</label>
+                <input id="symPriceAll" type="number" step="0.0001" placeholder="مثال: 10.25" style="width:140px;" />
+              </div>
+              <button class="btn" id="applySymPrice">تحديث السعر لكل الصفوف</button>
+              <button class="btn ghost" id="toggleCols">إخفاء/إظهار أعمدة</button>
+            </div>
+            <div id="colsPanel" style="display:none; margin-top:10px; border-top:1px dashed rgba(255,255,255,.15); padding-top:10px;">
+              <div class="muted" style="margin-bottom:6px;">اختر الأعمدة لعرضها:</div>
+              <div id="colsList" style="display:flex; gap:10px; flex-wrap:wrap;"></div>
+            </div>
+          </div>
+
+          <div style="overflow:auto; max-height: 520px; border-radius: 12px;">
+            <table id="tbl">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>الشركة / الرمز</th>
+                  <th>السوق</th>
+                  <th class="num">الكمية</th>
+                  <th class="num">سعر الشراء</th>
+                  <th class="num">العمولة</th>
+                  <th class="num">الضريبة</th>
+                  <th class="num">مبلغ التداول</th>
+                  <th class="num">سعر الشراء الحقيقي</th>
+                  <th class="num">سعر السوق</th>
+                  <th class="num">التكلفة</th>
+                  <th class="num">القيمة</th>
+                  <th class="num">الربح</th>
+                  <th class="num">التغيير %</th>
+                  <th class="num">DPS</th>
+                  <th class="num">عائد التوزيع</th>
+                  <th>التاريخ</th>
+                  <th>ملاحظات</th>
+                  <th></th>
+                </tr>
+                <tr class="filter-row" id="filtersRow"></tr>
+              </thead>
+              <tbody id="tbody"></tbody>
+              <tfoot>
+                <tr id="totalRow">
+                  <td colspan="3"><b>الإجمالي (حسب الفلاتر الظاهرة)</b></td>
+                  <td class="num" id="t_qty">—</td>
+                  <td class="num" id="t_buyAvg">—</td>
+                  <td class="num" id="t_fee">—</td>
+                  <td class="num" id="t_tax">—</td>
+                  <td class="num" id="t_trade">—</td>
+                  <td class="num" id="t_buyRealAvg">—</td>
+                  <td class="num" id="t_mkt">—</td>
+                  <td class="num" id="t_cost">—</td>
+                  <td class="num" id="t_val">—</td>
+                  <td class="num" id="t_pnl">—</td>
+                  <td class="num" id="t_ret">—</td>
+                  <td></td><td></td><td></td><td></td><td></td>
+                </tr>
+              </tfoot>
+            </table>
+          </div>
+        </div>
+
+        <!-- محتوى تبويب الحركات المالية -->
+        <div id="ledgerPanel" class="card" style="margin-top:10px;">
+          <h3 style="margin:0 0 6px;">🧾 الحركات المالية</h3>
+          <div id="ledgerList" class="muted">لا توجد حركات بعد.</div>
+        </div>
+
+        <!-- محتوى تبويب شاشة الأسعار (Placeholder) -->
+        <div id="pricesPanel" class="card" style="margin-top:10px; display:none;">
+          <h3 style="margin:0 0 6px;">📺 شاشة الأسعار (لاحقًا)</h3>
+          <div class="muted">سيتم إضافة لوحة أسعار مباشرة هنا لاحقًا.</div>
+        </div>
+
+        <!-- لوحة التوزيعات بالتابات -->
+        <div class="card" style="margin-top:12px;">
+          <div class="tabs" id="chartTabs">
+            <div class="tab active" data-mode="val">القيمة السوقية</div>
+            <div class="tab" data-mode="qty">عدد الأسهم</div>
+            <div class="tab" data-mode="trade">مبلغ التداول</div>
+            <div class="tab" data-mode="cost">التكلفة</div>
+            <div class="tab" data-mode="pnl">الربح</div>
+            <div class="tab" data-mode="ret">التغيير</div>
+          </div>
+          <div style="display:grid; grid-template-columns:220px 1fr; gap:14px; align-items:center;">
+            <div class="donut-wrap">
+              <svg id="donutSVG" width="220" height="220" viewBox="0 0 220 220"></svg>
+              <div id="tooltip" class="tooltip"></div>
+            </div>
+            <div>
+              <div class="legend" id="legend"></div>
+              <div class="muted" id="chartNote" style="margin-top:6px"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- لوحة تحديث سريع للأسعار -->
+        <div class="card" id="bulkPanel" style="display:none">
+          <h3 style="margin:0 0 8px">⚡️ تحديث سريع للأسعار</h3>
+          <div class="muted">الصق أسطر مثل:<br><code>ADIB, 22.80</code> أو <code>DIB 13.45</code></div>
+          <textarea id="bulkBox" rows="6" style="width:100%; margin-top:8px; padding:10px; border-radius:10px; background:rgba(255,255,255,.04); color:var(--text); border:1px solid rgba(255,255,255,.12);"></textarea>
+          <div style="display:flex; gap:8px; margin-top:8px;">
+            <button class="btn" id="applyBulk">تطبيق</button>
+            <button class="btn ghost" id="closeBulk">إغلاق</button>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <div>⚠️ تنويه: الأسعار الافتراضية صفر في هذه النسخة. حدِّث خانة "سعر السوق" يدويًا أو عبر "التحديث السريع".</div>
+    </footer>
   </div>
 
-  <div class="kpis" id="kpis">
-    <div class="kpi"><div class="label">إجمالي القيمة</div><div class="value" id="kpiValue">—</div></div>
-    <div class="kpi"><div class="label">إجمالي التكلفة</div><div class="value" id="kpiCost">—</div></div>
-    <div class="kpi"><div class="label">صافي الربح/الخسارة</div><div class="value" id="kpiPnL">—</div></div>
-    <div class="kpi"><div class="label">التغيير الكلي</div><div class="value" id="kpiReturn">—</div></div>
-  </div>
+  <script>
+    const $ = (s, p=document) => p.querySelector(s);
+    const $$ = (s, p=document) => [...p.querySelectorAll(s)];
 
-  <div class="filters" id="columnFilters"></div>
-  <input type="text" id="searchInput" placeholder="🔍 بحث: رمز/اسم" style="width:100%;padding:8px;">
+    const LS_KEY = 'portfolioData.v2-mohd';
+    const state = { currency:'د.إ', items: [], ledger:[] };
+    const nf = new Intl.NumberFormat('ar-AE',{minimumFractionDigits:2,maximumFractionDigits:2});
+    const colors = ['#60a5fa','#22c55e','#f59e0b','#ef4444','#a78bfa','#14b8a6','#f97316','#84cc16','#06b6d4','#eab308'];
 
-  <table id="portfolioTable">
-    <thead>
-      <tr>
-        <th>الرمز</th>
-        <th>الكمية</th>
-        <th>سعر الشراء</th>
-        <th>السعر الحالي</th>
-        <th>مبلغ التداول</th>
-        <th>التكلفة</th>
-        <th>القيمة</th>
-        <th>الربح</th>
-        <th>التغيير %</th>
-      </tr>
-    </thead>
-    <tbody id="tableBody"></tbody>
-    <tfoot>
-      <tr>
-        <td>المجموع</td>
-        <td id="sumQty">—</td>
-        <td id="avgBuy">—</td>
-        <td>—</td>
-        <td id="sumTrade">—</td>
-        <td id="sumCost">—</td>
-        <td id="sumValue">—</td>
-        <td id="sumProfit">—</td>
-        <td>—</td>
-      </tr>
-    </tfoot>
-  </table>
+    const dataFromUser = [
+      { symbol:'ADIB', qty:200, buy:21.6, fee:6.48, tax:0.324, trade:4326.8040, buyReal:21.63402, date:'2025-07-04', mkt:0, dps:0, target:0, notes:'' },
+      { symbol:'ADIB', qty:79, buy:12.72, fee:1.50732, tax:0.075, trade:1006.4627, buyReal:12.740034, date:'2024-10-01', mkt:0, dps:0, target:0, notes:'' },
+      { symbol:'ADIB', qty:20, buy:8.980, fee:0.2694, tax:0.013, trade:179.8829, buyReal:8.9941435, date:'2022-10-13', mkt:0, dps:0, target:0, notes:'' },
+      { symbol:'DIB', qty:100, buy:5.92, fee:12.2, tax:0.610, trade:604.8034, buyReal:6.048033976, date:'2022-09-26', mkt:0, dps:0, target:0, notes:'' },
+      { symbol:'DIB', qty:340, buy:5.93, fee:16.3, tax:0.813, trade:2033.2818, buyReal:5.980240487, date:'2022-10-25', mkt:0, dps:0, target:0, notes:'' },
+      { symbol:'EMAAR', qty:100, buy:6.23, fee:12.3, tax:0.614, trade:635.8965, buyReal:6.358965232, date:'2022-11-08', mkt:0, dps:0, target:0, notes:'' },
+      { symbol:'AIRARABIA', qty:300, buy:2.08, fee:12.3, tax:0.614, trade:636.8995, buyReal:2.122998424, date:'2022-11-08', mkt:0, dps:0, target:0, notes:'' },
+      { symbol:'DANA', qty:600, buy:0.916, fee:0.8244, tax:0.041, trade:550.4656, buyReal:0.9174427, date:'2022-11-15', mkt:0, dps:0, target:0, notes:'' },
+      { symbol:'DANA', qty:600, buy:0.918, fee:0.8262, tax:0.041, trade:551.6675, buyReal:0.91944585, date:'2022-11-10', mkt:0, dps:0, target:0, notes:'' },
+      { symbol:'ADNOCDIST', qty:200, buy:4.48, fee:1.344, tax:0.067, trade:897.4112, buyReal:4.487056, date:'2022-11-08', mkt:0, dps:0, target:0, notes:'' },
+      { symbol:'ADNOCDIST', qty:100, buy:4.250, fee:0.6375, tax:0.032, trade:425.6694, buyReal:4.25669375, date:'2022-10-13', mkt:0, dps:0, target:0, notes:'' },
+      { symbol:'EAND', qty:20, buy:23.7, fee:0.711, tax:0.036, trade:474.7466, buyReal:23.7373275, date:'2022-09-26', mkt:0, dps:0, target:0, notes:'' },
+      { symbol:'EAND', qty:15, buy:25.46, fee:0.57285, tax:0.029, trade:382.5015, buyReal:25.5000995, date:'2022-11-08', mkt:0, dps:0, target:0, notes:'' },
+      { symbol:'MULTIPLY', qty:200, buy:4.88, fee:1.464, tax:0.073, trade:977.5372, buyReal:4.887686, date:'2022-11-14', mkt:0, dps:0, target:0, notes:'' },
+      { symbol:'LULU', qty:1065, buy:2.04, fee:0, tax:0.000, trade:2172.6000, buyReal:2.04, date:'2022-11-13', mkt:0, dps:0, target:0, notes:'' },
+      { symbol:'DIB', qty:200, buy:9.78, fee:15.38, tax:0.769, trade:1972.1490, buyReal:9.860745, date:'2025-07-29', mkt:0, dps:0, target:0, notes:'' },
+      { symbol:'DIB', qty:300, buy:9.67, fee:17.98, tax:0.899, trade:2919.8790, buyReal:9.73293, date:'2025-07-29', mkt:0, dps:0, target:0, notes:'' },
+      { symbol:'DUBAIRESI', qty:700, buy:1.27, fee:12.44, tax:0.622, trade:902.0620, buyReal:1.28866, date:'2025-07-30', mkt:0, dps:0, target:0, notes:'' },
+      { symbol:'DIB', qty:940, buy:9.99, fee:35.83, tax:1.560, trade:9427.9900, buyReal:10.0297766, date:'2025-08-05', mkt:0, dps:0, target:0, notes:'' },
+      { symbol:'DIB', qty:950, buy:9.99, fee:36.1, tax:1.560, trade:9528.1600, buyReal:10.02964211, date:'2025-08-05', mkt:0, dps:0, target:0, notes:'' },
+      { symbol:'ALDAR', qty:104, buy:9.6, fee:1.5, tax:0.07, trade:999.9700, buyReal:9.615096154, date:'2025-08-05', mkt:0, dps:0, target:0, notes:'' },
+      { symbol:'DUBAIRESI', qty:7000, buy:1.39, fee:36.76, tax:1.600, trade:9768.3600, buyReal:1.39548, date:'2025-08-08', mkt:0, dps:0, target:0, notes:'' },
+      { symbol:'DIB', qty:1000, buy:9.66, fee:36.57, tax:1.580, trade:9698.1500, buyReal:9.69815, date:'2025-08-08', mkt:0, dps:0, target:0, notes:'' },
+      { symbol:'DIB', qty:1020, buy:9.75, fee:37.35, tax:1.62, trade:9983.9700, buyReal:9.788205882, date:'2025-08-15', mkt:0, dps:0, target:0, notes:'' },
+      { symbol:'SIB', qty:3300, buy:3.02, fee:14.95, tax:0.74, trade:9981.6900, buyReal:3.024754545, date:'2025-08-15', mkt:0, dps:0, target:0, notes:'' },
+      { symbol:'RAKPROP', qty:6450, buy:1.55, fee:15, tax:0.76, trade:10013.2600, buyReal:1.552443411, date:'2025-08-15', mkt:0, dps:0, target:0, notes:'' },
+      { symbol:'ADNOCDRILL', qty:1776, buy:5.63, fee:15, tax:0.76, trade:10014.6400, buyReal:5.638873874, date:'2025-08-15', mkt:0, dps:0, target:0, notes:'' }
+    ];
 
-  <div class="dashboard">
-    <div class="chart-container">
-      <h3>📊 توزيع عدد الأسهم</h3>
-      <canvas id="qtyChart"></canvas>
-    </div>
-    <div class="chart-container">
-      <h3>💰 توزيع القيمة السوقية</h3>
-      <canvas id="valChart"></canvas>
-    </div>
-    <div class="chart-container">
-      <h3>💵 مبلغ التداول</h3>
-      <canvas id="tradeChart"></canvas>
-    </div>
-    <div class="chart-container">
-      <h3>💸 التكلفة</h3>
-      <canvas id="costChart"></canvas>
-    </div>
-    <div class="chart-container">
-      <h3>🏷️ القيمة</h3>
-      <canvas id="valueChart"></canvas>
-    </div>
-    <div class="chart-container">
-      <h3>📈 الربح</h3>
-      <canvas id="profitChart"></canvas>
-    </div>
-    <div class="chart-container">
-      <h3>📉 التغيير</h3>
-      <canvas id="changeChart"></canvas>
-    </div>
-  </div>
+    function sum(a){return a.reduce((x,y)=>x+y,0)}
+    function fmt(x){return isFinite(+x)? state.currency+' '+nf.format(+x) : '—'}
+    function colorClass(x){return x>0?'pos':(x<0?'neg':'')}
 
-  <h2>📑 الحركات المالية</h2>
-  <div id="transactions">لا توجد حركات مسجلة.</div>
+    function persist(){localStorage.setItem(LS_KEY, JSON.stringify(state))}
+    function load(){
+      const raw=localStorage.getItem(LS_KEY);
+      if(raw){try{Object.assign(state, JSON.parse(raw))}catch{}}
+      if(!state.items||!state.items.length){state.items=dataFromUser; persist();}
+    }
 
-  <h2>📺 شاشة الأسعار</h2>
-  <div id="prices">(لاحقًا سنضيفها)</div>
+    // ===== حساب صفوف الجدول =====
+    function computeRows(){
+      return state.items.map(it=>{
+        const qty=+it.qty||0, buyBase=(+it.buyReal||0)||(+it.buy||0);
+        const cost=qty*buyBase, val=qty*(+it.mkt||0);
+        const pnl=val-cost, ret=cost>0? pnl/cost : 0;
+        const divYield=(+it.mkt||0)>0 ? (+it.dps||0)/(+it.mkt||0) : 0;
+        return {...it, cost, val, pnl, ret, divYield};
+      });
+    }
 
-<script>
-const nf = new Intl.NumberFormat('ar-EG',{maximumFractionDigits:2});
-const fmt = v => "د.إ " + nf.format(v);
+    // ====== فلاتر Dropdown ======
+    const headerKeys = ['#','symbol','ex','qty','buy','fee','tax','trade','buyReal','mkt','cost','val','pnl','ret','dps','divy','date','notes','_actions'];
+    const headerLabels = ['#','الشركة / الرمز','السوق','الكمية','سعر الشراء','العمولة','الضريبة','مبلغ التداول','سعر الشراء الحقيقي','سعر السوق','التكلفة','القيمة','الربح','التغيير %','DPS','عائد التوزيع','التاريخ','ملاحظات',''];
+    const filters = {}; // قيمة مختارة لكل عمود
 
-const sampleData = [
-  {symbol:"ADIB", qty:200, buy:21.6, current:22.78},
-  {symbol:"DIB", qty:150, buy:9.9, current:10.2},
-  {symbol:"EAND", qty:100, buy:16.5, current:15.8},
-  {symbol:"ADIB", qty:100, buy:12.7, current:22.78},
-];
+    function uniqueValues(list, key, isNumeric=false){
+      const set=new Set();
+      list.forEach(r=>{
+        let v;
+        switch(key){
+          case 'symbol': v=r.symbol; break;
+          case 'ex': v=r.ex||''; break;
+          case 'qty': v=r.qty; break;
+          case 'buy': v=r.buy; break;
+          case 'fee': v=r.fee; break;
+          case 'tax': v=r.tax; break;
+          case 'trade': v=r.trade; break;
+          case 'buyReal': v=r.buyReal; break;
+          case 'mkt': v=r.mkt; break;
+          case 'cost': v=r.cost; break;
+          case 'val': v=r.val; break;
+          case 'pnl': v=r.pnl; break;
+          case 'ret': v=r.ret; break;
+          case 'dps': v=r.dps; break;
+          case 'divy': v=r.divYield; break;
+          case 'date': v=r.date; break;
+          case 'notes': v=r.notes; break;
+          default: v=null;
+        }
+        if(v===undefined || v===null || v==='') return;
+        set.add(isNumeric? +v : v);
+      });
+      const arr=[...set];
+      if(isNumeric) arr.sort((a,b)=>a-b); else arr.sort();
+      return arr;
+    }
 
-let data = [...sampleData];
+    function buildFilterRow(rows){
+      const tr=$('#filtersRow'); tr.innerHTML='';
+      headerKeys.forEach((key,idx)=>{
+        const th=document.createElement('th');
+        if(idx===0 || key==='_actions'){ tr.appendChild(th); return; }
+        const numericKeys = new Set(['qty','buy','fee','tax','trade','buyReal','mkt','cost','val','pnl','ret','dps','divy']);
+        const list = uniqueValues(rows, key, numericKeys.has(key));
+        const sel=document.createElement('select');
+        const placeholder = 'الكل';
+        sel.innerHTML = `<option value="">${placeholder}</option>` + list.map(v=>{
+          const label = (numericKeys.has(key) && key!=='ret' && key!=='divy') ? nf.format(v)
+                        : (key==='ret'||key==='divy') ? nf.format(v*100)+'%'
+                        : (typeof v==='number'? nf.format(v): String(v));
+          const value = String(v);
+          return `<option value="${value}">${label}</option>`;
+        }).join('');
+        sel.onchange = (e)=>{ filters[key]=e.target.value; render(); };
+        th.appendChild(sel);
+        tr.appendChild(th);
+      });
+    }
 
-function renderTable(rows){
-  const body=document.getElementById("tableBody");
-  body.innerHTML="";
-  let sumQty=0,sumTrade=0,sumCost=0,sumValue=0,sumProfit=0,sumBuyCost=0,sumBuyQty=0;
-  rows.forEach(r=>{
-    const trade=r.qty*r.buy;
-    const cost=trade;
-    const value=r.qty*r.current;
-    const profit=value-cost;
-    const change=((r.current-r.buy)/r.buy*100).toFixed(2);
-    sumQty+=r.qty; sumTrade+=trade; sumCost+=cost; sumValue+=value; sumProfit+=profit;
-    sumBuyCost+=r.buy*r.qty; sumBuyQty+=r.qty;
-
-    const tr=document.createElement("tr");
-    tr.innerHTML=`
-      <td>${r.symbol}</td>
-      <td>${nf.format(r.qty)}</td>
-      <td>${nf.format(r.buy)}</td>
-      <td>${nf.format(r.current)}</td>
-      <td>${fmt(trade)}</td>
-      <td>${fmt(cost)}</td>
-      <td>${fmt(value)}</td>
-      <td class="${profit>=0?'positive':'negative'}">${fmt(profit)}</td>
-      <td class="${change>=0?'positive':'negative'}">${change>=0?'⬆️':'⬇️'} ${change}%</td>
-    `;
-    body.appendChild(tr);
-  });
-  document.getElementById("sumQty").textContent=nf.format(sumQty);
-  document.getElementById("avgBuy").textContent=sumBuyQty? nf.format(sumBuyCost/sumBuyQty):"—";
-  document.getElementById("sumTrade").textContent=fmt(sumTrade);
-  document.getElementById("sumCost").textContent=fmt(sumCost);
-  document.getElementById("sumValue").textContent=fmt(sumValue);
-  document.getElementById("sumProfit").textContent=fmt(sumProfit);
-}
-
-function renderDashboard(rows){
-  const ctxs=["qtyChart","valChart","tradeChart","costChart","valueChart","profitChart","changeChart"];
-  ctxs.forEach(id=>{
-    const ctx=document.getElementById(id);
-    if(ctx.chart) ctx.chart.destroy();
-    const labels=[...new Set(rows.map(r=>r.symbol))];
-    const agg={}; labels.forEach(l=>agg[l]=0);
-    rows.forEach(r=>{
-      const trade=r.qty*r.buy;
-      const cost=trade;
-      const value=r.qty*r.current;
-      const profit=value-cost;
-      const change=value-cost; // لاحظ: هنا نعرض كقيمة بدل نسبة
-      if(id==="qtyChart") agg[r.symbol]+=r.qty;
-      else if(id==="valChart") agg[r.symbol]+=value;
-      else if(id==="tradeChart") agg[r.symbol]+=trade;
-      else if(id==="costChart") agg[r.symbol]+=cost;
-      else if(id==="valueChart") agg[r.symbol]+=value;
-      else if(id==="profitChart") agg[r.symbol]+=profit;
-      else if(id==="changeChart") agg[r.symbol]+=change;
-    });
-    const values=labels.map(l=>agg[l]);
-    ctx.chart=new Chart(ctx,{
-      type:"doughnut",
-      data:{labels:labels, datasets:[{data:values}]},
-      options:{
-        plugins:{
-          tooltip:{callbacks:{label:ctx=>{
-            return `${ctx.label}: ${fmt(ctx.raw)}`;
-          }}},
-          legend:{labels:{generateLabels(chart){
-            const d=chart.data;
-            return d.labels.map((l,i)=>({
-              text:`${l}: ${fmt(d.datasets[0].data[i])}`,
-              fillStyle:chart.data.datasets[0].backgroundColor? chart.data.datasets[0].backgroundColor[i] : undefined
-            }));
-          }}}
+    function passDropdownFilters(r){
+      for(const [key,val] of Object.entries(filters)){
+        if(!val && val!=='0') continue;
+        let rv;
+        switch(key){
+          case 'symbol': rv=r.symbol; break;
+          case 'ex': rv=r.ex||''; break;
+          case 'qty': rv=r.qty; break;
+          case 'buy': rv=r.buy; break;
+          case 'fee': rv=r.fee; break;
+          case 'tax': rv=r.tax; break;
+          case 'trade': rv=r.trade; break;
+          case 'buyReal': rv=r.buyReal; break;
+          case 'mkt': rv=r.mkt; break;
+          case 'cost': rv=r.cost; break;
+          case 'val': rv=r.val; break;
+          case 'pnl': rv=r.pnl; break;
+          case 'ret': rv=r.ret; break;
+          case 'dps': rv=r.dps; break;
+          case 'divy': rv=r.divYield; break;
+          case 'date': rv=r.date; break;
+          case 'notes': rv=r.notes; break;
+          default: rv=null;
+        }
+        const numeric = ['qty','buy','fee','tax','trade','buyReal','mkt','cost','val','pnl','ret','dps','divy'].includes(key);
+        if(numeric){
+          const vnum = +rv;
+          if(String(vnum)!==val) return false;
+        } else {
+          if(String(rv)!==val) return false;
         }
       }
-    });
-  });
-}
+      return true;
+    }
 
-renderTable(data);
-renderDashboard(data);
-</script>
+    // ===== تجميع للرسوم (الآن كل شيء "قيم" وليس نسب) =====
+    function aggregateBySymbol(rows, mode){
+      const agg={};
+      rows.forEach(r=>{
+        const qty=+r.qty||0, buyBase=(+r.buyReal||0)||(+r.buy||0);
+        const cost=qty*buyBase, val=qty*(+r.mkt||0);
+        const pnl=val-cost;
+        let v=0;
+        switch(mode){
+          case 'qty': v=qty; break;                 // أسهم
+          case 'val': v=val; break;                 // قيمة سوقية
+          case 'trade': v=+r.trade||0; break;       // مبلغ التداول
+          case 'cost': v=cost; break;               // التكلفة
+          case 'pnl': v=pnl; break;                 // ربح/خسارة
+          case 'ret': v=pnl; break;                 // 🔁 التغيير كـ "قيمة" بدل نسبة
+        }
+        agg[r.symbol]=(agg[r.symbol]||0)+(isFinite(v)?v:0);
+      });
+      return agg;
+    }
+
+    // ===== رسم دونت SVG تفاعلي (Tooltip + Legend بالقيم) =====
+    function renderDonutSVG(mode, rows){
+      const svg = $('#donutSVG'); const legend = $('#legend'); const tip = $('#tooltip');
+      const note = $('#chartNote');
+      svg.innerHTML=''; legend.innerHTML=''; tip.style.display='none';
+
+      const agg = aggregateBySymbol(rows, mode);
+      let entries = Object.entries(agg);
+
+      // نجمع الأوزان: للقيم السالبة (pnl/ret) نستخدم القيمة المطلقة للحجم، ونُلوّن بالإشارة.
+      let total;
+      if(mode==='pnl' || mode==='ret'){
+        total = sum(entries.map(([,v])=>Math.abs(v)));
+      }else{
+        total = sum(entries.map(([,v])=>Math.max(v,0)));
+      }
+      if(total<=0){
+        note.textContent='لا توجد بيانات كافية للرسم.';
+        return;
+      } else {
+        const labels = {
+          qty:'عدد الأسهم', val:'القيمة السوقية', trade:'مبلغ التداول',
+          cost:'التكلفة', pnl:'الربح (قيمة)', ret:'التغيير (قيمة)'
+        };
+        note.textContent='الوضع الحالي: '+labels[mode]+' — حرّك المؤشر فوق القطاعات لمعرفة التفاصيل.';
+      }
+
+      const cx=110, cy=110, r=90, innerR=55;
+      let startAngle=0;
+
+      entries.forEach(([sym,v],i)=>{
+        const weight = (mode==='pnl' || mode==='ret') ? Math.abs(v) : Math.max(v,0);
+        if(weight<=0) return;
+        const angle = (weight/total)*Math.PI*2;
+        const endAngle = startAngle + angle;
+
+        const x1 = cx + r*Math.cos(startAngle), y1 = cy + r*Math.sin(startAngle);
+        const x2 = cx + r*Math.cos(endAngle),   y2 = cy + r*Math.sin(endAngle);
+        const xi = cx + innerR*Math.cos(endAngle), yi = cy + innerR*Math.sin(endAngle);
+        const xi0= cx + innerR*Math.cos(startAngle), yi0= cy + innerR*Math.sin(startAngle);
+        const largeArc = angle>Math.PI ? 1 : 0;
+
+        const path = document.createElementNS('http://www.w3.org/2000/svg','path');
+        const d = [
+          `M ${x1} ${y1}`,
+          `A ${r} ${r} 0 ${largeArc} 1 ${x2} ${y2}`,
+          `L ${xi} ${yi}`,
+          `A ${innerR} ${innerR} 0 ${largeArc} 0 ${xi0} ${yi0}`,
+          'Z'
+        ].join(' ');
+        path.setAttribute('d', d);
+
+        const baseColor = colors[i%colors.length];
+        const color = ((mode==='pnl' || mode==='ret') && v<0) ? '#ef4444' : baseColor;
+        path.setAttribute('fill', color);
+        path.style.cursor='pointer';
+
+        path.addEventListener('mousemove', (e)=>{
+          const valueText =
+            (mode==='qty') ? nf.format(v)+' سهم' :
+            fmt(v); // باقي الأوضاع تعرض قيمة نقدية
+          tip.textContent = `${sym}: ${valueText}`;
+          tip.style.display='block';
+          const rect = svg.getBoundingClientRect();
+          tip.style.left = (e.clientX - rect.left)+'px';
+          tip.style.top  = (e.clientY - rect.top)+'px';
+        });
+        path.addEventListener('mouseleave', ()=>{ tip.style.display='none'; });
+
+        svg.appendChild(path);
+
+        // أسطورة تعرض "القيمة" بدل %
+        const row=document.createElement('div'); row.className='item';
+        const left=document.createElement('div'); left.style.display='flex'; left.style.alignItems='center'; left.style.gap='8px';
+        const tag=document.createElement('span'); tag.className='tag'; tag.style.background=color;
+        const name=document.createElement('span'); name.textContent=sym;
+        left.append(tag,name);
+        const right=document.createElement('b');
+        right.textContent = (mode==='qty') ? nf.format(v)+' سهم' : fmt(v);
+        row.append(left,right); legend.append(row);
+
+        startAngle = endAngle;
+      });
+
+      // ثقب داخلي
+      const hole = document.createElementNS('http://www.w3.org/2000/svg','circle');
+      hole.setAttribute('cx', cx); hole.setAttribute('cy', cy); hole.setAttribute('r', innerR);
+      hole.setAttribute('fill', getComputedStyle(document.body).getPropertyValue('--card') || '#131a2a');
+      hole.setAttribute('stroke','rgba(255,255,255,.15)'); hole.setAttribute('stroke-width','1');
+      svg.appendChild(hole);
+    }
+
+    // ===== تحديث KPI + بناء الجدول + صف المجموع + الرسم =====
+    function render(){
+      const rows = computeRows();
+
+      // KPIs
+      const totalCost = sum(rows.map(r=>r.cost));
+      const totalVal = sum(rows.map(r=>r.val));
+      const totalPnL = totalVal-totalCost;
+      const totalRet = totalCost>0 ? totalPnL/totalCost : 0;
+      $('#kpiValue').textContent = fmt(totalVal);
+      $('#kpiCost').textContent = fmt(totalCost);
+      $('#kpiPnL').innerHTML = `${fmt(totalPnL)} <span class="chip ${totalPnL>0?'pos':(totalPnL<0?'neg':'neu')}">${totalPnL>=0?'▲':'▼'} ${nf.format(Math.abs(totalRet*100))}%</span>`;
+      $('#kpiReturn').textContent = nf.format(totalRet*100)+'%';
+
+      buildFilterRow(rows);
+
+      const q = $('#search').value?.trim().toLowerCase() || '';
+      const exFilter = $('#filterEx').value;
+      const tbody = $('#tbody'); tbody.innerHTML='';
+
+      const filtered = rows
+        .map((r,i)=>({r,i}))
+        .filter(({r})=>{
+          const hit = (r.symbol||'').toLowerCase().includes(q) || (r.name||'').toLowerCase().includes(q);
+          const hitEx = !exFilter || r.ex===exFilter;
+          const hitCols = passDropdownFilters(r);
+          return hit && hitEx && hitCols;
+        });
+
+      filtered.forEach(({r,i}, idx)=>{
+        const tr = document.createElement('tr');
+
+        const buyBase = (+r.buyReal||0) || (+r.buy||0);
+        const cost = r.qty*buyBase;
+        const val = r.qty*(+r.mkt||0);
+        const pnl = val - cost;
+        const ret = cost>0 ? (pnl/cost) : 0;
+
+        const cells = [
+          {key:'#', html:String(idx+1)},
+          {key:'symbol', html:`<div class="sym"><div class="t">${r.name||''}</div><div class="s">${r.symbol||''}</div></div>`},
+          {key:'ex', html:r.ex||''},
+          {key:'qty', html: `<input class="input small" type="number" step="1" data-idx="${i}" data-key="qty" value="${r.qty??''}">`},
+          {key:'buy', html: `<input class="input small" type="number" step="0.0001" data-idx="${i}" data-key="buy" value="${r.buy??''}">`},
+          {key:'fee', html: `<input class="input small" type="number" step="0.0001" data-idx="${i}" data-key="fee" value="${r.fee??''}">`},
+          {key:'tax', html: `<input class="input small" type="number" step="0.0001" data-idx="${i}" data-key="tax" value="${r.tax??''}">`},
+          {key:'trade', html: `<input class="input small" type="number" step="0.0001" data-idx="${i}" data-key="trade" value="${r.trade??''}">`},
+          {key:'buyReal', html: `<input class="input small" type="number" step="0.0000001" data-idx="${i}" data-key="buyReal" value="${r.buyReal??''}">`},
+          {key:'mkt', html: `<input class="input" type="number" step="0.0001" data-idx="${i}" data-key="mkt" value="${r.mkt??''}">`},
+          {key:'cost', html: fmt(cost), cls:'num'},
+          {key:'val', html: fmt(val), cls:'num'},
+          {key:'pnl', html: fmt(pnl), cls:`num ${colorClass(pnl)}`},
+          {key:'ret', html: `<span class="num pct ${colorClass(ret)}">${ret>=0? '▲':'▼'} ${nf.format(Math.abs(ret*100))}%</span>`},
+          {key:'dps', html:`<input class="input small" type="number" step="0.0001" data-idx="${i}" data-key="dps" value="${r.dps??''}">`},
+          {key:'divy', html: nf.format((r.mkt>0? (r.dps/r.mkt*100):0))+'%', cls:'num'},
+          {key:'date', html:`<input class="input small" type="text" data-idx="${i}" data-key="date" value="${r.date||''}">`},
+          {key:'notes', html:`<input class="input wide" type="text" data-idx="${i}" data-key="notes" value="${r.notes||''}">`},
+          {key:'_actions', html:`<button class="mini delete" data-del="${i}">حذف</button>`}
+        ];
+
+        cells.forEach(c=>{
+          const td=document.createElement('td');
+          td.className = c.cls || (['cost','val','pnl','ret','qty','buy','fee','tax','trade','buyReal','mkt','dps','divy'].includes(c.key)?'num':'');
+          td.innerHTML=c.html;
+          tr.appendChild(td);
+        });
+
+        tbody.appendChild(tr);
+      });
+
+      // أحداث الحذف والتحرير
+      $$('button[data-del]').forEach(btn=>btn.onclick = (e)=>{ const idx = +e.currentTarget.getAttribute('data-del'); const removed=state.items.splice(idx,1)[0]; persist(); logAction(`حذف صف ${removed?.symbol||''}`); render(); });
+      $$('input[data-idx]').forEach(inp=>{
+        inp.oninput = (e)=>{
+          const idx = +e.target.getAttribute('data-idx');
+          const key = e.target.getAttribute('data-key');
+          const val = e.target.type==='number' ? +e.target.value : e.target.value;
+          const prev = state.items[idx][key];
+          state.items[idx][key] = (e.target.type==='number' ? (isFinite(val)? val:0) : val);
+          persist();
+          if(key==='mkt') logAction(`تحديث سعر السوق لـ ${state.items[idx].symbol} إلى ${state.items[idx].mkt}`);
+          if(prev!==state.items[idx][key]) render();
+        };
+      });
+
+      buildSymbolDroplist();
+      if(!$('#colsList').dataset.built){ buildColsPanel(true); $('#colsList').dataset.built='1'; }
+
+      const activeMode = $('.tab.active')?.dataset.mode || 'val';
+      renderDonutSVG(activeMode, filtered.map(x=>x.r));
+
+      updateTotalsRow(filtered.map(x=>x.r));
+      renderLedger();
+    }
+
+    // صف المجموع
+    function updateTotalsRow(rows){
+      const tQty = sum(rows.map(r=> +r.qty||0));
+      const tFee = sum(rows.map(r=> +r.fee||0));
+      const tTax = sum(rows.map(r=> +r.tax||0));
+      const tTrade = sum(rows.map(r=> +r.trade||0));
+      const tCost = sum(rows.map(r=> (+r.qty||0)*(((+r.buyReal||0) || (+r.buy||0)))));
+      const tVal = sum(rows.map(r=> (+r.qty||0)*(+r.mkt||0)));
+      const tPnL = tVal - tCost;
+      const tRet = tCost>0? (tPnL/tCost)*100 : 0;
+
+      const wBuy = sum(rows.map(r=> (+r.qty||0)));
+      const buyAvg = wBuy>0 ? (sum(rows.map(r=> (+r.qty||0)*((+r.buy||0)))) / wBuy) : 0;
+      const buyRealAvg = wBuy>0 ? (sum(rows.map(r=> (+r.qty||0)*(((+r.buyReal||0)||(+r.buy||0)) )))/wBuy) : 0;
+      const mktAvg = wBuy>0 ? (sum(rows.map(r=> (+r.qty||0)*(+r.mkt||0)))/wBuy) : 0;
+
+      $('#t_qty').textContent = nf.format(tQty);
+      $('#t_buyAvg').textContent = nf.format(buyAvg);
+      $('#t_fee').textContent = nf.format(tFee);
+      $('#t_tax').textContent = nf.format(tTax);
+      $('#t_trade').textContent = nf.format(tTrade);
+      $('#t_buyRealAvg').textContent = nf.format(buyRealAvg);
+      $('#t_mkt').textContent = nf.format(mktAvg);
+      $('#t_cost').textContent = nf.format(tCost);
+      $('#t_val').textContent = nf.format(tVal);
+      $('#t_pnl').textContent = (tPnL>=0?'+':'')+nf.format(tPnL);
+      $('#t_ret').textContent = (tRet>=0?'▲ ':'▼ ')+ nf.format(Math.abs(tRet))+'%';
+      $('#t_ret').className = 'num '+(tRet>=0?'pct pos':'pct neg');
+      $('#t_pnl').className = 'num '+(tPnL>=0?'pos':'neg');
+    }
+
+    // droplist الرموز
+    function buildSymbolDroplist(){
+      const sel = $('#symSelectAll'); if(!sel) return;
+      const uniq = [...new Set(state.items.map(x=> (x.symbol||'').toUpperCase()).filter(Boolean))].sort();
+      sel.innerHTML = uniq.map(s=>`<option value="${s}">${s}</option>`).join('');
+    }
+
+    // أعمدة: إخفاء/إظهار
+    function buildColsPanel(reset=false){
+      const theadRow = $('#tbl thead tr'); if(!theadRow) return;
+      const ths = [...theadRow.children];
+      const container = $('#colsList'); if(!container) return;
+      if(reset) container.innerHTML='';
+      ths.forEach((th, idx)=>{
+        const label = th.textContent.trim() || '(عمود)';
+        const wrap = document.createElement('label');
+        wrap.style.display='flex'; wrap.style.alignItems='center'; wrap.style.gap='6px';
+        wrap.innerHTML = `<input type="checkbox" checked> ${label}`;
+        const cb = wrap.querySelector('input');
+        cb.addEventListener('change', (e)=>{
+          const show = e.target.checked;
+          const cells = document.querySelectorAll(`#tbl thead tr th:nth-child(${idx+1}), #tbl tbody tr td:nth-child(${idx+1}), #tbl tfoot tr td:nth-child(${idx+1})`);
+          cells.forEach(el=> el.style.display = show ? '' : 'none');
+        });
+        container.appendChild(wrap);
+      });
+    }
+
+    // الحركات
+    function logAction(txt){ state.ledger.unshift({ts:new Date().toISOString(), txt}); if(state.ledger.length>200) state.ledger.pop(); persist(); renderLedger(); }
+    function renderLedger(){
+      const box = $('#ledgerList');
+      if(!state.ledger.length){ box.textContent='لا توجد حركات بعد.'; return; }
+      box.innerHTML = state.ledger.slice(0,20).map(x=>{
+        const d = new Date(x.ts); const t = d.toLocaleString('ar-AE');
+        return `<div>• ${t} — ${x.txt}</div>`;
+      }).join('');
+    }
+
+    // ============ أحداث عامة ============
+    $('#toggleTheme').onclick = ()=> document.body.classList.toggle('light');
+    $('#search').oninput = ()=>render();
+    $('#filterEx').onchange = ()=>render();
+
+    // إخفاء/إظهار الجدول
+    $('#toggleTable').onclick = ()=>{
+      const sec = $('#tableSection');
+      const btn = $('#toggleTable');
+      const show = sec.style.display==='none';
+      sec.style.display = show ? '' : 'none';
+      btn.textContent = (show ? '− إخفاء الجدول' : '＋ إظهار الجدول');
+    };
+
+    // تبويبات الحركات/الأسعار
+    $$('.subtab').forEach(tab=>{
+      tab.addEventListener('click', ()=>{
+        $$('.subtab').forEach(t=>t.classList.remove('active'));
+        tab.classList.add('active');
+        const mode = tab.dataset.subtab;
+        $('#ledgerPanel').style.display = (mode==='ledger') ? '' : 'none';
+        $('#pricesPanel').style.display = (mode==='prices') ? '' : 'none';
+      });
+    });
+
+    // تبويبات الرسم
+    $$('.tab').forEach(tb=>{
+      tb.addEventListener('click', ()=>{
+        $$('.tab').forEach(t=>t.classList.remove('active'));
+        tb.classList.add('active');
+        const rowsNow = computeRows()
+          .map((r,i)=>({r,i}))
+          .filter(({r})=>{
+            const q = $('#search').value?.trim().toLowerCase() || '';
+            const exFilter = $('#filterEx').value;
+            const hit = (r.symbol||'').toLowerCase().includes(q) || (r.name||'').toLowerCase().includes(q);
+            const hitEx = !exFilter || r.ex===exFilter;
+            const hitCols = passDropdownFilters(r);
+            return hit && hitEx && hitCols;
+          })
+          .map(x=>x.r);
+        renderDonutSVG(tb.dataset.mode, rowsNow);
+      });
+    });
+
+    // تحديث سريع
+    $('#bulkBtn').onclick = ()=>{ $('#bulkPanel').style.display='block'; $('#bulkBox').focus(); };
+    $('#closeBulk').onclick = ()=>{ $('#bulkPanel').style.display='none'; };
+    $('#applyBulk').onclick = ()=>{
+      const txt = $('#bulkBox').value.trim(); if(!txt) return;
+      txt.split(/\n|\r/).map(s=>s.trim()).filter(Boolean).forEach(line=>{
+        const m = line.match(/([A-Za-z\-_.]+)/); const num = line.match(/(-?[0-9]+(?:\.[0-9]+)?)/g);
+        if(!m||!num) return; const sym=m[1].toUpperCase(); const price=parseFloat(num[num.length-1]);
+        state.items.forEach(x=>{ if((x.symbol||'').toUpperCase()===sym){ x.mkt = price; }});
+        logAction(`تحديث جماعي لسعر ${sym} إلى ${price}`);
+      });
+      persist(); render();
+    };
+
+    // استيراد/تصدير/إعادة ضبط
+    $('#exportBtn').onclick = ()=>{ const blob=new Blob([JSON.stringify(state,null,2)],{type:'application/json'}); const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='portfolio.json'; a.click(); };
+    $('#importFile').onchange = (e)=>{ const f=e.target.files[0]; if(!f) return; const reader=new FileReader(); reader.onload=()=>{ try{ const obj=JSON.parse(reader.result); if(obj && Array.isArray(obj.items)){ state.items=obj.items; if(obj.currency) state.currency=obj.currency; state.ledger = Array.isArray(obj.ledger)?obj.ledger:[]; persist(); render(); } }catch{ alert('ملف غير صالح'); } }; reader.readAsText(f); };
+    $('#resetBtn').onclick = ()=>{ if(confirm('هل تريد إعادة الضبط للبيانات المُقدَّمة؟')){ localStorage.removeItem(LS_KEY); state.items=dataFromUser; state.ledger=[]; persist(); render(); } };
+
+    // تطبيق سعر الرمز لكل الصفوف
+    $('#applySymPrice')?.addEventListener('click', ()=>{
+      const sym = ($('#symSelectAll')?.value||'').toUpperCase();
+      const price = +($('#symPriceAll')?.value||0);
+      if(!sym || !isFinite(price)) return;
+      state.items.forEach(it=>{ if((it.symbol||'').toUpperCase()===sym){ it.mkt = price; }});
+      persist(); logAction(`تحديث سعر ${sym} إلى ${price}`); render();
+    });
+
+    // إضافة صف جديد
+    $('#addBtn').onclick = ()=>{
+      const it = {
+        symbol: $('#fSymbol').value.trim().toUpperCase(),
+        qty: +$('#fQty').value||0,
+        buy: +$('#fBuy').value||0,
+        fee: +$('#fFee').value||0,
+        tax: +$('#fTax').value||0,
+        trade: +$('#fTrade').value||0,
+        buyReal: +$('#fBuyReal').value||0,
+        date: $('#fDate').value||'',
+        mkt: 0, dps:0, target:0, notes:''
+      };
+      if(!it.symbol) return;
+      state.items.push(it); persist();
+      logAction(`إضافة صف جديد ${it.symbol} (${it.qty})`);
+      ['fSymbol','fQty','fBuy','fFee','fTax','fTrade','fBuyReal','fDate'].forEach(id=>$('#'+id).value='');
+      render();
+    };
+
+    // Init
+    load(); render();
+
+    // سيناريو ماذا لو
+    $('#whatIf')?.addEventListener('input',(e)=>{
+      const p = +e.target.value; $('#whatIfLbl').textContent = (p>0?'+':'')+p+'%';
+      const rows = computeRows();
+      const totalVal = sum(rows.map(r=> r.val));
+      const hypot = sum(rows.map(r=> r.qty * ( (r.mkt||0) * (1+p/100) ) ));
+      const delta = hypot - totalVal;
+      $('#whatIfImpact').textContent = fmt(delta);
+    });
+  </script>
 </body>
 </html>

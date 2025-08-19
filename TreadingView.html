@@ -1,286 +1,558 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="utf-8"/>
-<meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>UAE Market Movers — شبيه TradingView</title>
-<style>
-  :root{--bg:#fff;--fg:#111;--muted:#666;--line:#e9e9e9;--accent:#0a8f22;--down:#d01919}
-  *{box-sizing:border-box} body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial;background:var(--bg);color:var(--fg)}
-  header{padding:14px 16px;border-bottom:1px solid var(--line);display:flex;flex-wrap:wrap;gap:10px;align-items:center}
-  header h1{font-size:18px;margin:0}
-  .toolbar{display:flex;gap:8px;align-items:center;margin-inline-start:auto}
-  .toolbar select,.toolbar input{padding:8px 10px;border:1px solid var(--line);border-radius:8px;font-size:14px}
-  .tabs{display:flex;gap:6px;padding:10px 16px;border-bottom:1px solid var(--line);flex-wrap:wrap}
-  .tab{padding:8px 12px;border:1px solid var(--line);border-radius:20px;cursor:pointer;font-size:14px;background:#fafafa}
-  .tab.active{background:#eef7ff;border-color:#cfe7ff}
-  .wrap{padding:12px 16px}
-  table{width:100%;border-collapse:collapse}
-  th,td{border-bottom:1px solid var(--line);padding:10px;text-align:center;font-size:14px;white-space:nowrap}
-  th{position:sticky;top:0;background:#f9f9f9;z-index:2}
-  th.sort{cursor:pointer}
-  th.sort::after{content:" ↕";color:var(--muted);font-weight:normal}
-  .pos{color:var(--accent)} .neg{color:var(--down)} .muted{color:var(--muted)}
-  .status{display:flex;justify-content:space-between;align-items:center;margin:8px 0 14px;color:var(--muted);font-size:13px}
-  .chip{padding:4px 8px;border:1px solid var(--line);border-radius:12px;font-size:12px}
-  .footer{padding:12px 16px;color:var(--muted);font-size:12px}
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>منصة محفظتي – HTML واحد</title>
+  <style>
+    :root {
+      --bg: #0b1220;
+      --card: #131a2a;
+      --muted: #a5b0c2;
+      --text: #eef1f7;
+      --accent: #5eead4;
+      --accent-2: #60a5fa;
+      --danger: #ef4444;
+      --success: #22c55e;
+      --warning: #f59e0b;
+      --shadow: 0 10px 24px rgba(0,0,0,.35);
+      --radius: 16px;
+    }
+    .light {
+      --bg: #f6f8fc;
+      --card: #ffffff;
+      --muted: #5b667a;
+      --text: #0b1220;
+      --accent: #0ea5e9;
+      --accent-2: #8b5cf6;
+      --danger: #b91c1c;
+      --success: #15803d;
+      --warning: #b45309;
+      --shadow: 0 10px 24px rgba(2,6,23,.12);
+    }
+
+    * { box-sizing: border-box; }
+    html, body { height: 100%; }
+    body {
+      margin: 0; font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Noto Kufi Arabic", "Noto Sans Arabic", Arial;
+      background: radial-gradient(1200px 800px at 80% -10%, rgba(59,130,246,.15), transparent 60%), var(--bg);
+      color: var(--text);
+    }
+
+    .container { max-width: 1200px; padding: 24px; margin: 0 auto; }
+
+    header {
+      display: grid; gap: 16px;
+    }
+
+    .title-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+    h1 { margin: 0; font-size: 28px; letter-spacing: .3px; }
+
+    .controls { display: flex; gap: 8px; flex-wrap: wrap; }
+    .btn {
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      color: white; border: none; padding: 10px 14px; border-radius: 12px; font-weight: 700; cursor: pointer;
+      box-shadow: var(--shadow);
+    }
+    .btn.ghost { background: transparent; color: var(--text); border: 1px solid rgba(255,255,255,.15); }
+    .btn.danger { background: linear-gradient(135deg, #ef4444, #f97316); }
+    .btn.flat { background: var(--card); color: var(--text); border: 1px solid rgba(255,255,255,.1); }
+
+    .grid { display: grid; grid-template-columns: 1fr; gap: 16px; }
+
+    @media (min-width: 900px){
+      .grid { grid-template-columns: 1.2fr .8fr; }
+    }
+
+    .card {
+      background: linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,0) 40%), var(--card);
+      border: 1px solid rgba(255,255,255,.06);
+      border-radius: var(--radius);
+      padding: 16px; box-shadow: var(--shadow);
+    }
+
+    /* KPI cards */
+    .kpis { display: grid; gap: 12px; grid-template-columns: repeat(2, 1fr); }
+    @media (min-width: 680px){ .kpis { grid-template-columns: repeat(4, 1fr); } }
+    .kpi { padding: 14px; border-radius: 14px; background: rgba(255,255,255,.04); border: 1px dashed rgba(255,255,255,.12); }
+    .kpi .label { color: var(--muted); font-size: 12px; }
+    .kpi .value { font-size: 22px; font-weight: 800; margin-top: 6px; }
+    .chip { display: inline-flex; align-items: center; gap: 6px; font-weight: 700; font-size: 12px; padding: 6px 10px; border-radius: 999px; }
+    .chip.pos { background: rgba(34,197,94,.14); color: #86efac; }
+    .chip.neg { background: rgba(239,68,68,.14); color: #fecaca; }
+    .chip.neu { background: rgba(234,179,8,.14); color: #fde68a; }
+
+    /* Add form */
+    .add-form { display: grid; gap: 8px; grid-template-columns: repeat(8, 1fr); align-items: end; }
+    .add-form .field { display: grid; gap: 6px; }
+    .add-form label { font-size: 12px; color: var(--muted); }
+    .add-form input, .add-form select, .toolbar input {
+      padding: 10px 12px; border-radius: 10px; border: 1px solid rgba(255,255,255,.12); background: rgba(255,255,255,.04); color: var(--text);
+    }
+    .add-form input::placeholder { color: #93a3b8; }
+    .add-form .wide { grid-column: span 2; }
+    .add-form .xwide { grid-column: span 3; }
+    .add-form .btn { grid-column: span 2; height: 40px; }
+    @media (max-width: 980px){ .add-form { grid-template-columns: repeat(2, 1fr); } .add-form .btn { grid-column: span 2; } }
+
+    /* Table */
+    .toolbar { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; justify-content: space-between; margin-bottom: 10px; }
+    .toolbar .left, .toolbar .right { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+    .toolbar .toggle { padding: 8px 10px; border-radius: 10px; background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.12); cursor: pointer; }
+
+    table { width: 100%; border-collapse: collapse; }
+    thead th {
+      position: sticky; top: 0; z-index: 1;
+      background: linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,0) 30%), var(--card);
+      color: var(--muted); font-weight: 700; text-align: right; font-size: 12px; letter-spacing: .2px;
+      border-bottom: 1px solid rgba(255,255,255,.12);
+      padding: 10px; white-space: nowrap;
+    }
+    tbody td { border-bottom: 1px dashed rgba(255,255,255,.08); padding: 8px 10px; vertical-align: middle; }
+    tbody tr:hover { background: rgba(255,255,255,.03); }
+
+    .sym { display: grid; gap: 2px; }
+    .sym .t { font-weight: 800; }
+    .sym .s { color: var(--muted); font-size: 12px; }
+    .num { text-align: left; font-variant-numeric: tabular-nums; direction: ltr; }
+    .pct.pos { color: #86efac; font-weight: 700; }
+    .pct.neg { color: #fecaca; font-weight: 700; }
+
+    .input { width: 110px; }
+    .input.small { width: 84px; }
+    .input.wide { width: 140px; }
+    .row-actions { display: flex; gap: 6px; }
+    .mini { padding: 6px 8px; border-radius: 10px; border: 1px solid rgba(255,255,255,.12); background: rgba(255,255,255,.06); color: var(--text); cursor: pointer; font-size: 12px; }
+    .mini.delete { background: rgba(239,68,68,.15); border-color: rgba(239,68,68,.4); }
+
+    .progress {
+      width: 120px; height: 8px; background: rgba(255,255,255,.08); border-radius: 999px; overflow: hidden; border: 1px solid rgba(255,255,255,.12);
+    }
+    .progress > span { display: block; height: 100%; background: linear-gradient(90deg, var(--accent), var(--accent-2)); }
+
+    /* Right column */
+    .panel { display: grid; gap: 12px; }
+
+    .donut {
+      --size: 160px;
+      width: var(--size); height: var(--size);
+      border-radius: 50%;
+      background: conic-gradient(#60a5fa 0 var(--a1), #22c55e var(--a1) var(--a2), #f59e0b var(--a2) var(--a3), #ef4444 var(--a3) 360deg);
+      position: relative; margin: 12px auto;
+      box-shadow: var(--shadow);
+    }
+    .donut::after {
+      content: ""; position: absolute; inset: 18%; border-radius: 50%; background: var(--card); border: 1px solid rgba(255,255,255,.1);
+    }
+    .legend { display: grid; gap: 6px; }
+    .legend .item { display: flex; align-items: center; gap: 8px; justify-content: space-between; }
+    .legend .tag { display: inline-block; width: 12px; height: 12px; border-radius: 3px; }
+
+    .whatif { display: grid; gap: 8px; }
+    .range { accent-color: var(--accent-2); }
+
+    footer { margin: 20px 0 0; color: var(--muted); font-size: 12px; text-align: center; }
+
+    .muted { color: var(--muted); }
+  </style>
 </head>
 <body>
+  <div class="container" id="app">
+    <header>
+      <div class="title-row">
+        <h1>💼 منصة محفظتي</h1>
+        <div class="controls">
+          <button class="btn flat" id="toggleTheme">🌗 وضع الليل/النهار</button>
+          <button class="btn ghost" id="exportBtn">⬇️ تصدير</button>
+          <label class="btn ghost" for="importFile" style="cursor:pointer">⬆️ استيراد</label>
+          <input id="importFile" type="file" accept="application/json" hidden>
+          <button class="btn danger" id="resetBtn">إعادة ضبط</button>
+        </div>
+      </div>
 
-<header>
-  <h1>📊 UAE Market Movers</h1>
-  <div class="toolbar">
-    <select id="exchange">
-      <option value="ALL">الكل: ADX + DFM</option>
-      <option value="ADX">أبوظبي — ADX</option>
-      <option value="DFM">دبي — DFM</option>
-    </select>
-    <input id="search" type="search" placeholder="ابحث بالرمز أو الاسم…"/>
-    <select id="refresh">
-      <option value="60000">تحديث كل 60 ثانية</option>
-      <option value="30000">كل 30 ثانية</option>
-      <option value="120000">كل دقيقتين</option>
-      <option value="0">إيقاف التحديث التلقائي</option>
-    </select>
+      <div class="kpis" id="kpis">
+        <div class="kpi"><div class="label">إجمالي القيمة</div><div class="value" id="kpiValue">—</div></div>
+        <div class="kpi"><div class="label">إجمالي التكلفة</div><div class="value" id="kpiCost">—</div></div>
+        <div class="kpi"><div class="label">صافي الربح/الخسارة</div><div class="value" id="kpiPnL">—</div></div>
+        <div class="kpi"><div class="label">العائد الكلي</div><div class="value" id="kpiReturn">—</div></div>
+      </div>
+
+      <div class="card">
+        <form class="add-form" id="addForm" onsubmit="return false;">
+          <div class="field">
+            <label>الرمز</label>
+            <input id="fSymbol" placeholder="ADIB / DIB / EMAAR" required />
+          </div>
+          <div class="field xwide">
+            <label>الشركة</label>
+            <input id="fName" placeholder="مصرف أبوظبي الإسلامي" />
+          </div>
+          <div class="field">
+            <label>السوق</label>
+            <select id="fEx">
+              <option value="ADX">ADX</option>
+              <option value="DFM">DFM</option>
+              <option value="NASDAQ">NASDAQ</option>
+              <option value="LSE">LSE</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>الكمية</label>
+            <input id="fQty" type="number" step="1" min="0" placeholder="100" />
+          </div>
+          <div class="field">
+            <label>سعر الشراء</label>
+            <input id="fBuy" type="number" step="0.0001" min="0" placeholder="10.50" />
+          </div>
+          <div class="field">
+            <label>سعر السوق</label>
+            <input id="fMkt" type="number" step="0.0001" min="0" placeholder="11.20" />
+          </div>
+          <div class="field">
+            <label>توزيع/سهم (سنوي)</label>
+            <input id="fDps" type="number" step="0.0001" min="0" placeholder="0.45" />
+          </div>
+          <button class="btn" id="addBtn">➕ إضافة للسجل</button>
+        </form>
+      </div>
+    </header>
+
+    <main class="grid">
+      <!-- Left: table -->
+      <section class="card">
+        <div class="toolbar">
+          <div class="left">
+            <input id="search" placeholder="بحث: رمز/اسم" />
+            <select id="filterEx">
+              <option value="">كل الأسواق</option>
+              <option value="ADX">ADX</option>
+              <option value="DFM">DFM</option>
+              <option value="NASDAQ">NASDAQ</option>
+              <option value="LSE">LSE</option>
+            </select>
+            <span class="muted">* عدّل الأرقام مباشرة في الجدول</span>
+          </div>
+          <div class="right">
+            <div class="toggle"><span id="currencyLabel">د.إ</span></div>
+            <button class="btn flat" id="bulkBtn">تحديث سريع للأسعار</button>
+          </div>
+        </div>
+
+        <div style="overflow:auto; max-height: 520px; border-radius: 12px;">
+          <table id="tbl">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>الشركة / الرمز</th>
+                <th>السوق</th>
+                <th class="num">الكمية</th>
+                <th class="num">سعر الشراء</th>
+                <th class="num">سعر السوق</th>
+                <th class="num">التكلفة</th>
+                <th class="num">القيمة</th>
+                <th class="num">الربح</th>
+                <th class="num">% العائد</th>
+                <th class="num">DPS</th>
+                <th class="num">عائد التوزيع</th>
+                <th class="num">الهدف</th>
+                <th>التقدم</th>
+                <th>ملاحظات</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody id="tbody"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- Right: panels -->
+      <aside class="panel">
+        <div class="card">
+          <h3 style="margin:0 0 8px">📊 توزيع المحفظة</h3>
+          <div class="donut" id="donut" title="التوزيع النسبي للوزن"></div>
+          <div class="legend" id="legend"></div>
+        </div>
+
+        <div class="card whatif">
+          <h3 style="margin:0">🧪 سيناريو ماذا لو</h3>
+          <div class="muted">حرّك الشريط لمحاكاة ارتفاع/انخفاض عام على أسعار السوق.</div>
+          <input id="whatIf" type="range" min="-20" max="20" step="1" value="0" class="range" />
+          <div><b id="whatIfLbl">0%</b> تأثير على الأسعار • صافي الأثر: <b id="whatIfImpact">—</b></div>
+        </div>
+
+        <div class="card" id="bulkPanel" style="display:none">
+          <h3 style="margin:0 0 8px">⚡️ تحديث سريع للأسعار</h3>
+          <div class="muted">الصق أسطر على النحو التالي وسيتم التحديث:
+            <br><code>ADIB, 22.80</code> أو <code>DIB 13.45</code>
+          </div>
+          <textarea id="bulkBox" rows="6" style="width:100%; margin-top:8px; padding:10px; border-radius: 10px; background: rgba(255,255,255,.04); color: var(--text); border:1px solid rgba(255,255,255,.12);"></textarea>
+          <div style="display:flex; gap:8px; margin-top:8px;">
+            <button class="btn" id="applyBulk">تطبيق</button>
+            <button class="btn ghost" id="closeBulk">إغلاق</button>
+          </div>
+        </div>
+      </aside>
+    </main>
+
+    <footer>
+      <div>⚠️ تنويه: الأسعار الافتراضية في هذه النسخة أمثلة فقط. حدّثها يدويًا أو عبر "التحديث السريع".</div>
+    </footer>
   </div>
-</header>
 
-<div class="tabs">
-  <button class="tab active" data-view="gainers">الأكثر ارتفاعًا</button>
-  <button class="tab" data-view="losers">الأكثر انخفاضًا</button>
-  <button class="tab" data-view="active">أنشط تداولًا</button>
-  <span class="chip" id="countChip">—</span>
-</div>
+  <script>
+    const $ = (s, p=document) => p.querySelector(s);
+    const $$ = (s, p=document) => [...p.querySelectorAll(s)];
 
-<div class="wrap">
-  <div class="status">
-    <div id="statusText">جاري تحميل البيانات…</div>
-    <div id="lastUpdate">—</div>
-  </div>
+    // ========= State =========
+    const LS_KEY = 'portfolioData.v1';
+    const state = {
+      currency: 'د.إ',
+      items: []
+    };
 
-  <div style="overflow:auto">
-    <table id="grid">
-      <thead>
-        <tr>
-          <th class="sort" data-k="name">الرمز</th>
-          <th class="sort" data-k="short_name">الاسم</th>
-          <th>البورصة</th>
-          <th class="sort" data-k="close">السعر</th>
-          <th class="sort" data-k="change">% التغيير</th>
-          <th class="sort" data-k="volume">الحجم</th>
-          <th class="sort" data-k="value_traded">القيمة المتداولة</th>
-          <th class="sort" data-k="market_cap_basic">القيمة السوقية</th>
-        </tr>
-      </thead>
-      <tbody></tbody>
-    </table>
-  </div>
-</div>
+    const sample = [
+      { symbol:'ADIB', name:'مصرف أبوظبي الإسلامي', ex:'ADX', qty:200, buy:21.60, mkt:22.80, dps:0.86, target:25, notes:'' },
+      { symbol:'DIB', name:'بنك دبي الإسلامي', ex:'DFM', qty:350, buy:10.20, mkt:12.90, dps:0.40, target:14, notes:'' },
+      { symbol:'EMAAR', name:'إعمار العقارية', ex:'DFM', qty:180, buy:7.50, mkt:8.20, dps:0.25, target:9, notes:'' },
+      { symbol:'AIRARABIA', name:'العربية للطيران', ex:'DFM', qty:500, buy:2.60, mkt:3.10, dps:0.09, target:3.6, notes:'' },
+      { symbol:'ADNOCDIST', name:'أدنوك للتوزيع', ex:'ADX', qty:300, buy:4.20, mkt:4.50, dps:0.33, target:5.2, notes:'' },
+      { symbol:'EAND', name:'e& اتصالات سابقًا', ex:'ADX', qty:120, buy:16.50, mkt:17.30, dps:0.80, target:19, notes:'' },
+      { symbol:'DANA', name:'دانة غاز', ex:'ADX', qty:1000, buy:0.94, mkt:0.98, dps:0.05, target:1.2, notes:'' },
+      { symbol:'MULTIPLY', name:'مولتيبلاي', ex:'ADX', qty:600, buy:3.10, mkt:3.05, dps:0.10, target:3.7, notes:'' }
+    ];
 
-<div class="footer">
-  نسخة واجهة شبيهة بـ TradingView للعرض التعليمي. للمصدر الحي يُنصح بوسيط (Proxy) مرخّص/قانوني. قد تكون بيانات دبي محدودة عبر بعض المصادر.
-</div>
+    // ========= Utils =========
+    const nf = new Intl.NumberFormat('ar-AE', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    const pf = new Intl.NumberFormat('ar-AE', { minimumFractionDigits: 2, maximumFractionDigits: 2, style:'percent' });
 
-<script>
-/* ===================== الإعدادات ===================== */
+    function load(){
+      const raw = localStorage.getItem(LS_KEY);
+      if(raw){
+        try { Object.assign(state, JSON.parse(raw)); } catch(e){ console.warn('LS parse', e); }
+      } else {
+        state.items = sample;
+        persist();
+      }
+    }
+    function persist(){ localStorage.setItem(LS_KEY, JSON.stringify(state)); }
 
-/* ملاحظة: TradingView يفرض CORS. للتجربة السريعة نستعمل AllOrigins كـ Proxy عام.
-   الأفضل لاحقًا تبديل هذا المتغير إلى proxy خاص بك (Cloudflare Worker / Apps Script)
-   بحيث يصبح: const PROXY = "https://YOUR_WORKER.workers.dev/tv-scan?endpoint="; */
-const PROXY = "https://api.allorigins.win/raw?url=";
+    function sum(arr){ return arr.reduce((a,b)=>a+b,0); }
 
-/* Endpoints محتملة لدى TradingView للسكانر (غير موثقة وقد تتغير) */
-const TV_BASES = [
-  "https://scanner.tradingview.com/middle_east/scan",
-  "https://scanner.tradingview.com/ae/scan",
-  "https://scanner.tradingview.com/arabia/scan",
-  "https://scanner.tradingview.com/uae/scan",
-  "https://scanner.tradingview.com/europe/scan"
-];
+    function compute(){
+      const rows = state.items.map(it => {
+        const cost = (+it.qty||0) * (+it.buy||0);
+        const val = (+it.qty||0) * (+it.mkt||0);
+        const pnl = val - cost;
+        const ret = cost>0 ? pnl / cost : 0;
+        const divYield = (+it.mkt||0)>0 ? (+it.dps||0) / (+it.mkt||0) : 0;
+        const annualDiv = (+it.dps||0) * (+it.qty||0);
+        const progress = (+it.target||0)>0 ? (+it.mkt||0)/(+it.target||0) : 0;
+        return { ...it, cost, val, pnl, ret, divYield, annualDiv, progress };
+      });
+      const totalCost = sum(rows.map(r=>r.cost));
+      const totalVal = sum(rows.map(r=>r.val));
+      const totalPnL = totalVal - totalCost;
+      const totalRet = totalCost>0 ? totalPnL/totalCost : 0;
+      const totalDiv = sum(rows.map(r=>r.annualDiv));
+      const portYield = totalVal>0 ? totalDiv/totalVal : 0;
+      return { rows, totalCost, totalVal, totalPnL, totalRet, totalDiv, portYield };
+    }
 
-/* الأعمدة المطلوبة */
-const COLUMNS = ["name","short_name","exchange","close","change","volume","Value.Traded","market_cap_basic"];
+    function colorPct(x){ return x>0 ? 'pos' : (x<0 ? 'neg' : 'neu'); }
 
-/* فلتر لأسهم الإمارات */
-const FILTER = [
-  { left:"type", operation:"in_range", right:["stock"] },
-  { left:"exchange", operation:"in_range", right:["DFM","ADX"] }
-];
+    // ========= Render =========
+    function render(){
+      const q = $('#search').value.trim().toLowerCase();
+      const exFilter = $('#filterEx').value;
+      const { rows, totalCost, totalVal, totalPnL, totalRet } = compute();
 
-/* حجم الصفحة (ترقيم) */
-const PAGE = 500;
+      // KPI
+      $('#kpiValue').textContent = fmt(totalVal);
+      $('#kpiCost').textContent = fmt(totalCost);
+      $('#kpiPnL').innerHTML = `${fmt(totalPnL)} <span class="chip ${colorPct(totalPnL)}">${totalPnL>0?'▲':'▼'} ${nf.format(totalRet*100)}%</span>`;
+      $('#kpiReturn').textContent = nf.format(totalRet*100) + '%';
 
-/* بيانات احتياطية (Fallback) للعرض إذا فشل الجلب الحي */
-const FALLBACK = [
-  { name:"ADX:FAB", short_name:"FAB", exchange:"ADX", close:18.2, change:0.85, volume:1750000, value_traded:32000000, market_cap_basic:2.7e11 },
-  { name:"ADX:ADIB", short_name:"ADIB", exchange:"ADX", close:22.8, change:-0.35, volume:980000, value_traded:21000000, market_cap_basic:9.1e10 },
-  { name:"ADX:ALDAR", short_name:"ALDAR", exchange:"ADX", close:7.45, change:1.20, volume:5250000, value_traded:39000000, market_cap_basic:5.0e10 },
-  { name:"DFM:EMAAR", short_name:"EMAAR", exchange:"DFM", close:8.15, change:0.40, volume:4100000, value_traded:33000000, market_cap_basic:8.8e10 },
-  { name:"DFM:DIB", short_name:"DIB", exchange:"DFM", close:9.85, change:-0.55, volume:6200000, value_traded:61000000, market_cap_basic:6.2e10 },
-  { name:"DFM:DEWA", short_name:"DEWA", exchange:"DFM", close:2.59, change:0.00, volume:8400000, value_traded:21700000, market_cap_basic:1.6e11 }
-];
+      // Table
+      const tbody = $('#tbody');
+      tbody.innerHTML = '';
 
-/* ===================== منطق الصفحة ===================== */
-
-let RAW = [];          // كل الصفوف
-let VIEW = "gainers";  // تبويب مختار
-let SORT = { k:"change", dir:"desc" }; // فرز افتراضي بحسب %التغيير تنازلي
-let AUTO_TMR = null;
-
-const $ = s => document.querySelector(s);
-const $$ = s => document.querySelectorAll(s);
-
-$("#exchange").addEventListener("change", render);
-$("#search").addEventListener("input", render);
-$("#refresh").addEventListener("change", () => setAutoRefresh(+$("#refresh").value));
-$$(".tab").forEach(t => t.addEventListener("click", e=>{
-  $$(".tab").forEach(x=>x.classList.remove("active"));
-  e.currentTarget.classList.add("active");
-  VIEW = e.currentTarget.dataset.view;
-  // غيّر الفرز حسب التبويب
-  if (VIEW==="gainers") SORT = {k:"change", dir:"desc"};
-  if (VIEW==="losers")  SORT = {k:"change", dir:"asc"};
-  if (VIEW==="active")  SORT = {k:"value_traded", dir:"desc"};
-  render();
-}));
-$$("th.sort").forEach(th => th.addEventListener("click", ()=>{
-  const k = th.dataset.k;
-  SORT = (SORT.k===k) ? {k, dir:(SORT.dir==="asc"?"desc":"asc")} : {k, dir:"desc"};
-  render();
-}));
-
-async function loadAll() {
-  setStatus("جاري تحميل البيانات…");
-  RAW = [];
-  for (const base of TV_BASES) {
-    try {
-      let from = 0, gotAny = false;
-      while (true) {
-        const payload = {
-          filter: FILTER,
-          options: { lang: "en" },
-          symbols: { query: { types: [] }, tickers: [] },
-          columns: COLUMNS,
-          sort: { sortBy: "name", sortOrder: "asc" },
-          range: [from, from + PAGE]
-        };
-        const url = PROXY + encodeURIComponent(base);
-        const res = await fetch(url, { method:"POST", headers:{ "content-type":"application/json" }, body: JSON.stringify(payload) });
-        if (!res.ok) throw new Error("HTTP "+res.status);
-        const json = await res.json();
-
-        const rows = json?.data || [];
-        if (!rows.length) break;
-
-        // توحيد الصيغة (s/d) → كائنات
-        const norm = rows.map(item=>{
-          if (item.s && item.d) {
-            const obj = { name:item.s };
-            // تطابق ترتيب COLUMNS
-            obj.short_name = item.d[1];
-            obj.exchange = item.d[2];
-            obj.close = item.d[3];
-            obj.change = item.d[4];
-            obj.volume = item.d[5];
-            obj["Value.Traded"] = item.d[6];
-            obj.market_cap_basic = item.d[7];
-            return normalize(obj);
-          }
-          return normalize(item);
+      rows
+        .map((r,i)=>({r,i}))
+        .filter(({r})=>{
+          const hit = r.symbol.toLowerCase().includes(q) || (r.name||'').toLowerCase().includes(q);
+          const hitEx = !exFilter || r.ex===exFilter;
+          return hit && hitEx;
+        })
+        .forEach(({r,i}, idx)=>{
+          const tr = document.createElement('tr');
+          tr.innerHTML = `
+            <td>${idx+1}</td>
+            <td>
+              <div class="sym">
+                <div class="t">${r.name||''}</div>
+                <div class="s">${r.symbol||''}</div>
+              </div>
+            </td>
+            <td>${r.ex||''}</td>
+            <td class="num">${inputNum('qty', r.qty, i, 'small')}</td>
+            <td class="num">${inputNum('buy', r.buy, i)}</td>
+            <td class="num">${inputNum('mkt', r.mkt, i)}</td>
+            <td class="num">${fmt(r.cost)}</td>
+            <td class="num">${fmt(r.val)}</td>
+            <td class="num ${colorPct(r.pnl)}">${fmt(r.pnl)}</td>
+            <td class="num ${colorPct(r.ret)}">${nf.format(r.ret*100)}%</td>
+            <td class="num">${inputNum('dps', r.dps, i, 'small')}</td>
+            <td class="num">${nf.format(r.divYield*100)}%</td>
+            <td class="num">${inputNum('target', r.target, i, 'small')}</td>
+            <td><div class="progress"><span style="width:${Math.max(0, Math.min(100, Math.round((r.progress||0)*100)))}%"></span></div></td>
+            <td>${inputText('notes', r.notes||'', i, 'wide')}</td>
+            <td class="row-actions">
+              <button class="mini delete" data-del="${i}">حذف</button>
+            </td>
+          `;
+          tbody.appendChild(tr);
         });
 
-        RAW.push(...norm);
-        gotAny = true;
-        if (rows.length < PAGE) break;
-        from += PAGE;
-        await sleep(200);
-      }
-      if (gotAny) break; // أول endpoint يعطينا بيانات نكتفي به
-    } catch (e) {
-      // جرّب endpoint التالي
-      console.warn("Fail on", base, e.message);
+      // Donut & legend
+      renderDonut(rows);
+
+      // Bind deletes
+      $$('button[data-del]').forEach(btn=>btn.onclick = (e)=>{
+        const idx = +e.currentTarget.getAttribute('data-del');
+        state.items.splice(idx,1); persist(); render();
+      });
+
+      // Bind inputs
+      $$('input[data-idx]').forEach(inp=>{
+        inp.oninput = (e)=>{
+          const idx = +e.target.getAttribute('data-idx');
+          const key = e.target.getAttribute('data-key');
+          const val = e.target.type==='number' ? +e.target.value : e.target.value;
+          state.items[idx][key] = (isFinite(val) ? val : 0);
+          persist(); render();
+        };
+      });
     }
-  }
-  if (!RAW.length) {
-    // فشل المصدر الحي → استعمل بيانات تجريبية
-    RAW = FALLBACK.map(normalize);
-    setStatus("عرض بيانات تجريبية (لم ينجح المصدر الحي)"); 
-  } else {
-    setStatus("تم الجلب من مصدر حي (قد تكون بيانات دبي محدودة)");
-  }
-  $("#lastUpdate").textContent = "آخر تحديث: " + new Date().toLocaleTimeString("ar-AE");
-  render();
-}
 
-function normalize(r){
-  return {
-    name: r.name || "",
-    short_name: r.short_name || "",
-    exchange: r.exchange || (r.name.includes(":") ? r.name.split(":")[0] : ""),
-    close: num(r.close),
-    change: num(r.change),
-    volume: num(r.volume),
-    value_traded: num(r["Value.Traded"] || r.value_traded),
-    market_cap_basic: num(r.market_cap_basic)
-  };
-}
+    function inputNum(key, val, idx, size=''){
+      return `<input class="input ${size}" type="number" step="0.0001" data-idx="${idx}" data-key="${key}" value="${val ?? ''}">`;
+    }
+    function inputText(key, val, idx, size=''){
+      return `<input class="input ${size}" type="text" data-idx="${idx}" data-key="${key}" value="${escapeHtml(val)}">`;
+    }
 
-function render(){
-  const ex = $("#exchange").value;
-  const q = $("#search").value.trim().toLowerCase();
+    function escapeHtml(s){ return (s||'').replace(/[&<>"']/g, m=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[m])); }
 
-  let rows = RAW.slice();
+    function fmt(x){ if(!isFinite(+x)) return '—'; return state.currency + ' ' + nf.format(+x); }
 
-  if (ex !== "ALL") rows = rows.filter(r => (r.exchange||"").toUpperCase() === ex);
-  if (q) rows = rows.filter(r => (r.name+" "+r.short_name).toLowerCase().includes(q));
+    function renderDonut(rows){
+      const weights = rows.map(r=>r.val);
+      const total = sum(weights);
+      const angles = [];
+      let acc = 0;
+      for(let i=0;i<weights.length;i++){
+        const a = total>0 ? (weights[i]/total)*360 : 0;
+        acc += a; angles.push(acc);
+      }
+      const donut = $('#donut');
+      donut.style.setProperty('--a1', (angles[0]||0)+'deg');
+      donut.style.setProperty('--a2', (angles[1]||angles[0]||0)+'deg');
+      donut.style.setProperty('--a3', (angles[2]||angles[1]||angles[0]||0)+'deg');
+      // Legend (first 4 items colored, rest grouped)
+      const colors = ['#60a5fa','#22c55e','#f59e0b','#ef4444','#a78bfa','#14b8a6','#f97316','#84cc16'];
+      const legend = $('#legend');
+      legend.innerHTML = '';
+      rows.forEach((r,i)=>{
+        const it = document.createElement('div'); it.className='item';
+        const left = document.createElement('div'); left.style.display='flex'; left.style.alignItems='center'; left.style.gap='8px';
+        const tag = document.createElement('span'); tag.className='tag'; tag.style.background = colors[i % colors.length];
+        const name = document.createElement('span'); name.textContent = `${r.symbol} · ${r.ex}`;
+        left.append(tag, name);
+        const weight = document.createElement('b'); weight.textContent = total>0 ? (nf.format((r.val/total)*100)+'%') : '—';
+        it.append(left, weight); legend.append(it);
+      });
+    }
 
-  if (VIEW === "gainers") rows = rows.filter(r => isFinite(r.change)).sort((a,b)=> b.change - a.change);
-  if (VIEW === "losers")  rows = rows.filter(r => isFinite(r.change)).sort((a,b)=> a.change - b.change);
-  if (VIEW === "active")  rows = rows.sort((a,b)=> (b.value_traded||0) - (a.value_traded||0));
+    // ========= Events =========
+    $('#toggleTheme').onclick = ()=>{
+      document.body.classList.toggle('light');
+    };
 
-  if (SORT && SORT.k){
-    rows = rows.sort((a,b)=>{
-      const k = SORT.k, dir = SORT.dir==="asc"?1:-1;
-      return ((a[k]||0) - (b[k]||0)) * dir;
-    });
-  }
+    $('#addBtn').onclick = ()=>{
+      const it = {
+        symbol: $('#fSymbol').value.trim().toUpperCase(),
+        name: $('#fName').value.trim(),
+        ex: $('#fEx').value,
+        qty: +$('#fQty').value || 0,
+        buy: +$('#fBuy').value || 0,
+        mkt: +$('#fMkt').value || 0,
+        dps: +$('#fDps').value || 0,
+        target: 0,
+        notes: ''
+      };
+      if(!it.symbol) return;
+      state.items.push(it); persist();
+      // clear quick fields
+      ['fSymbol','fName','fQty','fBuy','fMkt','fDps'].forEach(id=>$('#'+id).value='');
+      render();
+    };
 
-  // رسم الجدول
-  const tb = $("#grid tbody");
-  tb.innerHTML = "";
-  for (const r of rows){
-    const tr = document.createElement("tr");
-    tr.innerHTML = `
-      <td>${esc(r.name)}</td>
-      <td>${esc(r.short_name) || "—"}</td>
-      <td>${esc(r.exchange) || "—"}</td>
-      <td>${fmt(r.close)}</td>
-      <td class="${(r.change||0)>=0 ? 'pos':'neg'}">${isFinite(r.change)? r.change.toFixed(2):"—"}</td>
-      <td>${fmtInt(r.volume)}</td>
-      <td>${fmtInt(r.value_traded)}</td>
-      <td>${fmtInt(r.market_cap_basic)}</td>
-    `;
-    tb.appendChild(tr);
-  }
-  $("#countChip").textContent = `السجلات: ${rows.length}`;
-}
+    $('#search').oninput = ()=>render();
+    $('#filterEx').onchange = ()=>render();
 
-function setAutoRefresh(ms){
-  if (AUTO_TMR){ clearInterval(AUTO_TMR); AUTO_TMR=null; }
-  if (ms>0){ AUTO_TMR = setInterval(loadAll, ms); }
-}
+    $('#bulkBtn').onclick = ()=>{ $('#bulkPanel').style.display='block'; $('#bulkBox').focus(); };
+    $('#closeBulk').onclick = ()=>{ $('#bulkPanel').style.display='none'; };
+    $('#applyBulk').onclick = ()=>{
+      const txt = $('#bulkBox').value.trim();
+      if(!txt) return;
+      const lines = txt.split(/\n|\r/).map(s=>s.trim()).filter(Boolean);
+      lines.forEach(line=>{
+        const m = line.match(/([A-Za-z\-_.]+)/);
+        const num = line.match(/(-?[0-9]+(?:\.[0-9]+)?)/g);
+        if(!m || !num) return;
+        const sym = m[1].toUpperCase();
+        const price = parseFloat(num[num.length-1]);
+        const idx = state.items.findIndex(x=>x.symbol.toUpperCase()===sym);
+        if(idx>-1){ state.items[idx].mkt = price; }
+      });
+      persist(); render();
+    };
 
-function setStatus(t){ $("#statusText").textContent = t; }
-function num(v){ const n = Number(v); return isFinite(n)? n : null; }
-function fmt(v){ return v==null? "—" : Number(v).toLocaleString("en-US"); }
-function fmtInt(v){ return v==null? "—" : Math.round(v).toLocaleString("en-US"); }
-function esc(s){ return (s??"").toString().replace(/[&<>"]/g,m=>({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;" }[m])); }
-const sleep = ms => new Promise(r=>setTimeout(r,ms));
+    $('#whatIf').oninput = (e)=>{
+      const p = +e.target.value; $('#whatIfLbl').textContent = (p>0?'+':'')+p+'%';
+      const { rows, totalVal } = compute();
+      const hypot = sum(rows.map(r=> r.qty * (r.mkt*(1+p/100)) ));
+      const delta = hypot - totalVal;
+      $('#whatIfImpact').textContent = fmt(delta);
+    };
 
-/* بدء التشغيل */
-loadAll();
-setAutoRefresh(+$("#refresh").value);
-</script>
+    $('#exportBtn').onclick = ()=>{
+      const blob = new Blob([JSON.stringify(state, null, 2)], {type:'application/json'});
+      const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'portfolio.json'; a.click();
+    };
+
+    $('#importFile').onchange = (e)=>{
+      const f = e.target.files[0]; if(!f) return;
+      const reader = new FileReader();
+      reader.onload = ()=>{
+        try {
+          const obj = JSON.parse(reader.result);
+          if(obj && Array.isArray(obj.items)){
+            state.items = obj.items; if(obj.currency) state.currency = obj.currency; persist(); render();
+          }
+        } catch(err){ alert('ملف غير صالح'); }
+      };
+      reader.readAsText(f);
+    };
+
+    $('#resetBtn').onclick = ()=>{
+      if(confirm('هل تريد إعادة الضبط؟ ستُحذف بياناتك المخزنة محليًا.')){
+        localStorage.removeItem(LS_KEY); state.items = sample; persist(); render();
+      }
+    };
+
+    // ========= Init =========
+    load(); render();
+  </script>
 </body>
 </html>

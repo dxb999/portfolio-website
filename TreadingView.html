@@ -2,58 +2,79 @@
 <html lang="ar" dir="rtl">
 <head>
   <meta charset="utf-8" />
-  <title>قائمة مراقبة أسهم دبي (DFM)</title>
+  <title>رسم بياني مباشر لأسهم الإمارات (ADX + DFM)</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
     body{font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial;margin:0;padding:16px}
-    h1{margin:0 0 8px}
-    p{margin:0 0 16px;color:#555}
+    h1{margin:0 0 12px}
+    .bar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:12px}
+    select,button{padding:8px 10px;font-size:14px}
+    #chart{width:100%;height:70vh;min-height:480px;border:1px solid #eee;border-radius:10px;overflow:hidden}
+    .hint{color:#666;font-size:13px;margin-top:8px}
   </style>
 </head>
 <body>
-  <h1>📊 أسهم دبي (DFM)</h1>
-  <p>إن لم تظهر الرموز، تأكد أنك تستخدم هذا الودجت (Market Quotes) وليس Screener، وأن الصفحة تُحمَّل عبر HTTPS.</p>
-
-  <!-- TradingView Market Quotes Widget BEGIN -->
-  <div class="tradingview-widget-container">
-    <div class="tradingview-widget-container__widget"></div>
-    <script type="text/javascript"
-            src="https://s3.tradingview.com/external-embedding/embed-widget-market-quotes.js" async>
-    {
-      "width": "100%",
-      "height": "620",
-      "symbolsGroups": [
-        {
-          "name": "دبي (DFM)",
-          "symbols": [
-            { "name": "DFM:DEWA",          "displayName": "ديوا" },
-            { "name": "DFM:EMAAR",         "displayName": "إعمار" },
-            { "name": "DFM:DIB",           "displayName": "بنك دبي الإسلامي" },
-            { "name": "DFM:EMIRATESNBD",   "displayName": "الإمارات دبي الوطني" },
-            { "name": "DFM:AIRARABIA",     "displayName": "العربية للطيران" },
-            { "name": "DFM:SALIK",         "displayName": "سالك" },
-            { "name": "DFM:TECOM",         "displayName": "تيكوم" },
-            { "name": "DFM:EMPOWER",       "displayName": "إمباور" },
-            { "name": "DFM:DFM",           "displayName": "سوق دبي المالي" },
-            { "name": "DFM:ARMX",          "displayName": "أرامكس" },
-            { "name": "DFM:DIC",           "displayName": "دبي للاستثمار" },
-            { "name": "DFM:UPP",           "displayName": "الاتحاد العقارية" },
-            { "name": "DFM:GFH",           "displayName": "GFH" },
-            { "name": "DFM:AMLAK",         "displayName": "أملاك" },
-            { "name": "DFM:TAALEEM",       "displayName": "تعليم" },
-            { "name": "DFM:PARKIN",        "displayName": "باركن" },
-            { "name": "DFM:ALANSARI",      "displayName": "الأنصاري" },
-            { "name": "DFM:SPINNEYS",      "displayName": "سبينيس" }
-          ]
-        }
-      ],
-      "showSymbolLogo": true,
-      "colorTheme": "light",
-      "isTransparent": false,
-      "locale": "ar"
-    }
-    </script>
+  <h1>📈 رسم بياني مباشر لأسهم الإمارات</h1>
+  <div class="bar">
+    <label for="symbol">اختر الرمز:</label>
+    <select id="symbol">
+      <!-- أبوظبي ADX -->
+      <optgroup label="أبوظبي (ADX)">
+        <option value="ADX:FAB">ADX:FAB — بنك أبوظبي الأول</option>
+        <option value="ADX:ADIB">ADX:ADIB — مصرف أبوظبي الإسلامي</option>
+        <option value="ADX:ALDAR">ADX:ALDAR — الدار العقارية</option>
+        <option value="ADX:ADC">ADX:ADC — أدنوك للحفر (كمثال)</option>
+      </optgroup>
+      <!-- دبي DFM -->
+      <optgroup label="دبي (DFM)">
+        <option value="DFM:EMAAR">DFM:EMAAR — إعمار</option>
+        <option value="DFM:DIB">DFM:DIB — بنك دبي الإسلامي</option>
+        <option value="DFM:DEWA">DFM:DEWA — ديوا</option>
+        <option value="DFM:SALIK">DFM:SALIK — سالك</option>
+        <option value="DFM:AIRARABIA">DFM:AIRARABIA — العربية للطيران</option>
+      </optgroup>
+    </select>
+    <button id="load">عرض الرسم</button>
   </div>
-  <!-- TradingView Market Quotes Widget END -->
+
+  <div id="chart"></div>
+  <div class="hint">ملاحظة: بعض رموز دبي قد تكون بياناتها مؤجلة أو لا تظهر مؤقتًا عبر الودجت. جرّب رموزًا أخرى إن لم يظهر الرسم.</div>
+
+  <!-- TradingView core script -->
+  <script src="https://s3.tradingview.com/tv.js"></script>
+  <script>
+    let tvWidget = null;
+
+    function renderChart(symbol) {
+      // امسح أي ودجت سابق
+      document.getElementById('chart').innerHTML = '';
+      // أنشئ ودجت جديد
+      tvWidget = new TradingView.widget({
+        container_id: 'chart',
+        width: '100%',
+        height: '100%',
+        symbol: symbol,
+        interval: 'D',
+        timezone: 'Asia/Dubai',
+        theme: 'light',
+        style: '1',
+        locale: 'ar',
+        toolbar_bg: '#f1f3f6',
+        hide_top_toolbar: false,
+        hide_legend: false,
+        save_image: false,
+        enable_publishing: false
+      });
+    }
+
+    // زر التحميل
+    document.getElementById('load').addEventListener('click', () => {
+      const sym = document.getElementById('symbol').value;
+      renderChart(sym);
+    });
+
+    // تحميل تلقائي لأول رمز
+    renderChart(document.getElementById('symbol').value);
+  </script>
 </body>
 </html>

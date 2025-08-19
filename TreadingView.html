@@ -1,80 +1,286 @@
 <!doctype html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="utf-8" />
-  <title>رسم بياني مباشر لأسهم الإمارات (ADX + DFM)</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <style>
-    body{font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial;margin:0;padding:16px}
-    h1{margin:0 0 12px}
-    .bar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:12px}
-    select,button{padding:8px 10px;font-size:14px}
-    #chart{width:100%;height:70vh;min-height:480px;border:1px solid #eee;border-radius:10px;overflow:hidden}
-    .hint{color:#666;font-size:13px;margin-top:8px}
-  </style>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>UAE Market Movers — شبيه TradingView</title>
+<style>
+  :root{--bg:#fff;--fg:#111;--muted:#666;--line:#e9e9e9;--accent:#0a8f22;--down:#d01919}
+  *{box-sizing:border-box} body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial;background:var(--bg);color:var(--fg)}
+  header{padding:14px 16px;border-bottom:1px solid var(--line);display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+  header h1{font-size:18px;margin:0}
+  .toolbar{display:flex;gap:8px;align-items:center;margin-inline-start:auto}
+  .toolbar select,.toolbar input{padding:8px 10px;border:1px solid var(--line);border-radius:8px;font-size:14px}
+  .tabs{display:flex;gap:6px;padding:10px 16px;border-bottom:1px solid var(--line);flex-wrap:wrap}
+  .tab{padding:8px 12px;border:1px solid var(--line);border-radius:20px;cursor:pointer;font-size:14px;background:#fafafa}
+  .tab.active{background:#eef7ff;border-color:#cfe7ff}
+  .wrap{padding:12px 16px}
+  table{width:100%;border-collapse:collapse}
+  th,td{border-bottom:1px solid var(--line);padding:10px;text-align:center;font-size:14px;white-space:nowrap}
+  th{position:sticky;top:0;background:#f9f9f9;z-index:2}
+  th.sort{cursor:pointer}
+  th.sort::after{content:" ↕";color:var(--muted);font-weight:normal}
+  .pos{color:var(--accent)} .neg{color:var(--down)} .muted{color:var(--muted)}
+  .status{display:flex;justify-content:space-between;align-items:center;margin:8px 0 14px;color:var(--muted);font-size:13px}
+  .chip{padding:4px 8px;border:1px solid var(--line);border-radius:12px;font-size:12px}
+  .footer{padding:12px 16px;color:var(--muted);font-size:12px}
+</style>
 </head>
 <body>
-  <h1>📈 رسم بياني مباشر لأسهم الإمارات</h1>
-  <div class="bar">
-    <label for="symbol">اختر الرمز:</label>
-    <select id="symbol">
-      <!-- أبوظبي ADX -->
-      <optgroup label="أبوظبي (ADX)">
-        <option value="ADX:FAB">ADX:FAB — بنك أبوظبي الأول</option>
-        <option value="ADX:ADIB">ADX:ADIB — مصرف أبوظبي الإسلامي</option>
-        <option value="ADX:ALDAR">ADX:ALDAR — الدار العقارية</option>
-        <option value="ADX:ADC">ADX:ADC — أدنوك للحفر (كمثال)</option>
-      </optgroup>
-      <!-- دبي DFM -->
-      <optgroup label="دبي (DFM)">
-        <option value="DFM:EMAAR">DFM:EMAAR — إعمار</option>
-        <option value="DFM:DIB">DFM:DIB — بنك دبي الإسلامي</option>
-        <option value="DFM:DEWA">DFM:DEWA — ديوا</option>
-        <option value="DFM:SALIK">DFM:SALIK — سالك</option>
-        <option value="DFM:AIRARABIA">DFM:AIRARABIA — العربية للطيران</option>
-      </optgroup>
+
+<header>
+  <h1>📊 UAE Market Movers</h1>
+  <div class="toolbar">
+    <select id="exchange">
+      <option value="ALL">الكل: ADX + DFM</option>
+      <option value="ADX">أبوظبي — ADX</option>
+      <option value="DFM">دبي — DFM</option>
     </select>
-    <button id="load">عرض الرسم</button>
+    <input id="search" type="search" placeholder="ابحث بالرمز أو الاسم…"/>
+    <select id="refresh">
+      <option value="60000">تحديث كل 60 ثانية</option>
+      <option value="30000">كل 30 ثانية</option>
+      <option value="120000">كل دقيقتين</option>
+      <option value="0">إيقاف التحديث التلقائي</option>
+    </select>
+  </div>
+</header>
+
+<div class="tabs">
+  <button class="tab active" data-view="gainers">الأكثر ارتفاعًا</button>
+  <button class="tab" data-view="losers">الأكثر انخفاضًا</button>
+  <button class="tab" data-view="active">أنشط تداولًا</button>
+  <span class="chip" id="countChip">—</span>
+</div>
+
+<div class="wrap">
+  <div class="status">
+    <div id="statusText">جاري تحميل البيانات…</div>
+    <div id="lastUpdate">—</div>
   </div>
 
-  <div id="chart"></div>
-  <div class="hint">ملاحظة: بعض رموز دبي قد تكون بياناتها مؤجلة أو لا تظهر مؤقتًا عبر الودجت. جرّب رموزًا أخرى إن لم يظهر الرسم.</div>
+  <div style="overflow:auto">
+    <table id="grid">
+      <thead>
+        <tr>
+          <th class="sort" data-k="name">الرمز</th>
+          <th class="sort" data-k="short_name">الاسم</th>
+          <th>البورصة</th>
+          <th class="sort" data-k="close">السعر</th>
+          <th class="sort" data-k="change">% التغيير</th>
+          <th class="sort" data-k="volume">الحجم</th>
+          <th class="sort" data-k="value_traded">القيمة المتداولة</th>
+          <th class="sort" data-k="market_cap_basic">القيمة السوقية</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
+</div>
 
-  <!-- TradingView core script -->
-  <script src="https://s3.tradingview.com/tv.js"></script>
-  <script>
-    let tvWidget = null;
+<div class="footer">
+  نسخة واجهة شبيهة بـ TradingView للعرض التعليمي. للمصدر الحي يُنصح بوسيط (Proxy) مرخّص/قانوني. قد تكون بيانات دبي محدودة عبر بعض المصادر.
+</div>
 
-    function renderChart(symbol) {
-      // امسح أي ودجت سابق
-      document.getElementById('chart').innerHTML = '';
-      // أنشئ ودجت جديد
-      tvWidget = new TradingView.widget({
-        container_id: 'chart',
-        width: '100%',
-        height: '100%',
-        symbol: symbol,
-        interval: 'D',
-        timezone: 'Asia/Dubai',
-        theme: 'light',
-        style: '1',
-        locale: 'ar',
-        toolbar_bg: '#f1f3f6',
-        hide_top_toolbar: false,
-        hide_legend: false,
-        save_image: false,
-        enable_publishing: false
-      });
+<script>
+/* ===================== الإعدادات ===================== */
+
+/* ملاحظة: TradingView يفرض CORS. للتجربة السريعة نستعمل AllOrigins كـ Proxy عام.
+   الأفضل لاحقًا تبديل هذا المتغير إلى proxy خاص بك (Cloudflare Worker / Apps Script)
+   بحيث يصبح: const PROXY = "https://YOUR_WORKER.workers.dev/tv-scan?endpoint="; */
+const PROXY = "https://api.allorigins.win/raw?url=";
+
+/* Endpoints محتملة لدى TradingView للسكانر (غير موثقة وقد تتغير) */
+const TV_BASES = [
+  "https://scanner.tradingview.com/middle_east/scan",
+  "https://scanner.tradingview.com/ae/scan",
+  "https://scanner.tradingview.com/arabia/scan",
+  "https://scanner.tradingview.com/uae/scan",
+  "https://scanner.tradingview.com/europe/scan"
+];
+
+/* الأعمدة المطلوبة */
+const COLUMNS = ["name","short_name","exchange","close","change","volume","Value.Traded","market_cap_basic"];
+
+/* فلتر لأسهم الإمارات */
+const FILTER = [
+  { left:"type", operation:"in_range", right:["stock"] },
+  { left:"exchange", operation:"in_range", right:["DFM","ADX"] }
+];
+
+/* حجم الصفحة (ترقيم) */
+const PAGE = 500;
+
+/* بيانات احتياطية (Fallback) للعرض إذا فشل الجلب الحي */
+const FALLBACK = [
+  { name:"ADX:FAB", short_name:"FAB", exchange:"ADX", close:18.2, change:0.85, volume:1750000, value_traded:32000000, market_cap_basic:2.7e11 },
+  { name:"ADX:ADIB", short_name:"ADIB", exchange:"ADX", close:22.8, change:-0.35, volume:980000, value_traded:21000000, market_cap_basic:9.1e10 },
+  { name:"ADX:ALDAR", short_name:"ALDAR", exchange:"ADX", close:7.45, change:1.20, volume:5250000, value_traded:39000000, market_cap_basic:5.0e10 },
+  { name:"DFM:EMAAR", short_name:"EMAAR", exchange:"DFM", close:8.15, change:0.40, volume:4100000, value_traded:33000000, market_cap_basic:8.8e10 },
+  { name:"DFM:DIB", short_name:"DIB", exchange:"DFM", close:9.85, change:-0.55, volume:6200000, value_traded:61000000, market_cap_basic:6.2e10 },
+  { name:"DFM:DEWA", short_name:"DEWA", exchange:"DFM", close:2.59, change:0.00, volume:8400000, value_traded:21700000, market_cap_basic:1.6e11 }
+];
+
+/* ===================== منطق الصفحة ===================== */
+
+let RAW = [];          // كل الصفوف
+let VIEW = "gainers";  // تبويب مختار
+let SORT = { k:"change", dir:"desc" }; // فرز افتراضي بحسب %التغيير تنازلي
+let AUTO_TMR = null;
+
+const $ = s => document.querySelector(s);
+const $$ = s => document.querySelectorAll(s);
+
+$("#exchange").addEventListener("change", render);
+$("#search").addEventListener("input", render);
+$("#refresh").addEventListener("change", () => setAutoRefresh(+$("#refresh").value));
+$$(".tab").forEach(t => t.addEventListener("click", e=>{
+  $$(".tab").forEach(x=>x.classList.remove("active"));
+  e.currentTarget.classList.add("active");
+  VIEW = e.currentTarget.dataset.view;
+  // غيّر الفرز حسب التبويب
+  if (VIEW==="gainers") SORT = {k:"change", dir:"desc"};
+  if (VIEW==="losers")  SORT = {k:"change", dir:"asc"};
+  if (VIEW==="active")  SORT = {k:"value_traded", dir:"desc"};
+  render();
+}));
+$$("th.sort").forEach(th => th.addEventListener("click", ()=>{
+  const k = th.dataset.k;
+  SORT = (SORT.k===k) ? {k, dir:(SORT.dir==="asc"?"desc":"asc")} : {k, dir:"desc"};
+  render();
+}));
+
+async function loadAll() {
+  setStatus("جاري تحميل البيانات…");
+  RAW = [];
+  for (const base of TV_BASES) {
+    try {
+      let from = 0, gotAny = false;
+      while (true) {
+        const payload = {
+          filter: FILTER,
+          options: { lang: "en" },
+          symbols: { query: { types: [] }, tickers: [] },
+          columns: COLUMNS,
+          sort: { sortBy: "name", sortOrder: "asc" },
+          range: [from, from + PAGE]
+        };
+        const url = PROXY + encodeURIComponent(base);
+        const res = await fetch(url, { method:"POST", headers:{ "content-type":"application/json" }, body: JSON.stringify(payload) });
+        if (!res.ok) throw new Error("HTTP "+res.status);
+        const json = await res.json();
+
+        const rows = json?.data || [];
+        if (!rows.length) break;
+
+        // توحيد الصيغة (s/d) → كائنات
+        const norm = rows.map(item=>{
+          if (item.s && item.d) {
+            const obj = { name:item.s };
+            // تطابق ترتيب COLUMNS
+            obj.short_name = item.d[1];
+            obj.exchange = item.d[2];
+            obj.close = item.d[3];
+            obj.change = item.d[4];
+            obj.volume = item.d[5];
+            obj["Value.Traded"] = item.d[6];
+            obj.market_cap_basic = item.d[7];
+            return normalize(obj);
+          }
+          return normalize(item);
+        });
+
+        RAW.push(...norm);
+        gotAny = true;
+        if (rows.length < PAGE) break;
+        from += PAGE;
+        await sleep(200);
+      }
+      if (gotAny) break; // أول endpoint يعطينا بيانات نكتفي به
+    } catch (e) {
+      // جرّب endpoint التالي
+      console.warn("Fail on", base, e.message);
     }
+  }
+  if (!RAW.length) {
+    // فشل المصدر الحي → استعمل بيانات تجريبية
+    RAW = FALLBACK.map(normalize);
+    setStatus("عرض بيانات تجريبية (لم ينجح المصدر الحي)"); 
+  } else {
+    setStatus("تم الجلب من مصدر حي (قد تكون بيانات دبي محدودة)");
+  }
+  $("#lastUpdate").textContent = "آخر تحديث: " + new Date().toLocaleTimeString("ar-AE");
+  render();
+}
 
-    // زر التحميل
-    document.getElementById('load').addEventListener('click', () => {
-      const sym = document.getElementById('symbol').value;
-      renderChart(sym);
+function normalize(r){
+  return {
+    name: r.name || "",
+    short_name: r.short_name || "",
+    exchange: r.exchange || (r.name.includes(":") ? r.name.split(":")[0] : ""),
+    close: num(r.close),
+    change: num(r.change),
+    volume: num(r.volume),
+    value_traded: num(r["Value.Traded"] || r.value_traded),
+    market_cap_basic: num(r.market_cap_basic)
+  };
+}
+
+function render(){
+  const ex = $("#exchange").value;
+  const q = $("#search").value.trim().toLowerCase();
+
+  let rows = RAW.slice();
+
+  if (ex !== "ALL") rows = rows.filter(r => (r.exchange||"").toUpperCase() === ex);
+  if (q) rows = rows.filter(r => (r.name+" "+r.short_name).toLowerCase().includes(q));
+
+  if (VIEW === "gainers") rows = rows.filter(r => isFinite(r.change)).sort((a,b)=> b.change - a.change);
+  if (VIEW === "losers")  rows = rows.filter(r => isFinite(r.change)).sort((a,b)=> a.change - b.change);
+  if (VIEW === "active")  rows = rows.sort((a,b)=> (b.value_traded||0) - (a.value_traded||0));
+
+  if (SORT && SORT.k){
+    rows = rows.sort((a,b)=>{
+      const k = SORT.k, dir = SORT.dir==="asc"?1:-1;
+      return ((a[k]||0) - (b[k]||0)) * dir;
     });
+  }
 
-    // تحميل تلقائي لأول رمز
-    renderChart(document.getElementById('symbol').value);
-  </script>
+  // رسم الجدول
+  const tb = $("#grid tbody");
+  tb.innerHTML = "";
+  for (const r of rows){
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
+      <td>${esc(r.name)}</td>
+      <td>${esc(r.short_name) || "—"}</td>
+      <td>${esc(r.exchange) || "—"}</td>
+      <td>${fmt(r.close)}</td>
+      <td class="${(r.change||0)>=0 ? 'pos':'neg'}">${isFinite(r.change)? r.change.toFixed(2):"—"}</td>
+      <td>${fmtInt(r.volume)}</td>
+      <td>${fmtInt(r.value_traded)}</td>
+      <td>${fmtInt(r.market_cap_basic)}</td>
+    `;
+    tb.appendChild(tr);
+  }
+  $("#countChip").textContent = `السجلات: ${rows.length}`;
+}
+
+function setAutoRefresh(ms){
+  if (AUTO_TMR){ clearInterval(AUTO_TMR); AUTO_TMR=null; }
+  if (ms>0){ AUTO_TMR = setInterval(loadAll, ms); }
+}
+
+function setStatus(t){ $("#statusText").textContent = t; }
+function num(v){ const n = Number(v); return isFinite(n)? n : null; }
+function fmt(v){ return v==null? "—" : Number(v).toLocaleString("en-US"); }
+function fmtInt(v){ return v==null? "—" : Math.round(v).toLocaleString("en-US"); }
+function esc(s){ return (s??"").toString().replace(/[&<>"]/g,m=>({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;" }[m])); }
+const sleep = ms => new Promise(r=>setTimeout(r,ms));
+
+/* بدء التشغيل */
+loadAll();
+setAutoRefresh(+$("#refresh").value);
+</script>
 </body>
 </html>

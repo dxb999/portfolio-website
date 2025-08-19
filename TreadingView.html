@@ -1,377 +1,155 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>منصة محفظتي – بيانات محمد</title>
+  <meta charset="UTF-8">
+  <title>منصة محفظتي – نسخة محدّثة</title>
   <style>
-    :root { --bg:#0b1220; --card:#131a2a; --muted:#a5b0c2; --text:#eef1f7; --accent:#5eead4; --accent-2:#60a5fa; --danger:#ef4444; --success:#22c55e; --warning:#f59e0b; --shadow:0 10px 24px rgba(0,0,0,.35); --radius:16px; }
-    .light { --bg:#f6f8fc; --card:#fff; --muted:#5b667a; --text:#0b1220; --accent:#0ea5e9; --accent-2:#8b5cf6; --danger:#b91c1c; --success:#15803d; --warning:#b45309; --shadow:0 10px 24px rgba(2,6,23,.12); }
-    *{box-sizing:border-box} html,body{height:100%}
-    body{margin:0;font-family:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,"Noto Kufi Arabic","Noto Sans Arabic",Arial;background:radial-gradient(1200px 800px at 80% -10%,rgba(59,130,246,.15),transparent 60%),var(--bg);color:var(--text)}
-    .container{max-width:1200px;padding:24px;margin:0 auto}
-    header{display:grid;gap:16px}
-    .title-row{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
-    h1{margin:0;font-size:28px}
-    .controls{display:flex;gap:8px;flex-wrap:wrap}
-    .btn{background:linear-gradient(135deg,var(--accent),var(--accent-2));color:#fff;border:none;padding:10px 14px;border-radius:12px;font-weight:700;cursor:pointer;box-shadow:var(--shadow)}
-    .btn.ghost{background:transparent;color:var(--text);border:1px solid rgba(255,255,255,.15)}
-    .btn.danger{background:linear-gradient(135deg,#ef4444,#f97316)}
-    .btn.flat{background:var(--card);color:var(--text);border:1px solid rgba(255,255,255,.1)}
-    .grid{display:grid;grid-template-columns:1fr;gap:16px}
-    @media(min-width:900px){.grid{grid-template-columns:1.2fr .8fr}}
-    .card{background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(255,255,255,0) 40%),var(--card);border:1px solid rgba(255,255,255,.06);border-radius:var(--radius);padding:16px;box-shadow:var(--shadow)}
-    .kpis{display:grid;gap:12px;grid-template-columns:repeat(2,1fr)}@media(min-width:680px){.kpis{grid-template-columns:repeat(4,1fr)}}
-    .kpi{padding:14px;border-radius:14px;background:rgba(255,255,255,.04);border:1px dashed rgba(255,255,255,.12)}
-    .kpi .label{color:var(--muted);font-size:12px}
-    .kpi .value{font-size:22px;font-weight:800;margin-top:6px}
-    .chip{display:inline-flex;align-items:center;gap:6px;font-weight:700;font-size:12px;padding:6px 10px;border-radius:999px}
-    .chip.pos{background:rgba(34,197,94,.14);color:#86efac}
-    .chip.neg{background:rgba(239,68,68,.14);color:#fecaca}
-    .chip.neu{background:rgba(234,179,8,.14);color:#fde68a}
-    .add-form{display:grid;gap:8px;grid-template-columns:repeat(8,1fr);align-items:end}
-    .add-form .field{display:grid;gap:6px}
-    .add-form label{font-size:12px;color:var(--muted)}
-    .add-form input,.add-form select,.toolbar input{padding:10px 12px;border-radius:10px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.04);color:var(--text)}
-    .add-form .xwide{grid-column:span 2}
-    .add-form .btn{grid-column:span 2;height:40px}
-    @media(max-width:980px){.add-form{grid-template-columns:repeat(2,1fr)}.add-form .btn{grid-column:span 2}}
-    .toolbar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;justify-content:space-between;margin-bottom:10px}
-    .toolbar .toggle{padding:8px 10px;border-radius:10px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.12);cursor:pointer}
-    table{width:100%;border-collapse:collapse}
-    thead th{position:sticky;top:0;z-index:1;background:linear-gradient(180deg,rgba(255,255,255,.04),rgba(255,255,255,0) 30%),var(--card);color:var(--muted);font-weight:700;text-align:right;font-size:12px;letter-spacing:.2px;border-bottom:1px solid rgba(255,255,255,.12);padding:10px;white-space:nowrap}
-    tbody td{border-bottom:1px dashed rgba(255,255,255,.08);padding:8px 10px;vertical-align:middle}
-    tbody tr:hover{background:rgba(255,255,255,.03)}
-    .sym{display:grid;gap:2px}
-    .sym .t{font-weight:800}
-    .sym .s{color:var(--muted);font-size:12px}
-    .num{text-align:left;font-variant-numeric:tabular-nums;direction:ltr}
-    .pct.pos{color:#86efac;font-weight:700}
-    .pct.neg{color:#fecaca;font-weight:700}
-    .input{width:110px}
-    .input.small{width:84px}
-    .input.wide{width:140px}
-    .row-actions{display:flex;gap:6px}
-    .mini{padding:6px 8px;border-radius:10px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.06);color:var(--text);cursor:pointer;font-size:12px}
-    .mini.delete{background:rgba(239,68,68,.15);border-color:rgba(239,68,68,.4)}
-    .progress{width:120px;height:8px;background:rgba(255,255,255,.08);border-radius:999px;overflow:hidden;border:1px solid rgba(255,255,255,.12)}
-    .progress>span{display:block;height:100%;background:linear-gradient(90deg,var(--accent),var(--accent-2))}
-    .panel{display:grid;gap:12px}
-    .donut{--size:160px;width:var(--size);height:var(--size);border-radius:50%;background:conic-gradient(#60a5fa 0 var(--a1),#22c55e var(--a1) var(--a2),#f59e0b var(--a2) var(--a3),#ef4444 var(--a3) 360deg);position:relative;margin:12px auto;box-shadow:var(--shadow)}
-    .donut::after{content:"";position:absolute;inset:18%;border-radius:50%;background:var(--card);border:1px solid rgba(255,255,255,.1)}
-    .legend{display:grid;gap:6px}
-    .legend .item{display:flex;align-items:center;gap:8px;justify-content:space-between}
-    .legend .tag{display:inline-block;width:12px;height:12px;border-radius:3px}
-    .whatif{display:grid;gap:8px}
-    .range{accent-color:var(--accent-2)}
-    footer{margin:20px 0 0;color:var(--muted);font-size:12px;text-align:center}
-    .muted{color:var(--muted)}
+    body {font-family: Arial, sans-serif; margin: 20px; background:#f9f9f9;}
+    h1 {text-align:center;}
+    table {border-collapse: collapse; width: 100%; margin-top: 20px;}
+    th, td {border: 1px solid #ccc; padding: 8px; text-align: center;}
+    th {background: #333; color: white;}
+    .controls {margin: 10px 0;}
+    select, input {padding: 5px; margin: 5px;}
+    .hidden {display: none;}
   </style>
 </head>
 <body>
-  <div class="container" id="app">
-    <header>
-      <div class="title-row">
-        <h1>💼 منصة محفظتي</h1>
-        <div class="controls">
-          <button class="btn flat" id="toggleTheme">🌗 وضع الليل/النهار</button>
-          <button class="btn ghost" id="exportBtn">⬇️ تصدير</button>
-          <label class="btn ghost" for="importFile" style="cursor:pointer">⬆️ استيراد</label>
-          <input id="importFile" type="file" accept="application/json" hidden>
-          <button class="btn danger" id="resetBtn">إعادة ضبط</button>
-        </div>
-      </div>
+  <h1>📊 منصة محفظتي</h1>
 
-      <div class="kpis" id="kpis">
-        <div class="kpi"><div class="label">إجمالي القيمة</div><div class="value" id="kpiValue">—</div></div>
-        <div class="kpi"><div class="label">إجمالي التكلفة</div><div class="value" id="kpiCost">—</div></div>
-        <div class="kpi"><div class="label">صافي الربح/الخسارة</div><div class="value" id="kpiPnL">—</div></div>
-        <div class="kpi"><div class="label">العائد الكلي</div><div class="value" id="kpiReturn">—</div></div>
-      </div>
+  <div class="controls">
+    <label>اختر الرمز لتحديث السعر:</label>
+    <select id="symbolSelect"></select>
+    <input type="number" id="newPrice" placeholder="اكتب السعر الجديد">
+    <button onclick="updatePrice()">تحديث السعر</button>
 
-      <div class="card">
-        <form class="add-form" id="addForm" onsubmit="return false;">
-          <div class="field"><label>الرمز</label><input id="fSymbol" placeholder="ADIB / DIB / EMAAR" required /></div>
-          <div class="field"><label>الكمية</label><input id="fQty" type="number" step="1" min="0" placeholder="100" /></div>
-          <div class="field"><label>سعر الشراء</label><input id="fBuy" type="number" step="0.0001" min="0" placeholder="10.50" /></div>
-          <div class="field"><label>العمولة</label><input id="fFee" type="number" step="0.0001" min="0" placeholder="1.50" /></div>
-          <div class="field"><label>الضريبة</label><input id="fTax" type="number" step="0.0001" min="0" placeholder="0.08" /></div>
-          <div class="field"><label>مبلغ التداول</label><input id="fTrade" type="number" step="0.0001" min="0" placeholder="1000" /></div>
-          <div class="field"><label>سعر الشراء الحقيقي</label><input id="fBuyReal" type="number" step="0.0000001" min="0" placeholder="10.03" /></div>
-          <div class="field xwide"><label>التاريخ</label><input id="fDate" type="date" /></div>
-          <button class="btn" id="addBtn">➕ إضافة للسجل</button>
-        </form>
-      </div>
-    </header>
-
-    <main class="grid">
-      <section class="card">
-        <div class="toolbar">
-          <div class="left">
-            <input id="search" placeholder="بحث: رمز/اسم" />
-            <select id="filterEx">
-              <option value="">كل الأسواق</option>
-              <option value="ADX">ADX</option>
-              <option value="DFM">DFM</option>
-              <option value="NASDAQ">NASDAQ</option>
-              <option value="LSE">LSE</option>
-            </select>
-            <span class="muted">* عدّل الأرقام مباشرة في الجدول</span>
-          </div>
-          <div class="right">
-            <div class="toggle"><span id="currencyLabel">د.إ</span></div>
-            <button class="btn flat" id="bulkBtn">تحديث سريع للأسعار</button>
-          </div>
-        </div>
-
-        <div style="overflow:auto; max-height: 520px; border-radius: 12px;">
-          <table id="tbl">
-            <thead>
-              <tr>
-                <th>#</th>
-                <th>الشركة / الرمز</th>
-                <th>السوق</th>
-                <th class="num">الكمية</th>
-                <th class="num">سعر الشراء</th>
-                <th class="num">العمولة</th>
-                <th class="num">الضريبة</th>
-                <th class="num">مبلغ التداول</th>
-                <th class="num">سعر الشراء الحقيقي</th>
-                <th class="num">سعر السوق</th>
-                <th class="num">التكلفة</th>
-                <th class="num">القيمة</th>
-                <th class="num">الربح</th>
-                <th class="num">% العائد</th>
-                <th class="num">DPS</th>
-                <th class="num">عائد التوزيع</th>
-                <th>التاريخ</th>
-                <th>ملاحظات</th>
-                <th></th>
-              </tr>
-            </thead>
-            <tbody id="tbody"></tbody>
-          </table>
-        </div>
-      </section>
-
-      <aside class="panel">
-        <div class="card">
-          <h3 style="margin:0 0 8px">📊 توزيع المحفظة</h3>
-          <div class="donut" id="donut" title="التوزيع النسبي للوزن"></div>
-          <div class="legend" id="legend"></div>
-        </div>
-
-        <div class="card whatif">
-          <h3 style="margin:0">🧪 سيناريو ماذا لو</h3>
-          <div class="muted">حرّك الشريط لمحاكاة ارتفاع/انخفاض عام على أسعار السوق.</div>
-          <input id="whatIf" type="range" min="-20" max="20" step="1" value="0" class="range" />
-          <div><b id="whatIfLbl">0%</b> تأثير على الأسعار • صافي الأثر: <b id="whatIfImpact">—</b></div>
-        </div>
-
-        <div class="card" id="bulkPanel" style="display:none">
-          <h3 style="margin:0 0 8px">⚡️ تحديث سريع للأسعار</h3>
-          <div class="muted">الصق أسطر مثل:<br><code>ADIB, 22.80</code> أو <code>DIB 13.45</code></div>
-          <textarea id="bulkBox" rows="6" style="width:100%; margin-top:8px; padding:10px; border-radius:10px; background:rgba(255,255,255,.04); color:var(--text); border:1px solid rgba(255,255,255,.12);"></textarea>
-          <div style="display:flex; gap:8px; margin-top:8px;">
-            <button class="btn" id="applyBulk">تطبيق</button>
-            <button class="btn ghost" id="closeBulk">إغلاق</button>
-          </div>
-        </div>
-      </aside>
-    </main>
-
-    <footer>
-      <div>⚠️ تنويه: الأسعار الافتراضية صفر في هذه النسخة. حدِّث خانة "سعر السوق" يدويًا أو عبر "التحديث السريع".</div>
-    </footer>
+    <br>
+    <label>إظهار/إخفاء الأعمدة:</label>
+    <select id="columnToggle" onchange="toggleColumn()">
+      <option value="">-- اختر عمود --</option>
+    </select>
   </div>
 
-  <script>
-    const $ = (s, p=document) => p.querySelector(s);
-    const $$ = (s, p=document) => [...p.querySelectorAll(s)];
+  <table id="portfolio">
+    <thead>
+      <tr>
+        <th>رمز</th>
+        <th>الكمية</th>
+        <th>سعر الشراء</th>
+        <th>العمولة</th>
+        <th>الضريبة</th>
+        <th>مبلغ التداول</th>
+        <th>سعر الشراء الحقيقي</th>
+        <th>التاريخ</th>
+        <th>سعر السوق</th>
+        <th>التكلفة</th>
+        <th>القيمة</th>
+        <th>الربح</th>
+        <th>التغيير %</th>
+      </tr>
+    </thead>
+    <tbody id="portfolioBody"></tbody>
+  </table>
 
-    // ========= State =========
-    const LS_KEY = 'portfolioData.v2-mohd';
-    const state = { currency:'د.إ', items: [] };
+<script>
+const data = [
+  {symbol:'ADIB', qty:200, buy:21.6, fee:6.48, tax:0.324, trade:4326.8040, real:21.63402, date:'2025-07-04'},
+  {symbol:'ADIB', qty:79, buy:12.72, fee:1.50732, tax:0.075, trade:1006.4627, real:12.740034, date:'2024-10-01'},
+  {symbol:'ADIB', qty:20, buy:8.98, fee:0.2694, tax:0.013, trade:179.8829, real:8.9941435, date:'2022-10-13'},
+  {symbol:'DIB', qty:100, buy:5.92, fee:12.2, tax:0.61, trade:604.8034, real:6.048034, date:'2022-09-26'},
+  {symbol:'DIB', qty:340, buy:5.93, fee:16.3, tax:0.813, trade:2033.2818, real:5.98024, date:'2022-10-25'},
+  {symbol:'Emmar', qty:100, buy:6.23, fee:12.3, tax:0.614, trade:635.8965, real:6.358965, date:'2022-11-08'},
+  {symbol:'AIRARABIA', qty:300, buy:2.08, fee:12.3, tax:0.614, trade:636.8995, real:2.123, date:'2022-11-08'},
+  {symbol:'DANA', qty:600, buy:0.916, fee:0.8244, tax:0.041, trade:550.4656, real:0.91744, date:'2022-11-15'},
+  {symbol:'DANA', qty:600, buy:0.918, fee:0.8262, tax:0.041, trade:551.6675, real:0.91945, date:'2022-11-10'},
+  {symbol:'ADNOCDIST', qty:200, buy:4.48, fee:1.344, tax:0.067, trade:897.4112, real:4.487056, date:'2022-11-08'},
+  {symbol:'ADNOCDIST', qty:100, buy:4.25, fee:0.6375, tax:0.032, trade:425.6694, real:4.256694, date:'2022-10-13'},
+  {symbol:'EAND', qty:20, buy:23.7, fee:0.711, tax:0.036, trade:474.7466, real:23.7373, date:'2022-09-26'},
+  {symbol:'EAND', qty:15, buy:25.46, fee:0.57285, tax:0.029, trade:382.5015, real:25.5001, date:'2022-11-08'},
+  {symbol:'MULTIPLY', qty:200, buy:4.88, fee:1.464, tax:0.073, trade:977.5372, real:4.887686, date:'2022-11-14'},
+  {symbol:'LULU', qty:1065, buy:2.04, fee:0, tax:0, trade:2172.6, real:2.04, date:'2022-11-13'},
+  {symbol:'DIB', qty:200, buy:9.78, fee:15.38, tax:0.769, trade:1972.149, real:9.860745, date:'2025-07-29'},
+  {symbol:'DIB', qty:300, buy:9.67, fee:17.98, tax:0.899, trade:2919.879, real:9.73293, date:'2025-07-29'},
+  {symbol:'DUBAIRESI', qty:700, buy:1.27, fee:12.44, tax:0.622, trade:902.062, real:1.28866, date:'2025-07-30'},
+  {symbol:'DIB', qty:940, buy:9.99, fee:35.83, tax:1.56, trade:9427.99, real:10.02978, date:'2025-08-05'},
+  {symbol:'DIB', qty:950, buy:9.99, fee:36.1, tax:1.56, trade:9528.16, real:10.02964, date:'2025-08-05'},
+  {symbol:'ALDAR', qty:104, buy:9.6, fee:1.5, tax:0.07, trade:999.97, real:9.6151, date:'2025-08-05'},
+  {symbol:'DUBAIRESI', qty:7000, buy:1.39, fee:36.76, tax:1.6, trade:9768.36, real:1.39548, date:'2025-08-08'},
+  {symbol:'DIB', qty:1000, buy:9.66, fee:36.57, tax:1.58, trade:9698.15, real:9.69815, date:'2025-08-08'},
+  {symbol:'DIB', qty:1020, buy:9.75, fee:37.35, tax:1.62, trade:9983.97, real:9.78821, date:'2025-08-15'},
+  {symbol:'SIB', qty:3300, buy:3.02, fee:14.95, tax:0.74, trade:9981.69, real:3.02475, date:'2025-08-15'},
+  {symbol:'RAKPROP', qty:6450, buy:1.55, fee:15, tax:0.76, trade:10013.26, real:1.55244, date:'2025-08-15'},
+  {symbol:'ADNOCDRILL', qty:1776, buy:5.63, fee:15, tax:0.76, trade:10014.64, real:5.63887, date:'2025-08-15'}
+];
 
-    // ========= User Data =========
-    const dataFromUser = [
-      { symbol:'ADIB', qty:200, buy:21.6, fee:6.48, tax:0.324, trade:4326.8040, buyReal:21.63402, date:'2025-07-04', mkt:0, dps:0, target:0, notes:'' },
-      { symbol:'ADIB', qty:79, buy:12.72, fee:1.50732, tax:0.075, trade:1006.4627, buyReal:12.740034, date:'2024-10-01', mkt:0, dps:0, target:0, notes:'' },
-      { symbol:'ADIB', qty:20, buy:8.980, fee:0.2694, tax:0.013, trade:179.8829, buyReal:8.9941435, date:'2022-10-13', mkt:0, dps:0, target:0, notes:'' },
-      { symbol:'DIB', qty:100, buy:5.92, fee:12.2, tax:0.610, trade:604.8034, buyReal:6.048033976, date:'2022-09-26', mkt:0, dps:0, target:0, notes:'' },
-      { symbol:'DIB', qty:340, buy:5.93, fee:16.3, tax:0.813, trade:2033.2818, buyReal:5.980240487, date:'2022-10-25', mkt:0, dps:0, target:0, notes:'' },
-      { symbol:'EMAAR', qty:100, buy:6.23, fee:12.3, tax:0.614, trade:635.8965, buyReal:6.358965232, date:'2022-11-08', mkt:0, dps:0, target:0, notes:'' },
-      { symbol:'AIRARABIA', qty:300, buy:2.08, fee:12.3, tax:0.614, trade:636.8995, buyReal:2.122998424, date:'2022-11-08', mkt:0, dps:0, target:0, notes:'' },
-      { symbol:'DANA', qty:600, buy:0.916, fee:0.8244, tax:0.041, trade:550.4656, buyReal:0.9174427, date:'2022-11-15', mkt:0, dps:0, target:0, notes:'' },
-      { symbol:'DANA', qty:600, buy:0.918, fee:0.8262, tax:0.041, trade:551.6675, buyReal:0.91944585, date:'2022-11-10', mkt:0, dps:0, target:0, notes:'' },
-      { symbol:'ADNOCDIST', qty:200, buy:4.48, fee:1.344, tax:0.067, trade:897.4112, buyReal:4.487056, date:'2022-11-08', mkt:0, dps:0, target:0, notes:'' },
-      { symbol:'ADNOCDIST', qty:100, buy:4.250, fee:0.6375, tax:0.032, trade:425.6694, buyReal:4.25669375, date:'2022-10-13', mkt:0, dps:0, target:0, notes:'' },
-      { symbol:'EAND', qty:20, buy:23.7, fee:0.711, tax:0.036, trade:474.7466, buyReal:23.7373275, date:'2022-09-26', mkt:0, dps:0, target:0, notes:'' },
-      { symbol:'EAND', qty:15, buy:25.46, fee:0.57285, tax:0.029, trade:382.5015, buyReal:25.5000995, date:'2022-11-08', mkt:0, dps:0, target:0, notes:'' },
-      { symbol:'MULTIPLY', qty:200, buy:4.88, fee:1.464, tax:0.073, trade:977.5372, buyReal:4.887686, date:'2022-11-14', mkt:0, dps:0, target:0, notes:'' },
-      { symbol:'LULU', qty:1065, buy:2.04, fee:0, tax:0.000, trade:2172.6000, buyReal:2.04, date:'2022-11-13', mkt:0, dps:0, target:0, notes:'' },
-      { symbol:'DIB', qty:200, buy:9.78, fee:15.38, tax:0.769, trade:1972.1490, buyReal:9.860745, date:'2025-07-29', mkt:0, dps:0, target:0, notes:'' },
-      { symbol:'DIB', qty:300, buy:9.67, fee:17.98, tax:0.899, trade:2919.8790, buyReal:9.73293, date:'2025-07-29', mkt:0, dps:0, target:0, notes:'' },
-      { symbol:'DUBAIRESI', qty:700, buy:1.27, fee:12.44, tax:0.622, trade:902.0620, buyReal:1.28866, date:'2025-07-30', mkt:0, dps:0, target:0, notes:'' },
-      { symbol:'DIB', qty:940, buy:9.99, fee:35.83, tax:1.560, trade:9427.9900, buyReal:10.0297766, date:'2025-08-05', mkt:0, dps:0, target:0, notes:'' },
-      { symbol:'DIB', qty:950, buy:9.99, fee:36.1, tax:1.560, trade:9528.1600, buyReal:10.02964211, date:'2025-08-05', mkt:0, dps:0, target:0, notes:'' },
-      { symbol:'ALDAR', qty:104, buy:9.6, fee:1.5, tax:0.07, trade:999.9700, buyReal:9.615096154, date:'2025-08-05', mkt:0, dps:0, target:0, notes:'' },
-      { symbol:'DUBAIRESI', qty:7000, buy:1.39, fee:36.76, tax:1.600, trade:9768.3600, buyReal:1.39548, date:'2025-08-08', mkt:0, dps:0, target:0, notes:'' },
-      { symbol:'DIB', qty:1000, buy:9.66, fee:36.57, tax:1.580, trade:9698.1500, buyReal:9.69815, date:'2025-08-08', mkt:0, dps:0, target:0, notes:'' },
-      { symbol:'DIB', qty:1020, buy:9.75, fee:37.35, tax:1.62, trade:9983.9700, buyReal:9.788205882, date:'2025-08-15', mkt:0, dps:0, target:0, notes:'' },
-      { symbol:'SIB', qty:3300, buy:3.02, fee:14.95, tax:0.74, trade:9981.6900, buyReal:3.024754545, date:'2025-08-15', mkt:0, dps:0, target:0, notes:'' },
-      { symbol:'RAKPROP', qty:6450, buy:1.55, fee:15, tax:0.76, trade:10013.2600, buyReal:1.552443411, date:'2025-08-15', mkt:0, dps:0, target:0, notes:'' },
-      { symbol:'ADNOCDRILL', qty:1776, buy:5.63, fee:15, tax:0.76, trade:10014.6400, buyReal:5.638873874, date:'2025-08-15', mkt:0, dps:0, target:0, notes:'' }
-    ];
+function render() {
+  const body = document.getElementById('portfolioBody');
+  body.innerHTML = '';
+  data.forEach((row, i) => {
+    let cost = row.real * row.qty;
+    let value = (row.marketPrice || row.real) * row.qty;
+    let profit = value - cost;
+    let change = (cost === 0) ? 0 : (profit / cost) * 100;
+    body.innerHTML += `
+      <tr>
+        <td>${row.symbol}</td>
+        <td>${row.qty}</td>
+        <td>${row.buy.toFixed(2)}</td>
+        <td>${row.fee.toFixed(2)}</td>
+        <td>${row.tax.toFixed(3)}</td>
+        <td>${row.trade.toFixed(2)}</td>
+        <td>${row.real.toFixed(4)}</td>
+        <td>${row.date}</td>
+        <td>${row.marketPrice ? row.marketPrice.toFixed(2) : '-'}</td>
+        <td>${cost.toFixed(2)}</td>
+        <td>${value.toFixed(2)}</td>
+        <td>${profit.toFixed(2)}</td>
+        <td>${change.toFixed(2)}%</td>
+      </tr>`;
+  });
+}
 
-    // ========= Utils =========
-    const nf = new Intl.NumberFormat('ar-AE',{minimumFractionDigits:2,maximumFractionDigits:2});
-    function sum(arr){return arr.reduce((a,b)=>a+b,0)}
-    function fmt(x){if(!isFinite(+x)) return '—'; return state.currency+' '+nf.format(+x)}
-    function colorPct(x){return x>0?'pos':(x<0?'neg':'neu')}
-    function inputNum(key,val,idx,size=''){return `<input class="input ${size}" type="number" step="0.0000001" data-idx="${idx}" data-key="${key}" value="${val ?? ''}">`}
-    function inputText(key,val,idx,size=''){return `<input class="input ${size}" type="text" data-idx="${idx}" data-key="${key}" value="${(val||'').replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[m]))}">`}
+function initControls() {
+  const symbolSelect = document.getElementById('symbolSelect');
+  const uniqueSymbols = [...new Set(data.map(r => r.symbol))];
+  uniqueSymbols.forEach(sym => {
+    let opt = document.createElement('option');
+    opt.value = sym; opt.textContent = sym;
+    symbolSelect.appendChild(opt);
+  });
 
-    function persist(){localStorage.setItem(LS_KEY, JSON.stringify(state))}
-    function load(){const raw=localStorage.getItem(LS_KEY); if(raw){try{Object.assign(state, JSON.parse(raw))}catch{} } if(!state.items||!state.items.length){ state.items = dataFromUser; persist(); }}
+  const header = document.querySelectorAll('#portfolio thead th');
+  const colToggle = document.getElementById('columnToggle');
+  header.forEach((th, idx) => {
+    let opt = document.createElement('option');
+    opt.value = idx; opt.textContent = th.textContent;
+    colToggle.appendChild(opt);
+  });
+}
 
-    function compute(){
-      const rows = state.items.map(it=>{
-        const qty = (+it.qty||0);
-        const buyBase = (+it.buyReal||0) || (+it.buy||0);
-        const cost = qty * buyBase; // يشمل الرسوم إذا توفرت
-        const val = qty * (+it.mkt||0);
-        const pnl = val - cost;
-        const ret = cost>0 ? pnl/cost : 0;
-        const divYield = (+it.mkt||0)>0 ? (+it.dps||0)/(+it.mkt||0) : 0;
-        const annualDiv = (+it.dps||0)*qty;
-        const progress = (+it.target||0)>0 ? (+it.mkt||0)/(+it.target||0) : 0;
-        return {...it, cost, val, pnl, ret, divYield, annualDiv, progress};
-      });
-      const totalCost = sum(rows.map(r=>r.cost));
-      const totalVal = sum(rows.map(r=>r.val));
-      const totalPnL = totalVal-totalCost;
-      const totalRet = totalCost>0 ? totalPnL/totalCost : 0;
-      return {rows,totalCost,totalVal,totalPnL,totalRet};
+function updatePrice() {
+  const sym = document.getElementById('symbolSelect').value;
+  const price = parseFloat(document.getElementById('newPrice').value);
+  if(!sym || isNaN(price)) return;
+  data.forEach(row => {
+    if(row.symbol === sym) row.marketPrice = price;
+  });
+  render();
+}
+
+function toggleColumn() {
+  const colIndex = document.getElementById('columnToggle').value;
+  if(colIndex === '') return;
+  const table = document.getElementById('portfolio');
+  for (let r of table.rows) {
+    if (r.cells[colIndex]) {
+      r.cells[colIndex].style.display = r.cells[colIndex].style.display === 'none' ? '' : 'none';
     }
+  }
+}
 
-    function render(){
-      const q = $('#search').value.trim().toLowerCase();
-      const exFilter = $('#filterEx').value;
-      const { rows, totalCost, totalVal, totalPnL, totalRet } = compute();
-      $('#kpiValue').textContent = fmt(totalVal);
-      $('#kpiCost').textContent = fmt(totalCost);
-      $('#kpiPnL').innerHTML = `${fmt(totalPnL)} <span class="chip ${colorPct(totalPnL)}">${totalPnL>0?'▲':'▼'} ${nf.format(totalRet*100)}%</span>`;
-      $('#kpiReturn').textContent = nf.format(totalRet*100)+'%';
-
-      const tbody = $('#tbody');
-      tbody.innerHTML = '';
-      rows.map((r,i)=>({r,i}))
-        .filter(({r})=>{
-          const hit = (r.symbol||'').toLowerCase().includes(q) || (r.name||'').toLowerCase().includes(q);
-          const hitEx = !exFilter || r.ex===exFilter; return hit && hitEx;
-        })
-        .forEach(({r,i}, idx)=>{
-          const tr = document.createElement('tr');
-          tr.innerHTML = `
-            <td>${idx+1}</td>
-            <td>
-              <div class="sym">
-                <div class="t">${r.name||''}</div>
-                <div class="s">${r.symbol||''}</div>
-              </div>
-            </td>
-            <td>${r.ex||''}</td>
-            <td class="num">${inputNum('qty', r.qty, i, 'small')}</td>
-            <td class="num">${inputNum('buy', r.buy, i, 'small')}</td>
-            <td class="num">${inputNum('fee', r.fee, i, 'small')}</td>
-            <td class="num">${inputNum('tax', r.tax, i, 'small')}</td>
-            <td class="num">${inputNum('trade', r.trade, i, 'small')}</td>
-            <td class="num">${inputNum('buyReal', r.buyReal, i, 'small')}</td>
-            <td class="num">${inputNum('mkt', r.mkt, i)}</td>
-            <td class="num">${fmt(r.cost)}</td>
-            <td class="num">${fmt(r.val)}</td>
-            <td class="num ${colorPct(r.pnl)}">${fmt(r.pnl)}</td>
-            <td class="num ${colorPct(r.ret)}">${nf.format(r.ret*100)}%</td>
-            <td class="num">${inputNum('dps', r.dps, i, 'small')}</td>
-            <td class="num">${nf.format(r.divYield*100)}%</td>
-            <td>${inputText('date', r.date||'', i, 'small')}</td>
-            <td>${inputText('notes', r.notes||'', i, 'wide')}</td>
-            <td class="row-actions"><button class="mini delete" data-del="${i}">حذف</button></td>
-          `;
-          tbody.appendChild(tr);
-        });
-
-      renderDonut(rows);
-
-      $$('button[data-del]').forEach(btn=>btn.onclick = (e)=>{ const idx = +e.currentTarget.getAttribute('data-del'); state.items.splice(idx,1); persist(); render(); });
-      $$('input[data-idx]').forEach(inp=>{ inp.oninput = (e)=>{ const idx = +e.target.getAttribute('data-idx'); const key = e.target.getAttribute('data-key'); const val = e.target.type==='number' ? +e.target.value : e.target.value; state.items[idx][key] = (isFinite(val) ? val : 0); persist(); render(); }; });
-    }
-
-    function renderDonut(rows){
-      // تجميع حسب الرمز لعرض وزن كل سهم (مجمّع على الصفقات)
-      const bySym = {};
-      rows.forEach(r=>{ bySym[r.symbol] = (bySym[r.symbol]||0) + r.val; });
-      const entries = Object.entries(bySym);
-      const total = sum(entries.map(([,v])=>v));
-      // زوايا بسيطة لأول 4 قطاعات
-      let acc=0; const angles=[]; entries.slice(0,4).forEach(([,v])=>{ acc += total>0 ? (v/total)*360 : 0; angles.push(acc); });
-      const donut = $('#donut');
-      donut.style.setProperty('--a1', (angles[0]||0)+'deg');
-      donut.style.setProperty('--a2', (angles[1]||angles[0]||0)+'deg');
-      donut.style.setProperty('--a3', (angles[2]||angles[1]||angles[0]||0)+'deg');
-      const colors=['#60a5fa','#22c55e','#f59e0b','#ef4444','#a78bfa','#14b8a6','#f97316','#84cc16'];
-      const legend=$('#legend'); legend.innerHTML='';
-      entries.forEach(([sym,val],i)=>{
-        const it=document.createElement('div'); it.className='item';
-        const left=document.createElement('div'); left.style.display='flex'; left.style.alignItems='center'; left.style.gap='8px';
-        const tag=document.createElement('span'); tag.className='tag'; tag.style.background=colors[i%colors.length];
-        const name=document.createElement('span'); name.textContent=sym;
-        left.append(tag,name);
-        const weight=document.createElement('b'); weight.textContent= total>0 ? (nf.format((val/total)*100)+'%'):'—';
-        it.append(left,weight); legend.append(it);
-      });
-    }
-
-    // ========== Events ==========
-    $('#toggleTheme').onclick = ()=> document.body.classList.toggle('light');
-    $('#search').oninput = ()=>render();
-    $('#filterEx').onchange = ()=>render();
-    $('#bulkBtn').onclick = ()=>{ $('#bulkPanel').style.display='block'; $('#bulkBox').focus(); };
-    $('#closeBulk').onclick = ()=>{ $('#bulkPanel').style.display='none'; };
-    $('#applyBulk').onclick = ()=>{
-      const txt = $('#bulkBox').value.trim(); if(!txt) return;
-      txt.split(/\n|\r/).map(s=>s.trim()).filter(Boolean).forEach(line=>{
-        const m = line.match(/([A-Za-z\-_.]+)/); const num = line.match(/(-?[0-9]+(?:\.[0-9]+)?)/g);
-        if(!m||!num) return; const sym=m[1].toUpperCase(); const price=parseFloat(num[num.length-1]);
-        const idx = state.items.findIndex(x=>(x.symbol||'').toUpperCase()===sym);
-        if(idx>-1){ state.items[idx].mkt = price; }
-      });
-      persist(); render();
-    };
-
-    $('#exportBtn').onclick = ()=>{ const blob=new Blob([JSON.stringify(state,null,2)],{type:'application/json'}); const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='portfolio.json'; a.click(); };
-    $('#importFile').onchange = (e)=>{ const f=e.target.files[0]; if(!f) return; const reader=new FileReader(); reader.onload=()=>{ try{ const obj=JSON.parse(reader.result); if(obj && Array.isArray(obj.items)){ state.items=obj.items; if(obj.currency) state.currency=obj.currency; persist(); render(); } }catch{ alert('ملف غير صالح'); } }; reader.readAsText(f); };
-    $('#resetBtn').onclick = ()=>{ if(confirm('هل تريد إعادة الضبط للبيانات المُقدَّمة؟')){ localStorage.removeItem(LS_KEY); state.items=dataFromUser; persist(); render(); } };
-
-    $('#addBtn').onclick = ()=>{
-      const it = {
-        symbol: $('#fSymbol').value.trim().toUpperCase(),
-        qty: +$('#fQty').value||0,
-        buy: +$('#fBuy').value||0,
-        fee: +$('#fFee').value||0,
-        tax: +$('#fTax').value||0,
-        trade: +$('#fTrade').value||0,
-        buyReal: +$('#fBuyReal').value||0,
-        date: $('#fDate').value||'',
-        mkt: 0, dps:0, target:0, notes:''
-      };
-      if(!it.symbol) return;
-      state.items.push(it); persist(); ['fSymbol','fQty','fBuy','fFee','fTax','fTrade','fBuyReal','fDate'].forEach(id=>$('#'+id).value=''); render();
-    };
-
-    // Init
-    load(); render();
-  </script>
+initControls();
+render();
+</script>
 </body>
 </html>

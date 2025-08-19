@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="UTF-8">
+  <title>TradingView UAE Stocks</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 20px; direction: rtl; }
+    h1 { text-align: center; }
+    table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+    th, td { border: 1px solid #ccc; padding: 8px; text-align: center; }
+    th { background: #f4f4f4; }
+    tr:nth-child(even) { background: #fafafa; }
+    .update-time { margin-top: 10px; text-align: center; font-size: 14px; color: #555; }
+  </style>
+</head>
+<body>
+  <h1>📊 أسهم الإمارات (DFM + ADX)</h1>
+  <div class="update-time" id="updateTime">جاري التحديث...</div>
+  <table id="stockTable">
+    <thead>
+      <tr>
+        <th>الرمز</th>
+        <th>الاسم</th>
+        <th>البورصة</th>
+        <th>السعر</th>
+        <th>التغيير %</th>
+        <th>الحجم</th>
+        <th>القيمة السوقية</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+
+  <script>
+    async function loadData() {
+      const endpoint = "https://scanner.tradingview.com/middle_east/scan"; 
+      const payload = {
+        filter: [
+          { left: "type", operation: "in_range", right: ["stock"] },
+          { left: "exchange", operation: "in_range", right: ["DFM","ADX"] }
+        ],
+        options: { lang: "en" },
+        symbols: { query: { types: [] }, tickers: [] },
+        columns: [
+          "name", "short_name", "exchange", "close", "change", "volume", "market_cap_basic"
+        ],
+        sort: { sortBy: "name", sortOrder: "asc" },
+        range: [0, 500]
+      };
+
+      try {
+        const res = await fetch(endpoint, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload)
+        });
+        const json = await res.json();
+        renderTable(json.data);
+
+        // تحديث الوقت
+        const now = new Date().toLocaleTimeString("ar-AE");
+        document.getElementById("updateTime").innerText = "آخر تحديث: " + now;
+      } catch (err) {
+        console.error("خطأ:", err);
+        document.getElementById("updateTime").innerText = "⚠️ فشل في تحميل البيانات";
+      }
+    }
+
+    function renderTable(rows) {
+      const tbody = document.querySelector("#stockTable tbody");
+      tbody.innerHTML = "";
+
+      rows.forEach(item => {
+        let sym = item.s || item.name;
+        let d   = item.d || [];
+        const cols = item.d ? {
+          name: sym,
+          short_name: d[1],
+          exchange: d[2],
+          close: d[3],
+          change: d[4],
+          volume: d[5],
+          market_cap_basic: d[6]
+        } : item;
+
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td>${cols.name}</td>
+          <td>${cols.short_name || "-"}</td>
+          <td>${cols.exchange || "-"}</td>
+          <td>${cols.close || "-"}</td>
+          <td style="color:${cols.change>=0 ? 'green':'red'};">
+            ${cols.change != null ? cols.change.toFixed(2) : "-"}
+          </td>
+          <td>${cols.volume || "-"}</td>
+          <td>${cols.market_cap_basic || "-"}</td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    // تحميل عند فتح الصفحة
+    loadData();
+    // التحديث التلقائي كل 60 ثانية
+    setInterval(loadData, 60000);
+  </script>
+</body>
+</html>

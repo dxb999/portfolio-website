@@ -32,35 +32,34 @@
     .add-form{display:grid;gap:8px;grid-template-columns:repeat(8,1fr);align-items:end}
     .add-form .field{display:grid;gap:6px}
     .add-form label{font-size:12px;color:var(--muted)}
-    .add-form input,.add-form select,.toolbar input{padding:10px 12px;border-radius:10px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.04);color:var(--text)}
+    .add-form input,.add-form select,.toolbar input, .toolbar select, thead select{padding:10px 12px;border-radius:10px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.04);color:var(--text)}
+    thead select{width:100%; padding:6px 8px; font-size:12px}
     .add-form .xwide{grid-column:span 2}
     .add-form .btn{grid-column:span 2;height:40px}
     @media(max-width:980px){.add-form{grid-template-columns:repeat(2,1fr)}.add-form .btn{grid-column:span 2}}
     .toolbar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;justify-content:space-between;margin-bottom:10px}
     .toolbar .toggle{padding:8px 10px;border-radius:10px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.12);cursor:pointer}
     table{width:100%;border-collapse:collapse}
-    thead th{position:sticky;top:0;z-index:2;background:linear-gradient(180deg,rgba(255,255,255,.04),rgba(255,255,255,0) 30%),var(--card);color:var(--muted);font-weight:700;text-align:right;font-size:12px;letter-spacing:.2px;border-bottom:1px solid rgba(255,255,255,.12);padding:10px;white-space:nowrap}
-    thead tr.filter-row th{background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(255,255,255,0) 30%),var(--card);position:sticky;top:42px;z-index:1}
-    thead input{width:100%;padding:6px 8px;border-radius:8px;border:1px solid rgba(255,255,255,.15);background:rgba(255,255,255,.04);color:var(--text);font-size:12px}
+    thead th{position:sticky;top:0;z-index:3;background:linear-gradient(180deg,rgba(255,255,255,.04),rgba(255,255,255,0) 30%),var(--card);color:var(--muted);font-weight:700;text-align:right;font-size:12px;letter-spacing:.2px;border-bottom:1px solid rgba(255,255,255,.12);padding:10px;white-space:nowrap}
+    thead tr.filter-row th{background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(255,255,255,0) 30%),var(--card);position:sticky;top:42px;z-index:2}
     tbody td{border-bottom:1px dashed rgba(255,255,255,.08);padding:8px 10px;vertical-align:middle}
     tbody tr:hover{background:rgba(255,255,255,.03)}
     .sym{display:grid;gap:2px}
     .sym .t{font-weight:800}
     .sym .s{color:var(--muted);font-size:12px}
     .num{text-align:left;font-variant-numeric:tabular-nums;direction:ltr}
-    .pct.pos{color:#86efac;font-weight:700}
-    .pct.neg{color:#fecaca;font-weight:700}
+    .pct.pos{color:#86efac;font-weight:800}
+    .pct.neg{color:#fecaca;font-weight:800}
     .input{width:110px}
     .input.small{width:84px}
     .input.wide{width:140px}
     .row-actions{display:flex;gap:6px}
     .mini{padding:6px 8px;border-radius:10px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.06);color:var(--text);cursor:pointer;font-size:12px}
     .mini.delete{background:rgba(239,68,68,.15);border-color:rgba(239,68,68,.4)}
-    .progress{width:120px;height:8px;background:rgba(255,255,255,.08);border-radius:999px;overflow:hidden;border:1px solid rgba(255,255,255,.12)}
-    .progress>span{display:block;height:100%;background:linear-gradient(90deg,var(--accent),var(--accent-2))}
     .panel{display:grid;gap:12px}
-    .donut{--size:160px;width:var(--size);height:var(--size);border-radius:50%;background:conic-gradient(#60a5fa 0 var(--a1),#22c55e var(--a1) var(--a2),#f59e0b var(--a2) var(--a3),#ef4444 var(--a3) 360deg);position:relative;margin:12px auto;box-shadow:var(--shadow)}
-    .donut::after{content:"";position:absolute;inset:18%;border-radius:50%;background:var(--card);border:1px solid rgba(255,255,255,.1)}
+    /* دونت */
+    .donut{--size:180px;width:var(--size);height:var(--size);border-radius:50%;background:conic-gradient(#60a5fa 0 var(--a1),#22c55e var(--a1) var(--a2),#f59e0b var(--a2) var(--a3),#ef4444 var(--a3) var(--a4),#a78bfa var(--a4) var(--a5),#14b8a6 var(--a5) 360deg);position:relative;margin:12px auto;box-shadow:var(--shadow)}
+    .donut::after{content:"";position:absolute;inset:22%;border-radius:50%;background:var(--card);border:1px solid rgba(255,255,255,.1)}
     .legend{display:grid;gap:6px}
     .legend .item{display:flex;align-items:center;gap:8px;justify-content:space-between}
     .legend .tag{display:inline-block;width:12px;height:12px;border-radius:3px}
@@ -126,7 +125,7 @@
           </div>
         </div>
 
-        <!-- لوحة droplist لتحديث جميع الصفوف لنفس الرمز + فلترة أعمدة -->
+        <!-- droplist لتحديث كل الصفوف لنفس الرمز + إخفاء/إظهار الأعمدة -->
         <div class="card" style="margin-bottom:10px;">
           <div style="display:flex; gap:10px; flex-wrap:wrap; align-items:end;">
             <div style="display:grid; gap:6px;">
@@ -170,28 +169,8 @@
                 <th>ملاحظات</th>
                 <th></th>
               </tr>
-              <!-- صف الفلاتر لكل عمود -->
-              <tr class="filter-row">
-                <th></th>
-                <th><input id="filt_symbol" placeholder="مثال: DIB"></th>
-                <th><input id="filt_ex" placeholder="سوق"></th>
-                <th><input id="filt_qty" placeholder=">=100"></th>
-                <th><input id="filt_buy" placeholder="10-15"></th>
-                <th><input id="filt_fee" placeholder="<=5"></th>
-                <th><input id="filt_tax" placeholder="<=1"></th>
-                <th><input id="filt_trade" placeholder=">=500"></th>
-                <th><input id="filt_buyReal" placeholder=".."></th>
-                <th><input id="filt_mkt" placeholder=".."></th>
-                <th><input id="filt_cost" placeholder=".."></th>
-                <th><input id="filt_val" placeholder=".."></th>
-                <th><input id="filt_pnl" placeholder=".."></th>
-                <th><input id="filt_ret" placeholder=">0%"></th>
-                <th><input id="filt_dps" placeholder=".."></th>
-                <th><input id="filt_divy" placeholder=".."></th>
-                <th><input id="filt_date" placeholder="2025"></th>
-                <th><input id="filt_notes" placeholder="ملاحظة"></th>
-                <th></th>
-              </tr>
+              <!-- صف فلاتر: قوائم اختيار بدل الكتابة -->
+              <tr class="filter-row" id="filtersRow"></tr>
             </thead>
             <tbody id="tbody"></tbody>
           </table>
@@ -200,14 +179,15 @@
 
       <aside class="panel">
         <div class="card">
-          <h3 style="margin:0 0 8px">📊 توزيع المحفظة</h3>
-          <div class="donut" id="donut" title="التوزيع النسبي للوزن"></div>
-          <div class="legend" id="legend"></div>
+          <h3 style="margin:0 0 8px">📊 توزيع القيمة السوقية</h3>
+          <div class="donut" id="donutVal"></div>
+          <div class="legend" id="legendVal"></div>
         </div>
 
         <div class="card">
-          <h3 style="margin:0 0 8px">📦 عدد الأسهم لكل شركة</h3>
-          <div id="qtyBoard" class="legend"></div>
+          <h3 style="margin:0 0 8px">📦 عدد الأسهم لكل شركة (Donut)</h3>
+          <div class="donut" id="donutQty"></div>
+          <div class="legend" id="legendQty"></div>
         </div>
 
         <div class="card whatif">
@@ -238,11 +218,9 @@
     const $ = (s, p=document) => p.querySelector(s);
     const $$ = (s, p=document) => [...p.querySelectorAll(s)];
 
-    // ========= State =========
     const LS_KEY = 'portfolioData.v2-mohd';
     const state = { currency:'د.إ', items: [] };
 
-    // ========= User Data =========
     const dataFromUser = [
       { symbol:'ADIB', qty:200, buy:21.6, fee:6.48, tax:0.324, trade:4326.8040, buyReal:21.63402, date:'2025-07-04', mkt:0, dps:0, target:0, notes:'' },
       { symbol:'ADIB', qty:79, buy:12.72, fee:1.50732, tax:0.075, trade:1006.4627, buyReal:12.740034, date:'2024-10-01', mkt:0, dps:0, target:0, notes:'' },
@@ -273,280 +251,232 @@
       { symbol:'ADNOCDRILL', qty:1776, buy:5.63, fee:15, tax:0.76, trade:10014.6400, buyReal:5.638873874, date:'2025-08-15', mkt:0, dps:0, target:0, notes:'' }
     ];
 
-    // ========= Utils =========
-    const nf2 = new Intl.NumberFormat('ar-AE',{minimumFractionDigits:2,maximumFractionDigits:2});
+    const nf = new Intl.NumberFormat('ar-AE',{minimumFractionDigits:2,maximumFractionDigits:2});
     function sum(arr){return arr.reduce((a,b)=>a+b,0)}
-    function fmt(x){if(!isFinite(+x)) return '—'; return state.currency+' '+nf2.format(+x)}
-    function colorPct(x){return x>0?'pos':(x<0?'neg':'neu')}
-    function inputNum(key,val,idx,size=''){return `<input class="input ${size}" type="number" step="0.0000001" data-idx="${idx}" data-key="${key}" value="${val ?? ''}">`}
-    function inputText(key,val,idx,size=''){return `<input class="input ${size}" type="text" data-idx="${idx}" data-key="${key}" value="${(val||'').replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[m]))}">`}
+    function fmt(x){return isFinite(+x) ? (state.currency+' '+nf.format(+x)) : '—'}
+    function colorClass(x){return x>0?'pos':(x<0?'neg':'')}
 
     function persist(){localStorage.setItem(LS_KEY, JSON.stringify(state))}
-    function load(){const raw=localStorage.getItem(LS_KEY); if(raw){try{Object.assign(state, JSON.parse(raw))}catch{} } if(!state.items||!state.items.length){ state.items = dataFromUser; persist(); }}
+    function load(){
+      const raw=localStorage.getItem(LS_KEY);
+      if(raw){try{Object.assign(state, JSON.parse(raw))}catch{}}
+      if(!state.items||!state.items.length){state.items=dataFromUser; persist();}
+    }
 
-    function compute(){
-      const rows = state.items.map(it=>{
-        const qty = (+it.qty||0);
-        const buyBase = (+it.buyReal||0) || (+it.buy||0);
-        const cost = qty * buyBase;
-        const val = qty * (+it.mkt||0);
-        const pnl = val - cost;
-        const ret = cost>0 ? pnl/cost : 0;
-        const divYield = (+it.mkt||0)>0 ? (+it.dps||0)/(+it.mkt||0) : 0;
-        const annualDiv = (+it.dps||0)*qty;
-        const progress = (+it.target||0)>0 ? (+it.mkt||0)/(+it.target||0) : 0;
-        return {...it, cost, val, pnl, ret, divYield, annualDiv, progress};
+    function computeRows(){
+      return state.items.map(it=>{
+        const qty=+it.qty||0, buyBase=(+it.buyReal||0)||(+it.buy||0);
+        const cost=qty*buyBase, val=qty*(+it.mkt||0);
+        const pnl=val-cost, ret=cost>0? pnl/cost : 0;
+        const divYield=(+it.mkt||0)>0 ? (+it.dps||0)/(+it.mkt||0) : 0;
+        return {...it, cost, val, pnl, ret, divYield};
       });
-      const totalCost = sum(rows.map(r=>r.cost));
-      const totalVal = sum(rows.map(r=>r.val));
-      const totalPnL = totalVal-totalCost;
-      const totalRet = totalCost>0 ? totalPnL/totalCost : 0;
-      return {rows,totalCost,totalVal,totalPnL,totalRet};
     }
 
-    // ===== Helpers: فلتر عمود بنمط أرقام أو نص =====
-    function parseNumericFilter(expr){
-      if(!expr) return ()=>true;
-      expr = expr.toString().trim();
-      const pct = /%$/.test(expr); if(pct) expr = expr.replace(/%/,'');
-      // >=, <=, >, <, =X
-      const m1 = expr.match(/^(>=|<=|>|<|=)\s*(-?\d+(?:\.\d+)?)/);
-      if(m1){
-        const op = m1[1], num = parseFloat(m1[2]);
-        return (v)=>{ v = +v; if(pct) v*=100;
-          if(!isFinite(v)) return false;
-          return op==='>='? v>=num : op==='<= '? v<=num : op==='>'? v>num : op==='<'? v<num : v===num;
-        };
+    // ====== بناء صف فلاتر dropdown لكل عمود ======
+    const headerKeys = ['#','symbol','ex','qty','buy','fee','tax','trade','buyReal','mkt','cost','val','pnl','ret','dps','divy','date','notes','_actions'];
+    const headerLabels = ['#','الشركة / الرمز','السوق','الكمية','سعر الشراء','العمولة','الضريبة','مبلغ التداول','سعر الشراء الحقيقي','سعر السوق','التكلفة','القيمة','الربح','التغيير %','DPS','عائد التوزيع','التاريخ','ملاحظات',''];
+
+    const filters = {}; // قيمة مختارة لكل عمود (إن وجدت)
+
+    function uniqueValues(list, key, isNumeric=false){
+      const set=new Set();
+      list.forEach(r=>{
+        let v;
+        switch(key){
+          case 'symbol': v=r.symbol; break;
+          case 'ex': v=r.ex||''; break;
+          case 'qty': v=r.qty; break;
+          case 'buy': v=r.buy; break;
+          case 'fee': v=r.fee; break;
+          case 'tax': v=r.tax; break;
+          case 'trade': v=r.trade; break;
+          case 'buyReal': v=r.buyReal; break;
+          case 'mkt': v=r.mkt; break;
+          case 'cost': v=r.cost; break;
+          case 'val': v=r.val; break;
+          case 'pnl': v=r.pnl; break;
+          case 'ret': v=r.ret; break;
+          case 'dps': v=r.dps; break;
+          case 'divy': v=r.divYield; break;
+          case 'date': v=r.date; break;
+          case 'notes': v=r.notes; break;
+          default: v=null;
+        }
+        if(v===undefined || v===null || v==='') return;
+        set.add(isNumeric? +v : v);
+      });
+      const arr=[...set];
+      if(isNumeric) arr.sort((a,b)=>a-b); else arr.sort();
+      return arr;
+    }
+
+    function buildFilterRow(rows){
+      const tr=$('#filtersRow'); tr.innerHTML='';
+      headerKeys.forEach((key,idx)=>{
+        const th=document.createElement('th');
+        if(idx===0 || key==='_actions'){ tr.appendChild(th); return; }
+        // مجالات رقمية؟
+        const numericKeys = new Set(['qty','buy','fee','tax','trade','buyReal','mkt','cost','val','pnl','ret','dps','divy']);
+        const list = uniqueValues(rows, key, numericKeys.has(key));
+        const sel=document.createElement('select');
+        const placeholder = 'الكل';
+        sel.innerHTML = `<option value="">${placeholder}</option>` + list.map(v=>{
+          const label = (numericKeys.has(key) && key!=='ret' && key!=='divy') ? nf.format(v)
+                        : (key==='ret'||key==='divy') ? nf.format(v*100)+'%'
+                        : (typeof v==='number'? nf.format(v): String(v));
+          const value = (numericKeys.has(key) ? String(v) : String(v));
+          return `<option value="${value}">${label}</option>`;
+        }).join('');
+        sel.onchange = (e)=>{ filters[key]=e.target.value; render(); };
+        th.appendChild(sel);
+        tr.appendChild(th);
+      });
+    }
+
+    function passDropdownFilters(r){
+      // مطابقة دقيقة على القيمة المختارة (إن وُجدت)
+      for(const [key,val] of Object.entries(filters)){
+        if(!val && val!=='0') continue;
+        let rv;
+        switch(key){
+          case 'symbol': rv=r.symbol; break;
+          case 'ex': rv=r.ex||''; break;
+          case 'qty': rv=r.qty; break;
+          case 'buy': rv=r.buy; break;
+          case 'fee': rv=r.fee; break;
+          case 'tax': rv=r.tax; break;
+          case 'trade': rv=r.trade; break;
+          case 'buyReal': rv=r.buyReal; break;
+          case 'mkt': rv=r.mkt; break;
+          case 'cost': rv=r.cost; break;
+          case 'val': rv=r.val; break;
+          case 'pnl': rv=r.pnl; break;
+          case 'ret': rv=r.ret; break;
+          case 'dps': rv=r.dps; break;
+          case 'divy': rv=r.divYield; break;
+          case 'date': rv=r.date; break;
+          case 'notes': rv=r.notes; break;
+          default: rv=null;
+        }
+        const numeric = ['qty','buy','fee','tax','trade','buyReal','mkt','cost','val','pnl','ret','dps','divy'].includes(key);
+        if(numeric){
+          const vnum = (key==='ret'||key==='divy') ? +rv : +rv; // ret/divy مخزّنة كسعر كسري وليس %
+          if(String(vnum)!==val) return false;
+        } else {
+          if(String(rv)!==val) return false;
+        }
       }
-      // range: a-b
-      const m2 = expr.match(/^(-?\d+(?:\.\d+)?)\s*-\s*(-?\d+(?:\.\d+)?)/);
-      if(m2){
-        const a = parseFloat(m2[1]), b = parseFloat(m2[2]);
-        return (v)=>{ v=+v; if(pct) v*=100; return isFinite(v) && v>=Math.min(a,b) && v<=Math.max(a,b); };
-      }
-      // plain number = equals (with optional %)
-      const n = parseFloat(expr);
-      if(!isNaN(n)) return (v)=>{ v=+v; if(pct) v*=100; return isFinite(v) && v===n; };
-      // fallback substring for text-like
-      return ()=>true;
-    }
-    function txtMatch(needle){ needle=(needle||'').toString().trim().toLowerCase(); if(!needle) return ()=>true;
-      return (s)=> (s||'').toString().toLowerCase().includes(needle);
-    }
-    function getColumnFilters(){
-      return {
-        symbol: txtMatch($('#filt_symbol')?.value),
-        ex: txtMatch($('#filt_ex')?.value),
-        qty: parseNumericFilter($('#filt_qty')?.value),
-        buy: parseNumericFilter($('#filt_buy')?.value),
-        fee: parseNumericFilter($('#filt_fee')?.value),
-        tax: parseNumericFilter($('#filt_tax')?.value),
-        trade: parseNumericFilter($('#filt_trade')?.value),
-        buyReal: parseNumericFilter($('#filt_buyReal')?.value),
-        mkt: parseNumericFilter($('#filt_mkt')?.value),
-        cost: parseNumericFilter($('#filt_cost')?.value),
-        val: parseNumericFilter($('#filt_val')?.value),
-        pnl: parseNumericFilter($('#filt_pnl')?.value),
-        ret: parseNumericFilter($('#filt_ret')?.value), // استخدم % إن بغيت
-        dps: parseNumericFilter($('#filt_dps')?.value),
-        divy: parseNumericFilter($('#filt_divy')?.value),
-        date: txtMatch($('#filt_date')?.value),
-        notes: txtMatch($('#filt_notes')?.value),
-      };
-    }
-    function passesColumnFilters(r, F){
-      const buyBase = (+r.buyReal||0) || (+r.buy||0);
-      const cost = r.qty*buyBase, val = r.qty*(+r.mkt||0), pnl=val-cost, ret= cost>0? (pnl/cost)*100 : 0;
-      return F.symbol(r.symbol) &&
-             F.ex((r.ex||'')) &&
-             F.qty(r.qty) &&
-             F.buy(r.buy) &&
-             F.fee(r.fee) &&
-             F.tax(r.tax) &&
-             F.trade(r.trade) &&
-             F.buyReal(r.buyReal) &&
-             F.mkt(r.mkt) &&
-             F.cost(cost) &&
-             F.val(val) &&
-             F.pnl(pnl) &&
-             F.ret(ret) &&
-             F.dps(r.dps) &&
-             F.divy((r.mkt>0)? (r.dps/r.mkt*100):0) &&
-             F.date(r.date||'') &&
-             F.notes(r.notes||'');
+      return true;
     }
 
     function render(){
       const q = $('#search').value?.trim().toLowerCase() || '';
       const exFilter = $('#filterEx').value;
-      const F = getColumnFilters();
-      const { rows, totalCost, totalVal, totalPnL, totalRet } = compute();
+      const rows = computeRows();
 
       // KPIs
+      const totalCost = sum(rows.map(r=>r.cost));
+      const totalVal = sum(rows.map(r=>r.val));
+      const totalPnL = totalVal-totalCost;
+      const totalRet = totalCost>0 ? totalPnL/totalCost : 0;
       $('#kpiValue').textContent = fmt(totalVal);
       $('#kpiCost').textContent = fmt(totalCost);
-      $('#kpiPnL').innerHTML = `${fmt(totalPnL)} <span class="chip ${colorPct(totalPnL)}">${totalPnL>0?'▲':'▼'} ${nf2.format(totalRet*100)}%</span>`;
-      $('#kpiReturn').textContent = nf2.format(totalRet*100)+'%';
+      $('#kpiPnL').innerHTML = `${fmt(totalPnL)} <span class="chip ${totalPnL>0?'pos':(totalPnL<0?'neg':'neu')}">${totalPnL>=0?'▲':'▼'} ${nf.format(Math.abs(totalRet*100))}%</span>`;
+      $('#kpiReturn').textContent = nf.format(totalRet*100)+'%';
+
+      // فلاتر dropdown
+      buildFilterRow(rows);
 
       // Body
-      const tbody = $('#tbody'); tbody.innerHTML = '';
+      const tbody = $('#tbody'); tbody.innerHTML='';
       rows.map((r,i)=>({r,i}))
         .filter(({r})=>{
           const hit = (r.symbol||'').toLowerCase().includes(q) || (r.name||'').toLowerCase().includes(q);
           const hitEx = !exFilter || r.ex===exFilter;
-          const hitCols = passesColumnFilters(r,F);
+          const hitCols = passDropdownFilters(r);
           return hit && hitEx && hitCols;
         })
         .forEach(({r,i}, idx)=>{
+          const tr = document.createElement('tr');
+
           const buyBase = (+r.buyReal||0) || (+r.buy||0);
           const cost = r.qty*buyBase;
           const val = r.qty*(+r.mkt||0);
           const pnl = val - cost;
           const ret = cost>0 ? (pnl/cost) : 0;
 
-          const tr = document.createElement('tr');
-          tr.innerHTML = `
-            <td>${idx+1}</td>
-            <td>
-              <div class="sym">
-                <div class="t">${r.name||''}</div>
-                <div class="s">${r.symbol||''}</div>
-              </div>
-            </td>
-            <td>${r.ex||''}</td>
-            <td class="num">${inputNum('qty', r.qty, i, 'small')}</td>
-            <td class="num">${inputNum('buy', r.buy, i, 'small')}</td>
-            <td class="num">${inputNum('fee', r.fee, i, 'small')}</td>
-            <td class="num">${inputNum('tax', r.tax, i, 'small')}</td>
-            <td class="num">${inputNum('trade', r.trade, i, 'small')}</td>
-            <td class="num">${inputNum('buyReal', r.buyReal, i, 'small')}</td>
-            <td class="num">${inputNum('mkt', r.mkt, i)}</td>
-            <td class="num">${fmt(cost)}</td>
-            <td class="num">${fmt(val)}</td>
-            <td class="num ${colorPct(pnl)}">${fmt(pnl)}</td>
-            <td class="num ${colorPct(ret)}">${ret>=0?'▲':'▼'} ${nf2.format(Math.abs(ret*100))}%</td>
-            <td class="num">${inputNum('dps', r.dps, i, 'small')}</td>
-            <td class="num">${nf2.format((r.mkt>0? (r.dps/r.mkt*100):0))}%</td>
-            <td>${inputText('date', r.date||'', i, 'small')}</td>
-            <td>${inputText('notes', r.notes||'', i, 'wide')}</td>
-            <td class="row-actions"><button class="mini delete" data-del="${i}">حذف</button></td>
-          `;
+          const cells = [
+            {key:'#', html:String(idx+1)},
+            {key:'symbol', html:`<div class="sym"><div class="t">${r.name||''}</div><div class="s">${r.symbol||''}</div></div>`},
+            {key:'ex', html:r.ex||''},
+            {key:'qty', html: `<input class="input small" type="number" step="1" data-idx="${i}" data-key="qty" value="${r.qty??''}">`},
+            {key:'buy', html: `<input class="input small" type="number" step="0.0001" data-idx="${i}" data-key="buy" value="${r.buy??''}">`},
+            {key:'fee', html: `<input class="input small" type="number" step="0.0001" data-idx="${i}" data-key="fee" value="${r.fee??''}">`},
+            {key:'tax', html: `<input class="input small" type="number" step="0.0001" data-idx="${i}" data-key="tax" value="${r.tax??''}">`},
+            {key:'trade', html: `<input class="input small" type="number" step="0.0001" data-idx="${i}" data-key="trade" value="${r.trade??''}">`},
+            {key:'buyReal', html: `<input class="input small" type="number" step="0.0000001" data-idx="${i}" data-key="buyReal" value="${r.buyReal??''}">`},
+            {key:'mkt', html: `<input class="input" type="number" step="0.0001" data-idx="${i}" data-key="mkt" value="${r.mkt??''}">`},
+            {key:'cost', html: fmt(cost), cls:'num'},
+            {key:'val', html: fmt(val), cls:'num'},
+            {key:'pnl', html: fmt(pnl), cls:`num ${colorClass(pnl)}`},
+            {
+              key:'ret',
+              html: `<span class="num pct ${colorClass(ret)}">${ret>=0? '▲':'▼'} ${nf.format(Math.abs(ret*100))}%</span>`
+            },
+            {key:'dps', html:`<input class="input small" type="number" step="0.0001" data-idx="${i}" data-key="dps" value="${r.dps??''}">`},
+            {key:'divy', html: nf.format((r.mkt>0? (r.dps/r.mkt*100):0))+'%', cls:'num'},
+            {key:'date', html:`<input class="input small" type="text" data-idx="${i}" data-key="date" value="${r.date||''}">`},
+            {key:'notes', html:`<input class="input wide" type="text" data-idx="${i}" data-key="notes" value="${r.notes||''}">`},
+            {key:'_actions', html:`<button class="mini delete" data-del="${i}">حذف</button>`}
+          ];
+
+          cells.forEach(c=>{
+            const td=document.createElement('td');
+            td.className = c.cls || (['cost','val','pnl','ret','qty','buy','fee','tax','trade','buyReal','mkt','dps','divy'].includes(c.key)?'num':'');
+            td.innerHTML=c.html;
+            tr.appendChild(td);
+          });
+
           tbody.appendChild(tr);
         });
 
-      // التوزيع (دونت) + لوحة عدد الأسهم
-      renderDonut(rows);
-      renderQtyBoard(rows);
-
-      // أحداث الحذف والتحرير الفوري
+      // أحداث الحذف والتحرير
       $$('button[data-del]').forEach(btn=>btn.onclick = (e)=>{ const idx = +e.currentTarget.getAttribute('data-del'); state.items.splice(idx,1); persist(); render(); });
-      $$('input[data-idx]').forEach(inp=>{ inp.oninput = (e)=>{ const idx = +e.target.getAttribute('data-idx'); const key = e.target.getAttribute('data-key'); const val = e.target.type==='number' ? +e.target.value : e.target.value; state.items[idx][key] = (e.target.type==='number' ? (isFinite(val)? val:0) : val); persist(); render(); }; });
+      $$('input[data-idx]').forEach(inp=>{
+        inp.oninput = (e)=>{
+          const idx = +e.target.getAttribute('data-idx');
+          const key = e.target.getAttribute('data-key');
+          const val = e.target.type==='number' ? +e.target.value : e.target.value;
+          state.items[idx][key] = (e.target.type==='number' ? (isFinite(val)? val:0) : val);
+          persist(); render();
+        };
+      });
 
-      // إعادة بناء لوحة الأعمدة عند أول مرة
+      // بناء droplist الرموز لتحديث السعر
+      buildSymbolDroplist();
+
+      // رسوم الدونت
+      renderDonut(rows, 'val');  // حسب القيمة السوقية
+      renderDonut(rows, 'qty');  // حسب عدد الأسهم
+      // بناء قائمة الأعمدة
       if(!$('#colsList').dataset.built){ buildColsPanel(true); $('#colsList').dataset.built='1'; }
     }
 
-    function renderDonut(rows){
-      const bySym = {};
-      rows.forEach(r=>{ bySym[r.symbol] = (bySym[r.symbol]||0) + r.qty*(+r.mkt||0); });
-      const entries = Object.entries(bySym);
-      const total = sum(entries.map(([,v])=>v));
-      let acc=0; const angles=[]; entries.slice(0,4).forEach(([,v])=>{ acc += total>0 ? (v/total)*360 : 0; angles.push(acc); });
-      const donut = $('#donut');
-      donut.style.setProperty('--a1', (angles[0]||0)+'deg');
-      donut.style.setProperty('--a2', (angles[1]||angles[0]||0)+'deg');
-      donut.style.setProperty('--a3', (angles[2]||angles[1]||angles[0]||0)+'deg');
-      const colors=['#60a5fa','#22c55e','#f59e0b','#ef4444','#a78bfa','#14b8a6','#f97316','#84cc16'];
-      const legend=$('#legend'); legend.innerHTML='';
-      entries.forEach(([sym,val],i)=>{
-        const it=document.createElement('div'); it.className='item';
-        const left=document.createElement('div'); left.style.display='flex'; left.style.alignItems='center'; left.style.gap='8px';
-        const tag=document.createElement('span'); tag.className='tag'; tag.style.background=colors[i%colors.length];
-        const name=document.createElement('span'); name.textContent=sym;
-        left.append(tag,name);
-        const weight=document.createElement('b'); weight.textContent= total>0 ? (nf2.format((val/total)*100)+'%'):'—';
-        it.append(left,weight); legend.append(it);
-      });
-    }
-
-    function renderQtyBoard(rows){
-      const agg = {};
-      rows.forEach(r=>{ agg[r.symbol] = (agg[r.symbol]||0) + (+r.qty||0); });
-      const qtyBoard = $('#qtyBoard'); qtyBoard.innerHTML='';
-      Object.entries(agg)
-        .sort((a,b)=> b[1]-a[1])
-        .forEach(([sym, q])=>{
-          const item = document.createElement('div');
-          item.className='item';
-          const name = document.createElement('b'); name.textContent = sym;
-          const val = document.createElement('span'); val.textContent = nf2.format(q);
-          item.append(name, val); qtyBoard.append(item);
-        });
-    }
-
-    // ========== Events ==========
-    $('#toggleTheme').onclick = ()=> document.body.classList.toggle('light');
-    $('#search').oninput = ()=>render();
-    $('#filterEx').onchange = ()=>render();
-    $$('.filter-row input').forEach(inp=> inp.addEventListener('input', ()=>render()));
-    $('#bulkBtn').onclick = ()=>{ $('#bulkPanel').style.display='block'; $('#bulkBox').focus(); };
-    $('#closeBulk').onclick = ()=>{ $('#bulkPanel').style.display='none'; };
-    $('#applyBulk').onclick = ()=>{
-      const txt = $('#bulkBox').value.trim(); if(!txt) return;
-      txt.split(/\n|\r/).map(s=>s.trim()).filter(Boolean).forEach(line=>{
-        const m = line.match(/([A-Za-z\-_.]+)/); const num = line.match(/(-?[0-9]+(?:\.[0-9]+)?)/g);
-        if(!m||!num) return; const sym=m[1].toUpperCase(); const price=parseFloat(num[num.length-1]);
-        state.items.forEach(x=>{ if((x.symbol||'').toUpperCase()===sym){ x.mkt = price; }});
-      });
-      persist(); render();
-    };
-
-    $('#exportBtn').onclick = ()=>{ const blob=new Blob([JSON.stringify(state,null,2)],{type:'application/json'}); const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='portfolio.json'; a.click(); };
-    $('#importFile').onchange = (e)=>{ const f=e.target.files[0]; if(!f) return; const reader=new FileReader(); reader.onload=()=>{ try{ const obj=JSON.parse(reader.result); if(obj && Array.isArray(obj.items)){ state.items=obj.items; if(obj.currency) state.currency=obj.currency; persist(); render(); buildSymbolDroplist(); buildColsPanel(true); } }catch{ alert('ملف غير صالح'); } }; reader.readAsText(f); };
-    $('#resetBtn').onclick = ()=>{ if(confirm('هل تريد إعادة الضبط للبيانات المُقدَّمة؟')){ localStorage.removeItem(LS_KEY); state.items=dataFromUser; persist(); render(); buildSymbolDroplist(); buildColsPanel(true); } };
-
-    $('#addBtn').onclick = ()=>{
-      const it = {
-        symbol: $('#fSymbol').value.trim().toUpperCase(),
-        qty: +$('#fQty').value||0,
-        buy: +$('#fBuy').value||0,
-        fee: +$('#fFee').value||0,
-        tax: +$('#fTax').value||0,
-        trade: +$('#fTrade').value||0,
-        buyReal: +$('#fBuyReal').value||0,
-        date: $('#fDate').value||'',
-        mkt: 0, dps:0, target:0, notes:''
-      };
-      if(!it.symbol) return;
-      state.items.push(it); persist();
-      ['fSymbol','fQty','fBuy','fFee','fTax','fTrade','fBuyReal','fDate'].forEach(id=>$('#'+id).value='');
-      render(); buildSymbolDroplist(); buildColsPanel(true);
-    };
-
-    // droplist: بناء قائمة الرموز الفريدة
     function buildSymbolDroplist(){
       const sel = $('#symSelectAll'); if(!sel) return;
       const uniq = [...new Set(state.items.map(x=> (x.symbol||'').toUpperCase()).filter(Boolean))].sort();
       sel.innerHTML = uniq.map(s=>`<option value="${s}">${s}</option>`).join('');
     }
-    // تطبيق السعر على كل الصفوف لنفس الرمز
-    $('#applySymPrice')?.addEventListener('click', ()=>{
-      const sym = ($('#symSelectAll')?.value||'').toUpperCase();
-      const price = +($('#symPriceAll')?.value||0);
-      if(!sym || !isFinite(price)) return;
-      state.items.forEach(it=>{ if((it.symbol||'').toUpperCase()===sym){ it.mkt = price; }});
-      persist(); render();
-    });
 
-    // فلترة الأعمدة (إخفاء/إظهار) — تُبنى من رأس الجدول
+    // أعمدة: إخفاء/إظهار
     function buildColsPanel(reset=false){
       const theadRow = $('#tbl thead tr'); if(!theadRow) return;
       const ths = [...theadRow.children];
       const container = $('#colsList'); if(!container) return;
       if(reset) container.innerHTML='';
       ths.forEach((th, idx)=>{
-        if(idx===0) return; // نتخطى عمود رقم الصف
-        const label = th.textContent.trim();
+        const label = th.textContent.trim() || '(عمود)';
         const wrap = document.createElement('label');
         wrap.style.display='flex'; wrap.style.alignItems='center'; wrap.style.gap='6px';
         wrap.innerHTML = `<input type="checkbox" checked> ${label}`;
@@ -564,13 +494,98 @@
       p.style.display = (p.style.display==='none'||!p.style.display)?'block':'none';
     });
 
-    // ===== Init =====
-    load(); render(); buildSymbolDroplist(); buildColsPanel(true);
+    // دونت عام (qty أو val)
+    function renderDonut(rows, mode='val'){
+      const bySym={};
+      rows.forEach(r=>{
+        const key=r.symbol;
+        const val = (mode==='qty') ? (+r.qty||0) : (+r.mkt||0)*(+r.qty||0);
+        bySym[key]=(bySym[key]||0)+val;
+      });
+      const entries=Object.entries(bySym).filter(([,v])=>v>0);
+      const total=sum(entries.map(([,v])=>v));
+      const colors=['#60a5fa','#22c55e','#f59e0b','#ef4444','#a78bfa','#14b8a6','#f97316','#84cc16','#06b6d4','#eab308'];
+
+      // conic-gradient stops
+      let acc=0; const stops=[];
+      entries.forEach(([,v],i)=>{
+        const start=acc; const pct= total>0 ? (v/total) : 0; acc += pct;
+        const color=colors[i%colors.length];
+        stops.push(`${color} ${Math.round(start*360)}deg ${Math.round(acc*360)}deg`);
+      });
+      const donutEl = mode==='qty' ? $('#donutQty') : $('#donutVal');
+      const legendEl = mode==='qty' ? $('#legendQty') : $('#legendVal');
+
+      donutEl.style.background = stops.length? `conic-gradient(${stops.join(',')})` : 'conic-gradient(#334155 0 360deg)';
+      legendEl.innerHTML='';
+      entries.forEach(([sym,v],i)=>{
+        const row=document.createElement('div'); row.className='item';
+        const left=document.createElement('div'); left.style.display='flex'; left.style.alignItems='center'; left.style.gap='8px';
+        const tag=document.createElement('span'); tag.className='tag'; tag.style.background=colors[i%colors.length];
+        const name=document.createElement('span'); name.textContent=sym;
+        left.append(tag,name);
+        const right=document.createElement('b');
+        right.textContent = total>0 ? (mode==='qty'? nf.format(v) : nf.format((v/total)*100)+'%') : '—';
+        row.append(left,right); legendEl.append(row);
+      });
+    }
+
+    // أحداث: ثيم/بحث/استيراد...
+    $('#toggleTheme').onclick = ()=> document.body.classList.toggle('light');
+    $('#search').oninput = ()=>render();
+    $('#filterEx').onchange = ()=>render();
+
+    $('#bulkBtn').onclick = ()=>{ $('#bulkPanel').style.display='block'; $('#bulkBox').focus(); };
+    $('#closeBulk').onclick = ()=>{ $('#bulkPanel').style.display='none'; };
+    $('#applyBulk').onclick = ()=>{
+      const txt = $('#bulkBox').value.trim(); if(!txt) return;
+      txt.split(/\n|\r/).map(s=>s.trim()).filter(Boolean).forEach(line=>{
+        const m = line.match(/([A-Za-z\-_.]+)/); const num = line.match(/(-?[0-9]+(?:\.[0-9]+)?)/g);
+        if(!m||!num) return; const sym=m[1].toUpperCase(); const price=parseFloat(num[num.length-1]);
+        // تحديث كل الصفوف المطابقة
+        state.items.forEach(x=>{ if((x.symbol||'').toUpperCase()===sym){ x.mkt = price; }});
+      });
+      persist(); render();
+    };
+
+    $('#exportBtn').onclick = ()=>{ const blob=new Blob([JSON.stringify(state,null,2)],{type:'application/json'}); const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='portfolio.json'; a.click(); };
+    $('#importFile').onchange = (e)=>{ const f=e.target.files[0]; if(!f) return; const reader=new FileReader(); reader.onload=()=>{ try{ const obj=JSON.parse(reader.result); if(obj && Array.isArray(obj.items)){ state.items=obj.items; if(obj.currency) state.currency=obj.currency; persist(); render(); } }catch{ alert('ملف غير صالح'); } }; reader.readAsText(f); };
+    $('#resetBtn').onclick = ()=>{ if(confirm('هل تريد إعادة الضبط للبيانات المُقدَّمة؟')){ localStorage.removeItem(LS_KEY); state.items=dataFromUser; persist(); render(); } };
+
+    $('#applySymPrice')?.addEventListener('click', ()=>{
+      const sym = ($('#symSelectAll')?.value||'').toUpperCase();
+      const price = +($('#symPriceAll')?.value||0);
+      if(!sym || !isFinite(price)) return;
+      state.items.forEach(it=>{ if((it.symbol||'').toUpperCase()===sym){ it.mkt = price; }});
+      persist(); render();
+    });
+
+    $('#addBtn').onclick = ()=>{
+      const it = {
+        symbol: $('#fSymbol').value.trim().toUpperCase(),
+        qty: +$('#fQty').value||0,
+        buy: +$('#fBuy').value||0,
+        fee: +$('#fFee').value||0,
+        tax: +$('#fTax').value||0,
+        trade: +$('#fTrade').value||0,
+        buyReal: +$('#fBuyReal').value||0,
+        date: $('#fDate').value||'',
+        mkt: 0, dps:0, target:0, notes:''
+      };
+      if(!it.symbol) return;
+      state.items.push(it); persist();
+      ['fSymbol','fQty','fBuy','fFee','fTax','fTrade','fBuyReal','fDate'].forEach(id=>$('#'+id).value='');
+      render();
+    };
+
+    // Init
+    load(); render();
 
     // سيناريو ماذا لو
     $('#whatIf').oninput = (e)=>{
       const p = +e.target.value; $('#whatIfLbl').textContent = (p>0?'+':'')+p+'%';
-      const { rows, totalVal } = compute();
+      const rows = computeRows();
+      const totalVal = sum(rows.map(r=> r.val));
       const hypot = sum(rows.map(r=> r.qty * ( (r.mkt||0) * (1+p/100) ) ));
       const delta = hypot - totalVal;
       $('#whatIfImpact').textContent = fmt(delta);

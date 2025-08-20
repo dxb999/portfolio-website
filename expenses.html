@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <title>لوحتي المالية</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- خط عربي -->
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@500;700&display=swap" rel="stylesheet">
+  <!-- مكتبة Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Cairo', sans-serif;
+      background: #0b1220;
+      color: #fff;
+      display: flex;
+      height: 100vh;
+    }
+    /* الشريط الجانبي */
+    .sidebar {
+      width: 80px;
+      background: #111827;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding-top: 20px;
+    }
+    .sidebar div {
+      margin: 12px 0;
+      color: #9ca3af;
+      cursor: pointer;
+    }
+    .sidebar .active {
+      color: #f87171;
+      font-weight: bold;
+    }
+
+    /* المحتوى الرئيسي */
+    .main {
+      flex: 1;
+      padding: 20px;
+      overflow-y: auto;
+    }
+
+    /* شريط علوي */
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    .topbar h1 {
+      font-size: 20px;
+      font-weight: 700;
+    }
+    .tabs {
+      display: flex;
+      gap: 10px;
+    }
+    .tab {
+      background: #1f2937;
+      padding: 8px 16px;
+      border-radius: 12px;
+      cursor: pointer;
+    }
+    .tab.active {
+      background: linear-gradient(90deg, #ef4444, #f97316);
+    }
+
+    /* البطاقات */
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+    .card {
+      background: #1f2937;
+      border-radius: 16px;
+      padding: 20px;
+    }
+    .card h2 {
+      margin: 0;
+      font-size: 14px;
+      color: #9ca3af;
+    }
+    .card p {
+      margin: 8px 0 0;
+      font-size: 24px;
+      font-weight: bold;
+    }
+
+    /* أقسام الرسوم */
+    .charts {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+    .chart-card {
+      background: #1f2937;
+      border-radius: 16px;
+      padding: 16px;
+    }
+    .chart-card h3 {
+      margin: 0 0 10px;
+      font-size: 16px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- القائمة الجانبية -->
+  <div class="sidebar">
+    <div>Jan</div><div>Feb</div><div>Mar</div><div>Apr</div>
+    <div>May</div><div>Jun</div><div>Jul</div>
+    <div class="active">Aug</div>
+    <div>Sep</div><div>Oct</div><div>Nov</div><div>Dec</div>
+  </div>
+
+  <!-- المحتوى الرئيسي -->
+  <div class="main">
+    <!-- الشريط العلوي -->
+    <div class="topbar">
+      <h1>لوحتي المالية</h1>
+      <div class="tabs">
+        <div class="tab active">Dashboard</div>
+        <div class="tab">Spreadsheet</div>
+        <div class="tab">Today</div>
+      </div>
+    </div>
+
+    <!-- البطاقات -->
+    <div class="cards">
+      <div class="card" style="background:linear-gradient(90deg,#ef4444,#f97316)">
+        <h2>الرصيد المتاح</h2>
+        <p>89,000 درهم</p>
+      </div>
+      <div class="card">
+        <h2>إجمالي الثروة</h2>
+        <p>4,508,500 درهم</p>
+      </div>
+      <div class="card">
+        <h2>الدخل</h2>
+        <p>142,000 درهم</p>
+      </div>
+      <div class="card">
+        <h2>المصروفات</h2>
+        <p>82,000 درهم</p>
+      </div>
+    </div>
+
+    <!-- الرسوم -->
+    <div class="charts">
+      <div class="chart-card">
+        <h3>المصروفات حسب التصنيف</h3>
+        <canvas id="spendingChart"></canvas>
+      </div>
+      <div class="chart-card">
+        <h3>هدف الدخل</h3>
+        <canvas id="goalChart"></canvas>
+      </div>
+      <div class="chart-card">
+        <h3>مصادر الدخل</h3>
+        <canvas id="incomeChart"></canvas>
+      </div>
+      <div class="chart-card">
+        <h3>الأصول</h3>
+        <canvas id="assetsChart"></canvas>
+      </div>
+      <div class="chart-card">
+        <h3>التتبع الشهري</h3>
+        <canvas id="monthlyChart"></canvas>
+      </div>
+      <div class="chart-card">
+        <h3>مصاريف الحيوانات</h3>
+        <canvas id="petsChart"></canvas>
+      </div>
+    </div>
+
+  </div>
+
+<script>
+  // بيانات تجريبية
+  const spendingChart = new Chart(document.getElementById('spendingChart'), {
+    type: 'bar',
+    data: {
+      labels: ['Housing','Personal','Medical','Bills'],
+      datasets: [{ label:'درهم', data:[25000,8000,4000,7600], backgroundColor:['#6366f1','#a855f7','#ec4899','#f59e0b'] }]
+    }
+  });
+
+  const goalChart = new Chart(document.getElementById('goalChart'), {
+    type: 'doughnut',
+    data: {
+      labels: ['محقق','متبقي'],
+      datasets: [{ data:[67,33], backgroundColor:['#22c55e','#334155'] }]
+    }
+  });
+
+  const incomeChart = new Chart(document.getElementById('incomeChart'), {
+    type: 'bar',
+    data: {
+      labels:['E-commerce','Google Ads','My Shop','Salary'],
+      datasets:[{label:'درهم',data:[17600,13450,26800,126000],backgroundColor:['#0ea5e9','#f97316','#22c55e','#6366f1']}]
+    }
+  });
+
+  const assetsChart = new Chart(document.getElementById('assetsChart'), {
+    type:'pie',
+    data:{
+      labels:['Land','House','Stock','Jewellery','Vehicles'],
+      datasets:[{data:[1658000,2000000,150000,450000,250500],backgroundColor:['#22c55e','#3b82f6','#f59e0b','#eab308','#ef4444']}]
+    }
+  });
+
+  const monthlyChart = new Chart(document.getElementById('monthlyChart'), {
+    type:'bar',
+    data:{
+      labels:['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug'],
+      datasets:[
+        {label:'الدخل',data:[12000,15000,18000,20000,25000,26000,20000,14000],backgroundColor:'#22c55e'},
+        {label:'المصروفات',data:[8000,9500,12000,15000,17500,18000,16000,9000],backgroundColor:'#ef4444'}
+      ]
+    }
+  });
+
+  const petsChart = new Chart(document.getElementById('petsChart'), {
+    type:'line',
+    data:{
+      labels:['Mon','Tue','Wed','Thu','Fri','Sat','Sun'],
+      datasets:[{label:'مصاريف',data:[20,50,35,70,55,30,60],borderColor:'#f97316',tension:.4}]
+    }
+  });
+</script>
+
+</body>
+</html>

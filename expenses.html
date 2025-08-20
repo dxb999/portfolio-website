@@ -4,121 +4,63 @@
   <meta charset="UTF-8">
   <title>لوحتي المالية</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <!-- خط عربي -->
+  <!-- خط -->
   <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@500;700&display=swap" rel="stylesheet">
-  <!-- مكتبة Chart.js -->
+  <!-- Chart.js -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
-    body {
-      margin: 0;
-      font-family: 'Cairo', sans-serif;
-      background: #0b1220;
-      color: #fff;
-      display: flex;
-      height: 100vh;
-    }
+    body { margin:0; font-family:'Cairo',sans-serif; background:#0b1220; color:#fff; display:flex; height:100vh; }
     /* الشريط الجانبي */
-    .sidebar {
-      width: 80px;
-      background: #111827;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding-top: 20px;
-    }
-    .sidebar div {
-      margin: 12px 0;
-      color: #9ca3af;
-      cursor: pointer;
-    }
-    .sidebar .active {
-      color: #f87171;
-      font-weight: bold;
-    }
+    .sidebar { width:80px; background:#111827; display:flex; flex-direction:column; align-items:center; padding-top:20px; }
+    .sidebar div { margin:12px 0; color:#9ca3af; cursor:pointer; }
+    .sidebar .active { color:#f87171; font-weight:bold; }
 
-    /* المحتوى الرئيسي */
-    .main {
-      flex: 1;
-      padding: 20px;
-      overflow-y: auto;
-    }
+    /* المحتوى */
+    .main { flex:1; padding:20px; overflow-y:auto; }
 
-    /* شريط علوي */
-    .topbar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 20px;
-    }
-    .topbar h1 {
-      font-size: 20px;
-      font-weight: 700;
-    }
-    .tabs {
-      display: flex;
-      gap: 10px;
-    }
-    .tab {
-      background: #1f2937;
-      padding: 8px 16px;
-      border-radius: 12px;
-      cursor: pointer;
-    }
-    .tab.active {
-      background: linear-gradient(90deg, #ef4444, #f97316);
-    }
+    /* الشريط العلوي */
+    .topbar { display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; }
+    .tabs { display:flex; gap:10px; }
+    .tab { background:#1f2937; padding:8px 16px; border-radius:12px; cursor:pointer; }
+    .tab.active { background:linear-gradient(90deg,#ef4444,#f97316); }
+
+    /* التنبيهات */
+    .notifications { background:#1f2937; border-radius:12px; padding:12px; margin-bottom:20px; }
+    .notifications h2 { font-size:16px; margin:0 0 10px; }
+    .notif { background:#ef4444aa; padding:8px 12px; border-radius:8px; margin:6px 0; display:flex; justify-content:space-between; align-items:center; }
+    .notif button { background:none; border:none; color:#fff; cursor:pointer; }
+
+    .add-notif { background:#22c55e; border:none; padding:6px 12px; border-radius:6px; cursor:pointer; margin-top:10px; }
 
     /* البطاقات */
-    .cards {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 16px;
-      margin-bottom: 20px;
-    }
-    .card {
-      background: #1f2937;
-      border-radius: 16px;
-      padding: 20px;
-    }
-    .card h2 {
-      margin: 0;
-      font-size: 14px;
-      color: #9ca3af;
-    }
-    .card p {
-      margin: 8px 0 0;
-      font-size: 24px;
-      font-weight: bold;
-    }
+    .cards { display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:16px; margin-bottom:20px; }
+    .card { background:#1f2937; border-radius:16px; padding:20px; }
+    .card h2 { margin:0; font-size:14px; color:#9ca3af; }
+    .card p { margin:8px 0 0; font-size:24px; font-weight:bold; cursor:pointer; }
 
-    /* أقسام الرسوم */
-    .charts {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 20px;
-    }
-    .chart-card {
-      background: #1f2937;
-      border-radius: 16px;
-      padding: 16px;
-    }
-    .chart-card h3 {
-      margin: 0 0 10px;
-      font-size: 16px;
-    }
+    /* الرسوم */
+    .charts { display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:20px; }
+    .chart-card { background:#1f2937; border-radius:16px; padding:16px; }
+    .chart-card h3 { margin:0 0 10px; font-size:16px; }
+
+    /* النافذة المنبثقة للتعديل */
+    .modal { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:#000a; justify-content:center; align-items:center; }
+    .modal-content { background:#1f2937; padding:20px; border-radius:12px; width:300px; }
+    .modal-content input { width:100%; padding:8px; margin:8px 0; border:none; border-radius:6px; }
+    .modal-content button { margin-top:10px; padding:8px; border:none; border-radius:6px; cursor:pointer; }
   </style>
 </head>
 <body>
 
-  <!-- القائمة الجانبية -->
-  <div class="sidebar">
+  <!-- الشريط الجانبي -->
+  <div class="sidebar" id="months">
     <div>Jan</div><div>Feb</div><div>Mar</div><div>Apr</div>
     <div>May</div><div>Jun</div><div>Jul</div>
     <div class="active">Aug</div>
     <div>Sep</div><div>Oct</div><div>Nov</div><div>Dec</div>
   </div>
 
-  <!-- المحتوى الرئيسي -->
+  <!-- المحتوى -->
   <div class="main">
     <!-- الشريط العلوي -->
     <div class="topbar">
@@ -130,109 +72,109 @@
       </div>
     </div>
 
+    <!-- التنبيهات -->
+    <div class="notifications">
+      <h2>🔔 التنبيهات</h2>
+      <div id="notifList"></div>
+      <button class="add-notif" onclick="addNotifPrompt()">+ إضافة تنبيه</button>
+    </div>
+
     <!-- البطاقات -->
     <div class="cards">
       <div class="card" style="background:linear-gradient(90deg,#ef4444,#f97316)">
         <h2>الرصيد المتاح</h2>
-        <p>89,000 درهم</p>
+        <p onclick="editValue('balance')"><span id="balance">89000</span> درهم</p>
       </div>
       <div class="card">
         <h2>إجمالي الثروة</h2>
-        <p>4,508,500 درهم</p>
+        <p onclick="editValue('wealth')"><span id="wealth">4508500</span> درهم</p>
       </div>
       <div class="card">
         <h2>الدخل</h2>
-        <p>142,000 درهم</p>
+        <p onclick="editValue('income')"><span id="income">142000</span> درهم</p>
       </div>
       <div class="card">
         <h2>المصروفات</h2>
-        <p>82,000 درهم</p>
+        <p onclick="editValue('expenses')"><span id="expenses">82000</span> درهم</p>
       </div>
     </div>
 
     <!-- الرسوم -->
     <div class="charts">
-      <div class="chart-card">
-        <h3>المصروفات حسب التصنيف</h3>
-        <canvas id="spendingChart"></canvas>
-      </div>
-      <div class="chart-card">
-        <h3>هدف الدخل</h3>
-        <canvas id="goalChart"></canvas>
-      </div>
-      <div class="chart-card">
-        <h3>مصادر الدخل</h3>
-        <canvas id="incomeChart"></canvas>
-      </div>
-      <div class="chart-card">
-        <h3>الأصول</h3>
-        <canvas id="assetsChart"></canvas>
-      </div>
-      <div class="chart-card">
-        <h3>التتبع الشهري</h3>
-        <canvas id="monthlyChart"></canvas>
-      </div>
-      <div class="chart-card">
-        <h3>مصاريف الحيوانات</h3>
-        <canvas id="petsChart"></canvas>
-      </div>
+      <div class="chart-card"><h3>المصروفات حسب التصنيف</h3><canvas id="spendingChart"></canvas></div>
+      <div class="chart-card"><h3>هدف الدخل</h3><canvas id="goalChart"></canvas></div>
+      <div class="chart-card"><h3>مصادر الدخل</h3><canvas id="incomeChart"></canvas></div>
+      <div class="chart-card"><h3>الأصول</h3><canvas id="assetsChart"></canvas></div>
+      <div class="chart-card"><h3>التتبع الشهري</h3><canvas id="monthlyChart"></canvas></div>
+      <div class="chart-card"><h3>مصاريف الحيوانات</h3><canvas id="petsChart"></canvas></div>
     </div>
+  </div>
 
+  <!-- نافذة تعديل -->
+  <div class="modal" id="editModal">
+    <div class="modal-content">
+      <h3>تعديل القيمة</h3>
+      <input type="number" id="editInput">
+      <button onclick="saveEdit()">حفظ</button>
+      <button onclick="closeModal()">إلغاء</button>
+    </div>
   </div>
 
 <script>
-  // بيانات تجريبية
-  const spendingChart = new Chart(document.getElementById('spendingChart'), {
-    type: 'bar',
-    data: {
-      labels: ['Housing','Personal','Medical','Bills'],
-      datasets: [{ label:'درهم', data:[25000,8000,4000,7600], backgroundColor:['#6366f1','#a855f7','#ec4899','#f59e0b'] }]
-    }
-  });
+  // بيانات أساسية
+  let data = JSON.parse(localStorage.getItem('financeData')) || {
+    balance: 89000, wealth: 4508500, income: 142000, expenses: 82000,
+    notifs: [{text:"🔴 دفعة قرض بعد 10 أيام",date:"2025-08-30"}]
+  };
+  let currentKey=null;
 
-  const goalChart = new Chart(document.getElementById('goalChart'), {
-    type: 'doughnut',
-    data: {
-      labels: ['محقق','متبقي'],
-      datasets: [{ data:[67,33], backgroundColor:['#22c55e','#334155'] }]
-    }
-  });
+  // عرض القيم
+  function render() {
+    document.getElementById('balance').textContent = data.balance;
+    document.getElementById('wealth').textContent = data.wealth;
+    document.getElementById('income').textContent = data.income;
+    document.getElementById('expenses').textContent = data.expenses;
+    renderNotifs();
+    localStorage.setItem('financeData', JSON.stringify(data));
+  }
 
-  const incomeChart = new Chart(document.getElementById('incomeChart'), {
-    type: 'bar',
-    data: {
-      labels:['E-commerce','Google Ads','My Shop','Salary'],
-      datasets:[{label:'درهم',data:[17600,13450,26800,126000],backgroundColor:['#0ea5e9','#f97316','#22c55e','#6366f1']}]
-    }
-  });
+  // التنبيهات
+  function renderNotifs() {
+    const container = document.getElementById('notifList');
+    container.innerHTML="";
+    let now=new Date();
+    data.notifs.forEach((n,i)=>{
+      let due=new Date(n.date);
+      let diff=(due-now)/(1000*60*60*24);
+      if(diff<=30 && diff>=0){ // خلال شهر
+        const div=document.createElement('div');
+        div.className="notif";
+        div.innerHTML=`<span>${n.text} - ${n.date}</span> <button onclick="delNotif(${i})">✖</button>`;
+        container.appendChild(div);
+      }
+    });
+  }
+  function addNotifPrompt(){
+    let text=prompt("أدخل نص التنبيه:");
+    let date=prompt("أدخل تاريخ الاستحقاق (YYYY-MM-DD):");
+    if(text&&date){ data.notifs.push({text,date}); render(); }
+  }
+  function delNotif(i){ data.notifs.splice(i,1); render(); }
 
-  const assetsChart = new Chart(document.getElementById('assetsChart'), {
-    type:'pie',
-    data:{
-      labels:['Land','House','Stock','Jewellery','Vehicles'],
-      datasets:[{data:[1658000,2000000,150000,450000,250500],backgroundColor:['#22c55e','#3b82f6','#f59e0b','#eab308','#ef4444']}]
-    }
-  });
+  // تعديل القيم
+  function editValue(key){ currentKey=key; document.getElementById('editModal').style.display="flex"; document.getElementById('editInput').value=data[key]; }
+  function saveEdit(){ data[currentKey]=parseFloat(document.getElementById('editInput').value)||0; closeModal(); render(); }
+  function closeModal(){ document.getElementById('editModal').style.display="none"; }
 
-  const monthlyChart = new Chart(document.getElementById('monthlyChart'), {
-    type:'bar',
-    data:{
-      labels:['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug'],
-      datasets:[
-        {label:'الدخل',data:[12000,15000,18000,20000,25000,26000,20000,14000],backgroundColor:'#22c55e'},
-        {label:'المصروفات',data:[8000,9500,12000,15000,17500,18000,16000,9000],backgroundColor:'#ef4444'}
-      ]
-    }
-  });
-
-  const petsChart = new Chart(document.getElementById('petsChart'), {
-    type:'line',
-    data:{
-      labels:['Mon','Tue','Wed','Thu','Fri','Sat','Sun'],
-      datasets:[{label:'مصاريف',data:[20,50,35,70,55,30,60],borderColor:'#f97316',tension:.4}]
-    }
-  });
+  // رسوم تجريبية
+  new Chart(document.getElementById('spendingChart'),{type:'bar',data:{labels:['Housing','Personal','Medical','Bills'],datasets:[{label:'درهم',data:[25000,8000,4000,7600],backgroundColor:['#6366f1','#a855f7','#ec4899','#f59e0b']}]}});
+  new Chart(document.getElementById('goalChart'),{type:'doughnut',data:{labels:['محقق','متبقي'],datasets:[{data:[67,33],backgroundColor:['#22c55e','#334155']}]}});
+  new Chart(document.getElementById('incomeChart'),{type:'bar',data:{labels:['E-commerce','Google Ads','My Shop','Salary'],datasets:[{label:'درهم',data:[17600,13450,26800,126000],backgroundColor:['#0ea5e9','#f97316','#22c55e','#6366f1']}]}});
+  new Chart(document.getElementById('assetsChart'),{type:'pie',data:{labels:['Land','House','Stock','Jewellery','Vehicles'],datasets:[{data:[1658000,2000000,150000,450000,250500],backgroundColor:['#22c55e','#3b82f6','#f59e0b','#eab308','#ef4444']}]}});
+  new Chart(document.getElementById('monthlyChart'),{type:'bar',data:{labels:['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug'],datasets:[{label:'الدخل',data:[12000,15000,18000,20000,25000,26000,20000,14000],backgroundColor:'#22c55e'},{label:'المصروفات',data:[8000,9500,12000,15000,17500,18000,16000,9000],backgroundColor:'#ef4444'}]}});
+  new Chart(document.getElementById('petsChart'),{type:'line',data:{labels:['Mon','Tue','Wed','Thu','Fri','Sat','Sun'],datasets:[{label:'مصاريف',data:[20,50,35,70,55,30,60],borderColor:'#f97316',tension:.4}]}});
+  
+  render();
 </script>
-
 </body>
 </html>
